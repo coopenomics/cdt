@@ -238,6 +238,9 @@ extern "C" {
    int recover_key( const capi_checksum256* digest, const char* sig, size_t siglen, char* pub, size_t publen ) {
       return intrinsics::get().call<intrinsics::recover_key>(digest, sig, siglen, pub, publen);
    }
+   void assert_recover_key_account( const capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen, capi_name account, capi_name permission ) {
+      return intrinsics::get().call<intrinsics::assert_recover_key_account>(digest, sig, siglen, pub, publen, account, permission);
+   }
    void assert_sha256( const char* data, uint32_t length, const capi_checksum256* hash ) {
       return intrinsics::get().call<intrinsics::assert_sha256>(data, length, hash);
    }

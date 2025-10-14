@@ -42,6 +42,11 @@ extern "C" {
    __attribute__((eosio_wasm_import))
    void assert_recover_key( const capi_checksum256* digest, const char* sig,
                             size_t siglen, const char* pub, size_t publen );
+
+   __attribute__((eosio_wasm_import))
+   void assert_recover_key_account( const capi_checksum256* digest, const char* sig,
+                                    size_t siglen, const char* pub, size_t publen,
+                                    capi_name account, capi_name permission );
 }
 
 namespace eosio {
@@ -130,5 +135,17 @@ namespace eosio {
       ::assert_recover_key( reinterpret_cast<const capi_checksum256*>(digest_data.data()),
                             sig_data.data(), sig_data.size(),
                             pubkey_data.data(), pubkey_data.size() );
+   }
+
+   void assert_recover_key_account( const eosio::checksum256& digest, const eosio::signature& sig, const eosio::public_key& pubkey, eosio::name account, eosio::name permission ) {
+      auto digest_data = digest.extract_as_byte_array();
+
+      auto sig_data = eosio::pack(sig);
+      auto pubkey_data = eosio::pack(pubkey);
+
+      ::assert_recover_key_account( reinterpret_cast<const capi_checksum256*>(digest_data.data()),
+                                    sig_data.data(), sig_data.size(),
+                                    pubkey_data.data(), pubkey_data.size(),
+                                    account.value, permission.value );
    }
 }

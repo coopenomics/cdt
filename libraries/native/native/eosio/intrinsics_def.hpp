@@ -117,6 +117,7 @@ intrinsic_macro(db_upperbound_i64) \
 intrinsic_macro(db_end_i64) \
 intrinsic_macro(assert_recover_key) \
 intrinsic_macro(recover_key) \
+intrinsic_macro(assert_recover_key_account) \
 intrinsic_macro(assert_sha256) \
 intrinsic_macro(assert_sha1) \
 intrinsic_macro(assert_sha512) \

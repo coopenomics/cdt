@@ -336,4 +336,24 @@ namespace eosio {
     *  @param pubkey - Public key
     */
    void assert_recover_key( const eosio::checksum256& digest, const eosio::signature& sig, const eosio::public_key& pubkey );
+
+   /**
+    *  Tests a signature against a hash, verifies the recovered public key matches the expected one,
+    *  and checks that this public key belongs to the specified account permission.
+    *
+    *  @ingroup crypto
+    *  @param digest - Digest of the message that was signed
+    *  @param sig - Signature
+    *  @param pubkey - Expected public key
+    *  @param account - The account name to verify key ownership
+    *  @param permission - The permission name to check (e.g., "active"_n, "owner"_n)
+    *
+    *  @throw eosio::check will fail if:
+    *    - The signature is invalid
+    *    - The recovered key doesn't match the expected public key
+    *    - The account doesn't exist
+    *    - The permission doesn't exist for the account
+    *    - The public key doesn't belong to the specified account permission
+    */
+   void assert_recover_key_account( const eosio::checksum256& digest, const eosio::signature& sig, const eosio::public_key& pubkey, eosio::name account, eosio::name permission );
 }

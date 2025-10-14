@@ -232,6 +232,41 @@ int recover_key( const struct capi_checksum256* digest, const char* sig, size_t 
 __attribute__((eosio_wasm_import))
 void assert_recover_key( const struct capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen );
 
+/**
+ * Tests a signature against a hash, verifies the recovered public key matches the expected one,
+ * and checks that this public key belongs to the specified account permission.
+ *
+ * @ingroup crypto
+ * @param digest - Pointer to the digest/hash of the message that was signed
+ * @param sig - Pointer to the signature
+ * @param siglen - Length of the signature
+ * @param pub - Pointer to the expected public key
+ * @param publen - Length of the expected public key
+ * @param account - The account name to verify key ownership
+ * @param permission - The permission name to check (e.g., active, owner)
+ *
+ * @pre `digest` is a valid pointer to a `capi_checksum256` struct
+ * @pre `sig` is a valid pointer to a buffer containing the signature
+ * @pre `pub` is a valid pointer to a buffer containing the expected public key
+ *
+ * @post Throws if signature is invalid, key doesn't match, or key doesn't belong to account permission
+ *
+ * Example:
+ * @code
+ *  capi_checksum256 digest;
+ *  char sig[65];
+ *  size_t siglen = 65;
+ *  char pub[34];
+ *  size_t publen = 34;
+ *  capi_name account = N(myaccount);
+ *  capi_name permission = N(active);
+ *  assert_recover_key_account( &digest, sig, siglen, pub, publen, account, permission );
+ *  // If all checks pass, code continues here
+ * @endcode
+ */
+__attribute__((eosio_wasm_import))
+void assert_recover_key_account( const struct capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen, capi_name account, capi_name permission );
+
 #ifdef __cplusplus
 }
 #endif
