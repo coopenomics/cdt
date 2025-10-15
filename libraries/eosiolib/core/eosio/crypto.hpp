@@ -7,6 +7,7 @@
 #include "fixed_bytes.hpp"
 #include "varint.hpp"
 #include "serialize.hpp"
+#include "name.hpp"
 
 #include <array>
 

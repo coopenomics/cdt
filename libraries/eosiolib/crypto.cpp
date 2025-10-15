@@ -46,7 +46,7 @@ extern "C" {
    __attribute__((eosio_wasm_import))
    void assert_recover_key_account( const capi_checksum256* digest, const char* sig,
                                     size_t siglen, const char* pub, size_t publen,
-                                    capi_name account, capi_name permission );
+                                    uint64_t account, uint64_t permission );
 }
 
 namespace eosio {

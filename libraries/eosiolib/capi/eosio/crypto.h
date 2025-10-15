@@ -265,7 +265,7 @@ void assert_recover_key( const struct capi_checksum256* digest, const char* sig,
  * @endcode
  */
 __attribute__((eosio_wasm_import))
-void assert_recover_key_account( const struct capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen, capi_name account, capi_name permission );
+void assert_recover_key_account( const struct capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen, uint64_t account, uint64_t permission );
 
 #ifdef __cplusplus
 }
