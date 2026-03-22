@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 #include <utility>
@@ -47,62 +47,62 @@ namespace eosio {
    };
 
    /**
-    *  @defgroup console Console
+    *  @defgroup console Консоль
     *  @ingroup core
-    *  @brief Defines C++ wrapper to log/print text messages
+    *  @brief Определяет C++-обёртку для вывода текстовых сообщений в лог/консоль
     *
-    *  @details This API uses C++ variadic templates and type detection to
-    *  make it easy to print any native type. You can even overload
-    *  the `print()` method for your own custom types.
+    *  @details Этот API использует вариадические шаблоны C++ и определение типов,
+    *  чтобы упростить вывод любых встроенных типов. Можно перегрузить
+    *  метод `print()` и для своих типов.
     *
-    *  **Example:**
+    *  **Пример:**
     *  ```
     *     print( "hello world, this is a number: ", 5 );
     *  ```
     *
-    *  @section override Overriding Print for your Types
+    *  @section override Перегрузка print для своих типов
     *
-    *  There are two ways to overload print:
-    *  1. implement void print( const T& )
-    *  2. implement T::print()const
+    *  Два способа перегрузить print:
+    *  1. реализовать void print( const T& )
+    *  2. реализовать T::print() const
     */
 
    /**
-    *  Prints a block of bytes in hexadecimal
+    *  Выводит блок байт в шестнадцатеричном виде
     *
     *  @ingroup console
-    *  @param ptr  - pointer to bytes of interest
-    *  @param size - number of bytes to print
+    *  @param ptr  - Указатель на байты
+    *  @param size - Число байт для вывода
     */
    inline void printhex( const void* ptr, uint32_t size) {
       internal_use_do_not_use::printhex(ptr, size);
    }
 
    /**
-    *  Prints string to a given length
+    *  Выводит строку заданной длины
     *
     *  @ingroup console
-    *  @param ptr - a string
-    *  @param len - number of chars to print
+    *  @param ptr - Строка
+    *  @param len - Число символов для вывода
     */
    inline void printl( const char* ptr, size_t len ) {
      internal_use_do_not_use::prints_l(ptr, len);
    }
 
    /**
-    *  Prints string
+    *  Выводит строку
     *
     *  @ingroup console
-    *  @param ptr - a null terminated string
+    *  @param ptr - Строка с нулевым завершением
     */
    inline void print( const char* ptr ) {
      internal_use_do_not_use::prints(ptr);
    }
 
    /**
-    * Prints 8-128 bit signed integer
+    * Выводит знаковое целое 8–128 бит
     *
-    * @param num to be printed
+    * @param num Значение для вывода
     */
    template <typename T, std::enable_if_t<std::is_integral<std::decay_t<T>>::value &&
                                           std::is_signed<std::decay_t<T>>::value, int> = 0>
@@ -116,9 +116,9 @@ namespace eosio {
    }
 
    /**
-    *  Prints 8-128 bit unsigned integer
+    *  Выводит беззнаковое целое 8–128 бит
     *
-    *  @param num to be printed
+    *  @param num Значение для вывода
     */
    template <typename T, std::enable_if_t<std::is_integral<std::decay_t<T>>::value &&
                                           !std::is_signed<std::decay_t<T>>::value, int> = 0>
@@ -132,35 +132,35 @@ namespace eosio {
    }
 
    /**
-    *  Prints single-precision floating point number (i.e. float)
+    *  Выводит число с плавающей точкой одинарной точности (float)
     *
     *  @ingroup console
-    *  @param num to be printed
+    *  @param num Значение для вывода
     */
    inline void print( float num ) { internal_use_do_not_use::printsf( num ); }
 
    /**
-    *  Prints double-precision floating point number (i.e. double)
+    *  Выводит число с плавающей точкой двойной точности (double)
     *
     *  @ingroup console
-    *  @param num to be printed
+    *  @param num Значение для вывода
     */
    inline void print( double num ) { internal_use_do_not_use::printdf( num ); }
 
    /**
-    *  Prints quadruple-precision floating point number (i.e. long double)
+    *  Выводит число с плавающей точкой расширенной точности (long double)
     *
     *  @ingroup console
-    *  @param num to be printed
+    *  @param num Значение для вывода
     */
    inline void print( long double num ) { internal_use_do_not_use::printqf( &num ); }
 
   /**
-    *  Prints class object
+    *  Выводит объект класса
     *
     *  @ingroup console
-    *  @param t to be printed
-    *  @pre T must implements print() function
+    *  @param t Значение для вывода
+    *  @pre У T должна быть реализована функция print()
     */
    template<typename T, std::enable_if_t<!std::is_integral<std::decay_t<T>>::value, int> = 0>
    inline void print( T&& t ) {
@@ -173,25 +173,25 @@ namespace eosio {
    }
 
    /**
-    *  Prints null terminated string
+    *  Выводит строку с нулевым завершением
     *
     *  @ingroup console
-    *  @param s null terminated string to be printed
+    *  @param s Строка с нулевым завершением
     */
    inline void print_f( const char* s ) {
      internal_use_do_not_use::prints(s);
    }
 
    /**
-    *  Prints formatted string. It behaves similar to C printf/
+    *  Выводит форматированную строку. Поведение близко к C printf.
     *
-    *  @tparam Arg - Type of the value used to replace the format specifier
-    *  @tparam Args - Type of the value used to replace the format specifier
-    *  @param s - Null terminated string with to be printed (it can contains format specifier)
-    *  @param val - The value used to replace the format specifier
-    *  @param rest - The values used to replace the format specifier
+    *  @tparam Arg - Тип значения для подстановки вместо спецификатора формата
+    *  @tparam Args - Типы остальных значений для подстановки
+    *  @param s - Строка с нулевым завершением (может содержать спецификатор формата)
+    *  @param val - Значение для первой подстановки
+    *  @param rest - Остальные значения для подстановки
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  print_f("Number of apples: %", 10);
     *  @endcode
@@ -210,14 +210,14 @@ namespace eosio {
    }
 
     /**
-     *  Print out value / list of values
+     *  Выводит значение или список значений
      *
-     *  @tparam Arg - Type of the value used to replace the format specifier
-     *  @tparam Args - Type of the value used to replace the format specifier
-     *  @param a - The value to be printed
-     *  @param args - The other values to be printed
+     *  @tparam Arg - Тип первого значения
+     *  @tparam Args - Типы остальных значений
+     *  @param a - Первое значение для вывода
+     *  @param args - Остальные значения для вывода
      *
-     *  Example:
+     *  Пример:
      *
      *  @code
      *  const char *s = "Hello World!";
@@ -235,7 +235,7 @@ namespace eosio {
    }
 
    /**
-    * Simulate C++ style streams
+    * Имитация потоков в стиле C++
     *
     * @ingroup console
     */
@@ -244,15 +244,14 @@ namespace eosio {
    /// @cond OPERATORS
 
    /**
-    *  Overload c++ iostream
+    *  Перегрузка оператора для iostream C++
     *
-    *  @tparam Arg - Type of the value used to replace the format specifier
-    *  @tparam Args - Type of the value used to replace the format specifier
-    *  @param out - Output strem
-    *  @param v - The value to be printed
-    *  @return iostream& - Reference to the input output stream
+    *  @tparam T - Тип выводимого значения
+    *  @param out - Выходной поток
+    *  @param v - Значение для вывода
+    *  @return iostream& - Ссылка на поток ввода-вывода
     *
-    *  Example:
+    *  Пример:
     *
     *  @code
     *  const char *s = "Hello World!";

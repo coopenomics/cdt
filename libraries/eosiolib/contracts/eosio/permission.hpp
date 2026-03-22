@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 
@@ -33,17 +33,17 @@ namespace eosio {
    }
 
    /**
-   *  Checks if a transaction is authorized by a provided set of keys and permissions
+   *  Проверяет, авторизована ли транзакция заданным набором ключей и разрешений (permissions)
    *  @ingroup permission
    *
-   *  @param trx_data - pointer to the start of the serialized transaction
-   *  @param trx_size - size (in bytes) of the serialized transaction
-   *  @param pubkeys_data - pointer to the start of the serialized vector of provided public keys
-   *  @param pubkeys_size  - size (in bytes) of serialized vector of provided public keys (can be 0 if no public keys are to be provided)
-   *  @param perms_data - pointer to the start of the serialized vector of provided permissions (empty permission name acts as wildcard)
-   *  @param perms_size - size (in bytes) of the serialized vector of provided permissions
+   *  @param trx_data — указатель на начало сериализованной транзакции
+   *  @param trx_size — размер (в байтах) сериализованной транзакции
+   *  @param pubkeys_data — указатель на начало сериализованного вектора открытых ключей
+   *  @param pubkeys_size — размер (в байтах) сериализованного вектора ключей (0, если ключи не передаются)
+   *  @param perms_data — указатель на начало сериализованного вектора разрешений (пустое имя разрешения — подстановка (совпадает с любым))
+   *  @param perms_size — размер (в байтах) сериализованного вектора разрешений
    *
-   *  @return 1 if the transaction is authorized, 0 otherwise
+   *  @return 1, если транзакция авторизована; иначе 0
    */
    bool
    check_transaction_authorization( const char* trx_data,     uint32_t trx_size,
@@ -53,18 +53,18 @@ namespace eosio {
    }
 
    /**
-   *  Checks if a permission is authorized by a provided delay and a provided set of keys and permissions
+   *  Проверяет, авторизовано ли разрешение заданной задержкой и набором ключей и разрешений
    *  @ingroup permission
    *
-   *  @param account - the account owner of the permission
-   *  @param permission - the name of the permission to check for authorization
-   *  @param pubkeys_data - pointer to the start of the serialized vector of provided public keys
-   *  @param pubkeys_size  - size (in bytes) of serialized vector of provided public keys (can be 0 if no public keys are to be provided)
-   *  @param perms_data - pointer to the start of the serialized vector of provided permissions (empty permission name acts as wildcard)
-   *  @param perms_size - size (in bytes) of the serialized vector of provided permissions
-   *  @param delay - the provided delay in microseconds (cannot exceed INT64_MAX)
+   *  @param account — аккаунт-владелец разрешения
+   *  @param permission — имя проверяемого разрешения
+   *  @param pubkeys_data — указатель на начало сериализованного вектора открытых ключей
+   *  @param pubkeys_size — размер (в байтах) сериализованного вектора ключей (0, если ключи не передаются)
+   *  @param perms_data — указатель на начало сериализованного вектора разрешений (пустое имя — подстановка (совпадает с любым))
+   *  @param perms_size — размер (в байтах) сериализованного вектора разрешений
+   *  @param delay — задержка в микросекундах (не больше INT64_MAX)
    *
-   *  @return 1 if the permission is authorized, 0 otherwise
+   *  @return 1, если разрешение авторизовано; иначе 0
    */
    bool
    check_permission_authorization( name account,
@@ -79,21 +79,21 @@ namespace eosio {
 
 
   /**
-   * @defgroup permission Permission
+   * @defgroup permission Разрешение (permission)
    * @ingroup contracts
    * @ingroup types
-   * @brief Defines C++ API functions for validating authorization of keys and permissions
+   * @brief Определяет функции C++ API COOPOS для проверки авторизации ключей и разрешений (permissions)
    */
 
    /**
-    *  Checks if a transaction is authorized by a provided set of keys and permissions
+    *  Проверяет, авторизована ли транзакция заданным набором ключей и разрешений
     *  @ingroup permission
     *
-    *  @param trx - the transaction for which to check authorizations
-    *  @param provided_permissions - the set of permissions which have authorized the transaction (empty permission name acts as wildcard)
-    *  @param provided_keys - the set of public keys which have authorized the transaction
+    *  @param trx — транзакция, для которой проверяется авторизация
+    *  @param provided_permissions — набор разрешений, которыми подписана транзакция (пустое имя — подстановка (совпадает с любым))
+    *  @param provided_keys — набор открытых ключей, которыми подписана транзакция
     *
-    *  @return whether the transaction was authorized by provided keys and permissions
+    *  @return true, если транзакция авторизована указанными ключами и разрешениями
     */
    bool
    check_transaction_authorization( const transaction&                 trx,
@@ -127,17 +127,17 @@ namespace eosio {
    }
 
    /**
-    *  Checks if a permission is authorized by a provided delay and a provided set of keys and permissions
+    *  Проверяет, авторизовано ли разрешение заданной задержкой и набором ключей и разрешений
     *
     *  @ingroup permission
     *
-    *  @param account    - the account owner of the permission
-    *  @param permission - the permission name to check for authorization
-    *  @param provided_keys - the set of public keys which have authorized the transaction
-    *  @param provided_permissions - the set of permissions which have authorized the transaction (empty permission name acts as wildcard)
-    *  @param provided_delay_us - the provided delay in microseconds (cannot exceed INT64_MAX)
+    *  @param account — аккаунт-владелец разрешения
+    *  @param permission — имя проверяемого разрешения
+    *  @param provided_keys — набор открытых ключей, подписавших операцию
+    *  @param provided_permissions — набор разрешений (пустое имя — подстановка (совпадает с любым))
+    *  @param provided_delay_us — задержка в микросекундах (не больше INT64_MAX)
     *
-    *  @return whether the permission was authorized by provided delay, keys, and permissions
+    *  @return true, если разрешение удовлетворено указанной задержкой, ключами и разрешениями
     */
    bool
    check_permission_authorization( name                               account,
@@ -174,14 +174,14 @@ namespace eosio {
    }
 
    /**
-    *  Returns the last used time of a permission
+    *  Возвращает время последнего использования разрешения
     *
     *  @ingroup permission
     *
-    *  @param account    - the account owner of the permission
-    *  @param permission - the name of the permission
+    *  @param account — аккаунт-владелец разрешения
+    *  @param permission — имя разрешения
     *
-    *  @return the last used time (in microseconds since Unix epoch) of the permission
+    *  @return момент последнего использования (микросекунды с начала эпохи Unix)
     */
    time_point get_permission_last_used( name account, name permission ) {
       return time_point(
@@ -191,13 +191,13 @@ namespace eosio {
    }
 
    /**
-    *  Returns the creation time of an account
+    *  Возвращает время создания аккаунта
     *
     *  @ingroup permission
     *
-    *  @param account - the account
+    *  @param account — аккаунт
     *
-    *  @return the creation time (in microseconds since Unix epoch) of the account
+    *  @return момент создания (микросекунды с начала эпохи Unix)
     */
    time_point get_account_creation_time( name account ) {
       return time_point(

@@ -7,7 +7,7 @@ extern "C" {
 /**
  * @defgroup privileged_c Privileged C API
  * @ingroup c_api
- * @brief Defines %C Privileged API
+ * @brief Определяет привилегированный C API
  */
 
  /**

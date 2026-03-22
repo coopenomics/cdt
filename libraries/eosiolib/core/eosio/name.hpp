@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 
@@ -20,16 +20,15 @@ namespace eosio {
    }
 
    /**
-    * @defgroup name
+    * @defgroup name Имя
     * @ingroup core
     * @ingroup types
-    * @brief EOSIO Name Type
+    * @brief Тип имени COOPOS
     */
 
    /**
-    * Wraps a %uint64_t to ensure it is only passed to methods that expect a %name.
-    * Ensures value is only passed to methods that expect a %name and that no mathematical
-    * operations occur.  Also enables specialization of print
+    * Обёртка над %uint64_t для имён аккаунтов и контрактов в COOPOS: значение передаётся только там,
+    * где ожидается %name, без арифметики над «именем». Позволяет специализировать печать.
     *
     * @ingroup name
     */
@@ -38,18 +37,18 @@ namespace eosio {
       enum class raw : uint64_t {};
 
       /**
-       * Construct a new name
+       * Конструктор по умолчанию; имя с нулевым значением
        *
-       * @brief Construct a new name object defaulting to a value of 0
+       * @brief Конструктор name со значением по умолчанию 0
        *
        */
       constexpr name() : value(0) {}
 
       /**
-       * Construct a new name given a unit64_t value
+       * Создаёт name из uint64_t
        *
-       * @brief Construct a new name object initialising value with v
-       * @param v - The unit64_t value
+       * @brief Конструктор name; инициализация поля value значением v
+       * @param v — значение uint64_t
        *
        */
       constexpr explicit name( uint64_t v )
@@ -57,10 +56,10 @@ namespace eosio {
       {}
 
       /**
-       * Construct a new name given a scoped enumerated type of raw (uint64_t).
+       * Создаёт name из типа name::raw
        *
-       * @brief Construct a new name object initialising value with r
-       * @param r - The raw value which is a scoped enumerated type of unit64_t
+       * @brief Конструктор name; инициализация поля value значением r
+       * @param r — сырое значение (strong typedef к uint64_t)
        *
        */
       constexpr explicit name( name::raw r )
@@ -68,10 +67,10 @@ namespace eosio {
       {}
 
       /**
-       * Construct a new name given an string.
+       * Создаёт name из строки (правила кодирования имён COOPOS)
        *
-       * @brief Construct a new name object initialising value with str
-       * @param str - The string value which validated then converted to unit64_t
+       * @brief Конструктор name; инициализация поля value из строки str
+       * @param str — строка; после проверки преобразуется в uint64_t
        *
        */
       constexpr explicit name( std::string_view str )
@@ -100,10 +99,10 @@ namespace eosio {
       }
 
       /**
-       *  Converts a %name Base32 symbol into its corresponding value
+       *  Преобразует символ алфавита имён (Base32-подобный) в числовое значение
        *
-       *  @param c - Character to be converted
-       *  @return constexpr char - Converted value
+       *  @param c — символ
+       *  @return числовое значение символа
        */
       static constexpr uint8_t char_to_value( char c ) {
          if( c == '.')
@@ -119,7 +118,7 @@ namespace eosio {
       }
 
       /**
-       *  Returns the length of the %name
+       *  Длина имени в символах
        */
       constexpr uint8_t length()const {
          constexpr uint64_t mask = 0xF800000000000000ull;
@@ -139,7 +138,7 @@ namespace eosio {
       }
 
       /**
-       *  Returns the suffix of the %name
+       *  Суффикс имени после последней значащей точки
        */
       constexpr name suffix()const {
          uint32_t remaining_bits_after_last_actual_dot = 0;
@@ -172,7 +171,7 @@ namespace eosio {
       }
 
       /**
-       *  Returns the prefix of the %name
+       *  Префикс имени до последней значащей точки
        */
       constexpr name prefix() const {
          uint64_t result = value;
@@ -204,28 +203,28 @@ namespace eosio {
       }
 
       /**
-       * Casts a name to raw
+       * Приведение к name::raw
        *
-       * @return Returns an instance of raw based on the value of a name
+       * @return значение в виде raw
        */
       constexpr operator raw()const { return raw(value); }
 
       /**
-       * Explicit cast to bool of the uint64_t value of the name
+       * Явное приведение к bool по полю value
        *
-       * @return Returns true if the name is set to the default value of 0 else true.
+       * @return true — если value ≠ 0; иначе false
        */
       constexpr explicit operator bool()const { return value != 0; }
 
       /**
-       *  Writes the %name as a string to the provided char buffer
+       *  Записывает строковое представление %name в буфер char
        *
-       *  @pre The range [begin, end) must be a valid range of memory to write to.
-       *  @param begin - The start of the char buffer
-       *  @param end - Just past the end of the char buffer
-       *  @param dry_run - If true, do not actually write anything into the range.
-       *  @return char* - Just past the end of the last character that would be written assuming dry_run == false and end was large enough to provide sufficient space. (Meaning only applies if returned pointer >= begin.)
-       *  @post If the output string fits within the range [begin, end) and dry_run == false, the range [begin, returned pointer) contains the string representation of the %name. Nothing is written if dry_run == true or returned pointer > end (insufficient space) or if returned pointer < begin (overflow in calculating desired end).
+       *  @pre диапазон [begin, end) — допустимая область памяти для записи
+       *  @param begin — начало буфера
+       *  @param end — конец буфера (не включая end)
+       *  @param dry_run — если true, ничего не записывать
+       *  @return char* — указатель сразу за последним символом, который был бы записан (при достаточном буфере и dry_run == false; смысл только если возврат ≥ begin)
+       *  @post при успехе и dry_run == false в [begin, возврат) — строка имени
        */
       char* write_as_string( char* begin, char* end, bool dry_run = false )const {
          static const char* charmap = ".12345abcdefghijklmnopqrstuvwxyz";
@@ -249,9 +248,9 @@ namespace eosio {
       }
 
       /**
-       *  Returns the name as a string.
+       *  Строковое представление имени через write_as_string()
        *
-       *  @brief Returns the name value as a string by calling write_as_string() and returning the buffer produced by write_as_string()
+       *  @brief Возвращает имя как строку через write_as_string() и буфер, заполненный этой функцией
        */
       std::string to_string()const {
          char buffer[13];
@@ -260,9 +259,8 @@ namespace eosio {
       }
 
       /**
-       * Prints an names as base32 encoded string
+       * Печать имени в лог контракта COOPOS (нативный вывод)
        *
-       * @param name to be printed
        */
       inline void print()const {
         internal_use_do_not_use::printn(value);
@@ -271,27 +269,27 @@ namespace eosio {
       /// @cond INTERNAL
 
       /**
-       * Equivalency operator. Returns true if a == b (are the same)
+       * Оператор равенства
        *
-       * @return boolean - true if both provided %name values are the same
+       * @return true — значения совпадают
        */
       friend constexpr bool operator == ( const name& a, const name& b ) {
          return a.value == b.value;
       }
 
       /**
-       * Inverted equivalency operator. Returns true if a != b (are different)
+       * Оператор неравенства
        *
-       * @return boolean - true if both provided %name values are not the same
+       * @return true — значения различаются
        */
       friend constexpr bool operator != ( const name& a, const name& b ) {
          return a.value != b.value;
       }
 
       /**
-       * Less than operator. Returns true if a < b.
+       * Оператор «меньше» по uint64_t
        *
-       * @return boolean - true if %name `a` is less than `b`
+       * @return true — a меньше b
        */
       friend constexpr bool operator < ( const name& a, const name& b ) {
          return a.value < b.value;
@@ -315,7 +313,7 @@ namespace eosio {
 
 /**
  * @ingroup name
- * @brief "foo"_n is a shortcut for name("foo")
+ * @brief Литерал "foo"_n — сокращение для name("foo")
  */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu-string-literal-operator-template"

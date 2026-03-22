@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 
@@ -16,13 +16,13 @@
 
 namespace eosio {
   /**
-   *  @defgroup symbol Symbol
+   *  @defgroup symbol Символ
    *  @ingroup core
-   *  @brief Defines C++ API for managing symbols
+   *  @brief Определяет C++ API для работы с символами
    */
 
    /**
-    *  Stores the symbol code as a uint64_t value
+    *  Код символа токена, упакованный в uint64_t
     *
     *  @ingroup symbol
     */
@@ -30,18 +30,18 @@ namespace eosio {
    public:
 
       /**
-       * Default constructor, construct a new symbol_code
+       * Конструктор по умолчанию; создаёт symbol_code со значением 0
        *
-       * @brief Construct a new symbol_code object defaulting to a value of 0
+       * @brief Конструктор symbol_code со значением по умолчанию 0
        *
        */
       constexpr symbol_code() : value(0) {}
 
       /**
-       * Construct a new symbol_code given a scoped enumerated type of raw (uint64_t).
+       * Создаёт symbol_code из сырого значения uint64_t.
        *
-       * @brief Construct a new symbol_code object initialising value with raw
-       * @param raw - The raw value which is a scoped enumerated type of unit64_t
+       * @brief Конструктор symbol_code; инициализация поля value из raw
+       * @param raw — сырое значение (uint64_t)
        *
        */
       constexpr explicit symbol_code( uint64_t raw )
@@ -49,10 +49,10 @@ namespace eosio {
       {}
 
       /**
-       * Construct a new symbol_code given an string.
+       * Создаёт symbol_code из строки (до 7 заглавных букв A–Z).
        *
-       * @brief Construct a new symbol_code object initialising value with str
-       * @param str - The string value which validated then converted to unit64_t
+       * @brief Конструктор symbol_code; инициализация поля value из строки str
+       * @param str — строка; после проверки преобразуется в uint64_t
        *
        */
       constexpr explicit symbol_code( std::string_view str )
@@ -71,8 +71,8 @@ namespace eosio {
       }
 
       /**
-       * Checks if the symbol code is valid
-       * @return true - if symbol is valid
+       * Проверяет корректность кода символа
+       * @return true — символ допустим
        */
       constexpr bool is_valid()const {
          auto sym = value;
@@ -92,9 +92,9 @@ namespace eosio {
       }
 
       /**
-       * Returns the character length of the provided symbol
+       * Возвращает длину кода символа в символах
        *
-       * @return length - character length of the provided symbol
+       * @return length — число значащих символов
        */
       constexpr uint32_t length()const {
          auto sym = value;
@@ -107,31 +107,31 @@ namespace eosio {
       }
 
       /**
-       * Casts a symbol code to raw
+       * Возвращает сырое значение uint64_t
        *
-       * @return Returns an instance of raw based on the value of a symbol_code
+       * @return значение поля value
        */
       constexpr uint64_t raw()const { return value; }
 
       /**
-       * Explicit cast to bool of the symbol_code
+       * Явное приведение к bool
        *
-       * @return Returns true if the symbol_code is set to the default value of 0 else true.
+       * @return true — если value не равен 0; иначе false
        */
       constexpr explicit operator bool()const { return value != 0; }
 
       /**
-       *  Writes the symbol_code as a string to the provided char buffer
+       *  Записывает symbol_code в виде строки в буфер char
        *
        *
-       *  @brief Writes the symbol_code as a string to the provided char buffer
+       *  @brief Записывает symbol_code в виде строки в переданный буфер char
        *  @pre is_valid() == true
-       *  @pre The range [begin, end) must be a valid range of memory to write to.
-       *  @param begin - The start of the char buffer
-       *  @param end - Just past the end of the char buffer
-       *  @param dry_run - If true, do not actually write anything into the range.
-       *  @return char* - Just past the end of the last character that would be written assuming dry_run == false and end was large enough to provide sufficient space. (Meaning only applies if returned pointer >= begin.)
-       *  @post If the output string fits within the range [begin, end) and dry_run == false, the range [begin, returned pointer) contains the string representation of the symbol_code. Nothing is written if dry_run == true or returned pointer > end (insufficient space) or if returned pointer < begin (overflow in calculating desired end).
+       *  @pre диапазон [begin, end) — допустимая область памяти для записи
+       *  @param begin — начало буфера
+       *  @param end — конец буфера (не включая end)
+       *  @param dry_run — если true, ничего не записывать
+       *  @return char* — указатель сразу за последним записанным символом (при dry_run == false и достаточном буфере; смысл только если возврат ≥ begin)
+       *  @post при успехе и dry_run == false в [begin, возврат) — строка; иначе запись может не выполняться
        */
       char* write_as_string( char* begin, char* end, bool dry_run = false )const {
          constexpr uint64_t mask = 0xFFull;
@@ -153,7 +153,7 @@ namespace eosio {
       }
 
       /**
-       *  Returns the name value as a string by calling write_as_string() and returning the buffer produced by write_as_string()
+       *  Строковое представление кода символа через write_as_string()
        */
       std::string to_string()const {
          char buffer[7];
@@ -162,9 +162,8 @@ namespace eosio {
       }
 
       /**
-       * Prints a symbol_code
+       * Печать symbol_code в лог контракта COOPOS
        *
-       * @param sym_code symbol code to be printed
        */
       inline void print()const {
          char buffer[7];
@@ -174,27 +173,27 @@ namespace eosio {
       }
 
       /**
-       * Equivalency operator. Returns true if a == b (are the same)
+       * Оператор равенства
        *
-       * @return boolean - true if both provided symbol_codes are the same
+       * @return true — коды совпадают
        */
       friend constexpr bool operator == ( const symbol_code& a, const symbol_code& b ) {
          return a.value == b.value;
       }
 
       /**
-       * Inverted equivalency operator. Returns true if a != b (are different)
+       * Оператор неравенства
        *
-       * @return boolean - true if both provided symbol_codes are not the same
+       * @return true — коды различаются
        */
       friend constexpr bool operator != ( const symbol_code& a, const symbol_code& b ) {
          return a.value != b.value;
       }
 
       /**
-       * Less than operator. Returns true if a < b.
-       * @brief Less than operator
-       * @return boolean - true if symbol_code `a` is less than `b`
+       * Оператор «меньше»
+       * @brief Оператор «меньше»
+       * @return true — значение a меньше b
        */
       friend constexpr bool operator < ( const symbol_code& a, const symbol_code& b ) {
          return a.value < b.value;
@@ -205,12 +204,12 @@ namespace eosio {
    };
 
    /**
-    *  Serialize a symbol_code into a stream
+    *  Сериализация symbol_code в поток
     *
-    *  @param ds - The stream to write
-    *  @param sym - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @param ds — поток записи
+    *  @param sym_code — значение для сериализации
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream>
    inline DataStream& operator<<(DataStream& ds, const eosio::symbol_code sym_code) {
@@ -220,12 +219,12 @@ namespace eosio {
    }
 
    /**
-    *  Deserialize a symbol_code from a stream
+    *  Десериализация symbol_code из потока
     *
-    *  @param ds - The stream to read
-    *  @param symbol - The destination for deserialized value
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @param ds — поток чтения
+    *  @param sym_code — приёмник значения
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream>
    inline DataStream& operator>>(DataStream& ds, eosio::symbol_code& sym_code) {
@@ -236,68 +235,68 @@ namespace eosio {
    }
 
    /**
-    *  Stores information about a symbol, the symbol can be 7 characters long.
+    *  Символ токена: код (до 7 символов) и точность (число десятичных знаков).
     *
     *  @ingroup symbol
     */
    class symbol {
    public:
       /**
-       * Construct a new symbol object defaulting to a value of 0
+       * Конструктор по умолчанию; значение 0
        */
       constexpr symbol() : value(0) {}
 
       /**
-       * Construct a new symbol given a scoped enumerated type of raw (uint64_t).
+       * Создаёт symbol из упакованного uint64_t (код и точность).
        *
-       * @param raw - The raw value which is a scoped enumerated type of unit64_t
+       * @param raw — сырое значение uint64_t
        */
       constexpr explicit symbol( uint64_t raw ) : value(raw) {}
 
       /**
-       * Construct a new symbol given a symbol_code and a uint8_t precision.
+       * Создаёт symbol по коду символа и точности.
        *
-       * @param sc - The symbol_code
-       * @param precision - The number of decimal places used for the symbol
+       * @param sc — код символа
+       * @param precision — число десятичных знаков
        */
       constexpr symbol( symbol_code sc, uint8_t precision )
       : value( (sc.raw() << 8) | static_cast<uint64_t>(precision) )
       {}
 
       /**
-       * Construct a new symbol given a string and a uint8_t precision.
+       * Создаёт symbol по строке кода и точности.
        *
-       * @param ss - The string containing the symbol
-       * @param precision - The number of decimal places used for the symbol
+       * @param ss — строка с кодом символа
+       * @param precision — число десятичных знаков
        */
       constexpr symbol( std::string_view ss, uint8_t precision )
       : value( (symbol_code(ss).raw() << 8)  | static_cast<uint64_t>(precision) )
       {}
 
       /**
-       * Is this symbol valid
+       * Допустим ли символ
        */
       constexpr bool is_valid()const                 { return code().is_valid(); }
 
       /**
-       * This symbol's precision
+       * Точность символа (десятичные знаки)
        */
       constexpr uint8_t precision()const             { return static_cast<uint8_t>( value & 0xFFull ); }
 
       /**
-       * Returns representation of symbol name
+       * Код символа (symbol_code)
        */
       constexpr symbol_code code()const              { return symbol_code{value >> 8};   }
 
       /**
-       * Returns uint64_t repreresentation of the symbol
+       * Упакованное представление symbol в uint64_t
        */
       constexpr uint64_t raw()const                  { return value; }
 
       constexpr explicit operator bool()const { return value != 0; }
 
       /**
-       * %Print the symbol
+       * Печать символа в лог контракта COOPOS
        */
       void print( bool show_precision = true )const {
          if( show_precision ){
@@ -310,27 +309,27 @@ namespace eosio {
       }
 
       /**
-       * Equivalency operator. Returns true if a == b (are the same)
+       * Оператор равенства
        *
-       * @return boolean - true if both provided symbols are the same
+       * @return true — символы совпадают
        */
       friend constexpr bool operator == ( const symbol& a, const symbol& b ) {
          return a.value == b.value;
       }
 
       /**
-       * Inverted equivalency operator. Returns true if a != b (are different)
+       * Оператор неравенства
        *
-       * @return boolean - true if both provided symbols are not the same
+       * @return true — символы различаются
        */
       friend constexpr bool operator != ( const symbol& a, const symbol& b ) {
          return a.value != b.value;
       }
 
       /**
-       * Less than operator. Returns true if a < b.
-       * @brief Less than operator
-       * @return boolean - true if symbol `a` is less than `b`
+       * Оператор «меньше»
+       * @brief Оператор «меньше»
+       * @return true — значение a меньше b
        */
       friend constexpr bool operator < ( const symbol& a, const symbol& b ) {
          return a.value < b.value;
@@ -341,13 +340,13 @@ namespace eosio {
    };
 
    /**
-    *  Serialize a symbol into a stream
+    *  Сериализация symbol в поток
     *
-    *  @brief Serialize a symbol
-    *  @param ds - The stream to write
-    *  @param sym - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Сериализация symbol
+    *  @param ds — поток записи
+    *  @param sym — значение для сериализации
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream>
    inline DataStream& operator<<(DataStream& ds, const eosio::symbol sym) {
@@ -357,13 +356,13 @@ namespace eosio {
    }
 
    /**
-    *  Deserialize a symbol from a stream
+    *  Десериализация symbol из потока
     *
-    *  @brief Deserialize a symbol
-    *  @param ds - The stream to read
-    *  @param symbol - The destination for deserialized value
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Десериализация symbol
+    *  @param ds — поток чтения
+    *  @param sym — приёмник значения
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream>
    inline DataStream& operator>>(DataStream& ds, eosio::symbol& sym) {
@@ -374,7 +373,7 @@ namespace eosio {
    }
 
    /**
-    *  Extended asset which stores the information of the owner of the symbol
+    *  Расширенный символ: символ токена и контракт-эмитент в сети COOPOS
     *
     *  @ingroup symbol
     */
@@ -383,36 +382,36 @@ namespace eosio {
    public:
 
       /**
-       * Default constructor, construct a new extended_symbol
+       * Конструктор по умолчанию
        */
       constexpr extended_symbol() {}
 
       /**
-       * Construct a new symbol_code object initialising symbol and contract with the passed in symbol and name
+       * Создаёт extended_symbol по символу и имени контракта
        *
-       * @param sym - The symbol
-       * @param con - The name of the contract
+       * @param sym — символ токена
+       * @param con — имя контракта (эмитента)
        */
       constexpr extended_symbol( symbol s, name con ) : sym(s), contract(con) {}
 
       /**
-       * Returns the symbol in the extended_contract
+       * Символ без привязки к контракту
        *
        * @return symbol
        */
       constexpr symbol get_symbol() const { return sym; }
 
       /**
-       * Returns the name of the contract in the extended_symbol
+       * Имя контракта-эмитента
        *
        * @return name
        */
       constexpr name  get_contract() const { return contract; }
 
       /**
-       * %Print the extended symbol
+       * Печать расширенного символа в лог контракта COOPOS
        *
-       * @brief %Print the extended symbol
+       * @brief Вывод расширенного символа
        */
       void print( bool show_precision = true )const {
          sym.print( show_precision );
@@ -420,35 +419,35 @@ namespace eosio {
       }
 
       /**
-       * Equivalency operator. Returns true if a == b (are the same)
+       * Оператор равенства
        *
-       * @return boolean - true if both provided extended_symbols are the same
+       * @return true — пары (символ, контракт) совпадают
        */
       friend constexpr bool operator == ( const extended_symbol& a, const extended_symbol& b ) {
         return std::tie( a.sym, a.contract ) == std::tie( b.sym, b.contract );
       }
 
       /**
-       * Inverted equivalency operator. Returns true if a != b (are different)
+       * Оператор неравенства
        *
-       * @return boolean - true if both provided extended_symbols are not the same
+       * @return true — значения различаются
        */
       friend constexpr bool operator != ( const extended_symbol& a, const extended_symbol& b ) {
         return std::tie( a.sym, a.contract ) != std::tie( b.sym, b.contract );
       }
 
       /**
-       * Less than operator. Returns true if a < b.
+       * Оператор «меньше» (лексикографически по паре символ, контракт)
        *
-       * @return boolean - true if extended_symbol `a` is less than `b`
+       * @return true — a меньше b
        */
       friend constexpr bool operator < ( const extended_symbol& a, const extended_symbol& b ) {
         return std::tie( a.sym, a.contract ) < std::tie( b.sym, b.contract );
       }
 
    private:
-      symbol sym; ///< the symbol
-      name   contract; ///< the token contract hosting the symbol
+      symbol sym; ///< символ токена
+      name   contract; ///< контракт, выпускающий токен
 
       EOSLIB_SERIALIZE( extended_symbol, (sym)(contract) )
    };

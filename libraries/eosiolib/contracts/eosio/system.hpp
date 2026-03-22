@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright как определено в eos/LICENSE
  */
 #pragma once
 #include "../../core/eosio/time.hpp"
@@ -31,26 +31,25 @@ namespace eosio {
   }
 
   /**
-   *  @addtogroup system System
+   *  @addtogroup system Системные функции (System)
    *  @ingroup contracts
-   *  @brief Defines time related functions and eosio_exit
+   *  @brief Определяет функции, связанные со временем, и eosio_exit
    */
 
    /**
-    *  This method will abort execution of wasm without failing the contract.
-    *  This is used to bypass all cleanup / destructors that would normally be
-    *  called.
+    *  Прерывает выполнение WASM без признания контракта провалившимся.
+    *  Используется, чтобы обойти обычную очистку и деструкторы при нормальном выходе.
     *
        <html><p><b>
-       WARNING: this method will immediately abort execution of wasm code that is on
-                the stack and would be executed as the method normally returned.
-                Problems can occur with write-caches, RAII, reference counting
-                when this method aborts execution of wasm code immediately.
+       ВНИМАНИЕ: метод немедленно обрывает выполнение WASM-кода на стеке, который
+                выполнился бы при обычном возврате из функции.
+                Возможны проблемы с кэшами записи, RAII, подсчётом ссылок,
+                если выполнение WASM прерывается сразу.
        </b></p></html>
     *  @ingroup system
     *
-    *  @param code - the exit code
-    *    Example:
+    *  @param code — код выхода
+    *    Пример:
     *
     *      @code
     *      eosio_exit(0);
@@ -64,39 +63,39 @@ namespace eosio {
    }
 
    /**
-   *  Returns the time in microseconds from 1970 of the current block as a time_point
+   *  Время текущего блока в микросекундах от 1970 года как time_point
    *
    *  @ingroup system
-   *  @return time in microseconds from 1970 of the current block as a time_point
+   *  @return время текущего блока в микросекундах от 1970 года (time_point)
    */
    time_point current_time_point();
 
    /**
-   *  Returns the time in microseconds from 1970 of the current block as a block_timestamp
+   *  Время текущего блока в микросекундах от 1970 года как block_timestamp
    *
    *  @ingroup system
-   *  @return time in microseconds from 1970 of the current block as a block_timestamp
+   *  @return время текущего блока в микросекундах от 1970 года (block_timestamp)
    */
    block_timestamp current_block_time();
 
    using block_num_t = uint32_t;
 
    /**
-   *  Returns the current block number 
+   *  Номер текущего блока
    *
    *  @ingroup system
-   *  @return the current block number 
+   *  @return номер текущего блока
    */
    inline block_num_t current_block_number() {
       return internal_use_do_not_use::get_block_num();
    }
 
    /**
-    * Check if specified protocol feature has been activated
+    * Проверяет, активирована ли указанная протокольная возможность в COOPOS
     *
     * @ingroup system
-    * @param feature_digest - digest of the protocol feature
-    * @return true if the specified protocol feature has been activated, false otherwise
+    * @param feature_digest — дайджест протокольной возможности
+    * @return true, если возможность активирована, иначе false
     */
    inline bool is_feature_activated( const checksum256& feature_digest ) {
       auto feature_digest_data = feature_digest.extract_as_byte_array();
@@ -106,10 +105,10 @@ namespace eosio {
    }
 
    /**
-    * Return name of account that sent current inline action
+    * Имя аккаунта, отправившего текущее inline-действие
     *
     * @ingroup system
-    * @return name of account that sent the current inline action (empty name if not called from inline action)
+    * @return имя отправителя текущего inline-действия (пустое имя, если вызов не из inline-действия)
     */
    inline name get_sender() {
       return name( internal_use_do_not_use::get_sender() );

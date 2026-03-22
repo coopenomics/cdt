@@ -10,7 +10,7 @@ extern "C" {
 
 /**
  *  @addtogroup crypto Crypto
- *  @brief Defines %C API for calculating and checking hash
+ *  @brief Определяет C API для вычисления и проверки хешей
  *  @{
  */
 

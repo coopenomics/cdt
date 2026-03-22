@@ -6,28 +6,28 @@
 namespace eosio {
 
   /**
-   *  @defgroup producer_key Producer Key
+   *  @defgroup producer_key Ключ производителя
    *  @ingroup contracts
    *  @ingroup types
-   *  @brief Maps producer with its signing key, used for producer schedule
+   *  @brief Сопоставляет производителя с его ключом подписи блока; используется в расписании производителей
    */
 
   /**
-   *  Maps producer with its signing key, used for producer schedule
+   *  Сопоставляет производителя с ключом подписи блока; используется в расписании производителей
    *
    *  @ingroup producer_key
    */
   struct producer_key {
 
     /**
-     *  Name of the producer
+     *  Имя производителя
      *
      *  @ingroup producer_key
      */
     name             producer_name;
 
     /**
-     *  Block signing key used by this producer
+     *  Ключ подписи блока, используемый этим производителем
      *
      *  @ingroup producer_key
      */
@@ -45,25 +45,25 @@ namespace eosio {
   };
 
    /**
-    *  @defgroup producer_schedule Producer Schedule
+    *  @defgroup producer_schedule Расписание производителей
     *  @ingroup contracts
     *  @ingroup types
-    *  @brief Defines both the order, account name, and signing keys of the active set of producers.
+    *  @brief Задаёт порядок, имена аккаунтов и ключи подписи активного набора производителей.
     */
 
    /**
-    * Defines both the order, account name, and signing keys of the active set of producers.
+    *  Задаёт порядок, имена аккаунтов и ключи подписи активного набора производителей
     *
     * @ingroup producer_schedule
     */
    struct producer_schedule {
       /**
-       * Version number of the schedule. It is sequentially incrementing version number
+       * Номер версии расписания (монотонно возрастающий)
        */
       uint32_t                     version;
 
       /**
-       * List of producers for this schedule, including its signing key
+       * Список производителей расписания с ключами подписи
        */
       std::vector<producer_key>    producers;
 
@@ -71,29 +71,29 @@ namespace eosio {
    };
 
    /**
-    *  @defgroup producer_authority Producer Authority
+    *  @defgroup producer_authority Полномочие производителя
     *  @ingroup contracts
     *  @ingroup types
-    *  @brief Maps producer with its a flexible authority structure, used for producer schedule
+    *  @brief Сопоставляет производителя с гибкой структурой полномочий; используется в расписании производителей
     */
 
    /**
-    * pairs a public key with an integer weight
+    *  Сопоставляет открытый ключ с целочисленным весом
     *
     * @ingroup producer_authority
     */
    struct key_weight {
       /**
-       * public key used in a weighted threshold multi-sig authority
+       * Открытый ключ во взвешенном пороговом полномочии с несколькими подписями (multi-sig)
        *
-       * @brief public key used in a weighted threshold multi-sig authority
+       * @brief открытый ключ во взвешенном пороговом полномочии с несколькими подписями (multi-sig)
        */
       public_key key;
 
       /**
-       * weight associated with a signature from the private key associated with the accompanying public key
+       * Вес подписи закрытым ключом, соответствующим этому открытому ключу
        *
-       * @brief weight of the public key
+       * @brief вес открытого ключа
        */
       uint16_t   weight;
 
@@ -101,25 +101,24 @@ namespace eosio {
    };
 
    /**
-    * block signing authority version 0
-    * this authority allows for a weighted threshold multi-sig per-producer
+    *  Полномочие подписи блока, версия 0: взвешенный пороговый multi-sig на производителя
     *
     * @ingroup producer_authority
     *
-    * @brief weighted threshold multi-sig authority
+    * @brief взвешенное пороговое полномочие с несколькими подписями (multi-sig)
     */
    struct block_signing_authority_v0 {
       /**
-       * minimum threshold of accumulated weights from component keys that satisfies this authority
+       * Минимальный порог суммы весов компонентных ключей, при котором полномочие считается удовлетворённым
        *
-       * @brief minimum threshold of accumulated weights from component keys that satisfies this authority
+       * @brief минимальный порог суммы весов компонентных ключей, при котором полномочие считается удовлетворённым
        */
       uint32_t                    threshold;
 
       /**
-       * component keys and their associated weights
+       * Компонентные ключи и связанные с ними веса
        *
-       * @brief component keys and their associated weights
+       * @brief компонентные ключи и связанные с ними веса
        */
       std::vector<key_weight>     keys;
 
@@ -129,30 +128,30 @@ namespace eosio {
    };
 
    /**
-    * variant of all possible block signing authorities
+    *  Вариант (std::variant) всех допустимых полномочий подписи блока
     *
     * @ingroup producer_authority
     */
    using block_signing_authority = std::variant<block_signing_authority_v0>;
 
    /**
-    * Maps producer with its signing key, used for producer schedule
+    *  Сопоставляет производителя с полномочием подписи блока; используется в расписании производителей
     *
     * @ingroup producer_authority
     *
-    * @brief Maps producer with its signing key
+    * @brief Сопоставляет производителя с его ключом подписи
     */
    struct producer_authority {
 
       /**
-       * Name of the producer
+       * Имя производителя
        *
-       * @brief Name of the producer
+       * @brief имя производителя
        */
       name             producer_name;
 
       /**
-       * The block signing authority used by this producer
+       * Полномочие подписи блока для этого производителя
        */
       block_signing_authority       authority;
 
@@ -164,10 +163,10 @@ namespace eosio {
    };
 
    /**
-    *  Returns back the list of active producer names.
+    *  Возвращает список имён активных производителей
     *
     *  @ingroup producer_schedule
     */
    std::vector<name> get_active_producers();
 
-} /// namespace eosio
+} /// пространство имён eosio

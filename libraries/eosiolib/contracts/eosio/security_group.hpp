@@ -18,9 +18,9 @@ __attribute__((eosio_wasm_import)) uint32_t get_active_security_group(char* data
 } // namespace internal_use_do_not_use
 
 /**
- *  @defgroup security_group Security Group
+ *  @defgroup security_group Группа безопасности
  *  @ingroup contracts
- *  @brief Defines C++ security group API
+ *  @brief Определяет C++ API группы безопасности
  */
 
 struct security_group {
@@ -30,12 +30,12 @@ struct security_group {
 };
 
 /**
- * Propose new participants to the security group.
+ * Предложить новых участников группы безопасности.
  *
  * @ingroup security_group
- * @param participants - the participants.
+ * @param participants — участники.
  *
- * @return -1 if proposing a new security group was unsuccessful, otherwise returns 0.
+ * @return -1, если предложение новой группы безопасности не удалось, иначе 0.
  */
 inline int64_t add_security_group_participants(const std::set<name>& participants) {
    auto packed_participants = eosio::pack( participants );
@@ -43,12 +43,12 @@ inline int64_t add_security_group_participants(const std::set<name>& participant
 }
 
 /**
- * Propose to remove participants from the security group.
- *å
+ * Предложить исключить участников из группы безопасности.
+ *
  * @ingroup security_group
- * @param participants - the participants.
- *å
- * @return -1 if proposing a new security group was unsuccessful, otherwise returns 0.
+ * @param participants — участники.
+ *
+ * @return -1, если предложение новой группы безопасности не удалось, иначе 0.
  */
 inline int64_t remove_security_group_participants(const std::set<name>& participants){
    auto packed_participants = eosio::pack( participants );
@@ -56,12 +56,12 @@ inline int64_t remove_security_group_participants(const std::set<name>& particip
 }
 
 /**
- * Check if the specified accounts are all in the active security group.
+ * Проверить, что все указанные аккаунты входят в активную группу безопасности.
  *
  * @ingroup security_group
- * @param participants - the participants.
+ * @param participants — участники.
  *
- * @return Returns true if the specified accounts are all in the active security group.
+ * @return true, если все указанные аккаунты входят в активную группу безопасности.
  */
 inline bool in_active_security_group(const std::set<name>& participants){
    auto packed_participants = eosio::pack( participants );
@@ -69,13 +69,10 @@ inline bool in_active_security_group(const std::set<name>& participants){
 }
 
 /**
- * Gets the active security group
+ * Возвращает активную группу безопасности (распакованную структуру).
  *
  * @ingroup security_group
- * @param[out] packed_security_group - the buffer containing the packed security_group.
- *
- * @return Returns the size required in the buffer (if the buffer is too small, nothing is written).
- *
+ * @return объект security_group с данными активной группы
  */
 inline security_group get_active_security_group() {
    size_t buffer_size = internal_use_do_not_use::get_active_security_group(0, 0);

@@ -5,39 +5,39 @@
 namespace  eosio {
 
    /**
-    *  @defgroup singleton Singleton Table
+    *  @defgroup singleton Singleton-таблица
     *  @ingroup contracts
-    *  @brief Defines EOSIO Singleton Table used with %multiindex
+    *  @brief Определяет singleton-таблицу COOPOS для использования с %multiindex
     */
 
    /**
-    *  This wrapper uses a single table to store named objects various types.
+    *  Обёртка использует одну таблицу для хранения именованных объектов различных типов.
     *
     *  @ingroup singleton
-    *  @tparam SingletonName - the name of this singleton variable
-    *  @tparam T - the type of the singleton
+    *  @tparam SingletonName — имя этой singleton-переменной
+    *  @tparam T — тип singleton
     */
    template<name::raw SingletonName, typename T>
    class singleton
    {
       /**
-       * Primary key of the data inside singleton table
+       * Первичный ключ данных в singleton-таблице
        */
       constexpr static uint64_t pk_value = static_cast<uint64_t>(SingletonName);
 
       /**
-       * Structure of data inside the singleton table
+       * Структура данных в singleton-таблице
        */
       struct row {
          /**
-          * Value to be stored inside the singleton table
+          * Значение, хранимое в singleton-таблице
           */
          T value;
 
          /**
-          * Get primary key of the data
+          * Возвращает первичный ключ данных
           *
-          * @return uint64_t - Primary Key
+          * @return uint64_t — первичный ключ
           */
          uint64_t primary_key() const { return pk_value; }
 
@@ -49,28 +49,28 @@ namespace  eosio {
       public:
 
          /**
-          * Construct a new singleton object given the table's owner and the scope
+          * Создаёт объект singleton по владельцу таблицы и области видимости (scope)
           *
-          * @param code - The table's owner
-          * @param scope - The scope of the table
+          * @param code — владелец таблицы
+          * @param scope — scope таблицы
           */
          singleton( name code, uint64_t scope ) : _t( code, scope ) {}
 
          /**
-          *  Check if the singleton table exists
+          *  Проверяет существование singleton-таблицы
           *
-          * @return true - if exists
-          * @return false - otherwise
+          * @return true — если существует
+          * @return false — иначе
           */
          bool exists() {
             return _t.find( pk_value ) != _t.end();
          }
 
          /**
-          * Get the value stored inside the singleton table. Will throw an exception if it doesn't exist
+          * Возвращает значение из singleton-таблицы. Выбрасывает исключение, если записи нет
           *
-          * @brief Get the value stored inside the singleton table
-          * @return T - The value stored
+          * @brief Возвращает значение, хранящееся в singleton-таблице
+          * @return T — сохранённое значение
           */
          T get() {
             auto itr = _t.find( pk_value );
@@ -79,10 +79,10 @@ namespace  eosio {
          }
 
          /**
-          * Get the value stored inside the singleton table. If it doesn't exist, it will return the specified default value
+          * Возвращает значение из singleton-таблицы. Если записи нет — указанное значение по умолчанию
           *
-          * @param def - The default value to be returned in case the data doesn't exist
-          * @return T - The value stored
+          * @param def — значение по умолчанию, если данных нет
+          * @return T — сохранённое значение
           */
          T get_or_default( const T& def = T() ) {
             auto itr = _t.find( pk_value );
@@ -90,11 +90,11 @@ namespace  eosio {
          }
 
          /**
-          * Get the value stored inside the singleton table. If it doesn't exist, it will create a new one with the specified default value
+          * Возвращает значение из singleton-таблицы. Если записи нет — создаёт её с указанным значением по умолчанию
           *
-          * @param bill_to_account - The account to bill for the newly created data if the data doesn't exist
-          * @param def - The default value to be created in case the data doesn't exist
-          * @return T - The value stored
+          * @param bill_to_account — аккаунт, с которого списывается оплата за новые данные, если записи не было
+          * @param def — значение по умолчанию при создании записи
+          * @return T — сохранённое значение
           */
          T get_or_create( name bill_to_account, const T& def = T() ) {
             auto itr = _t.find( pk_value );
@@ -103,10 +103,10 @@ namespace  eosio {
          }
 
          /**
-          * Set new value to the singleton table
+          * Записывает новое значение в singleton-таблицу
           *
-          * @param value - New value to be set
-          * @param bill_to_account - Account to pay for the new value
+          * @param value — новое значение
+          * @param bill_to_account — аккаунт, с которого списывается оплата за запись
           */
          void set( const T& value, name bill_to_account ) {
             auto itr = _t.find( pk_value );
@@ -118,7 +118,7 @@ namespace  eosio {
          }
 
          /**
-          * Remove the only data inside singleton table
+          * Удаляет единственную запись в singleton-таблице
           */
          void remove( ) {
             auto itr = _t.find( pk_value );

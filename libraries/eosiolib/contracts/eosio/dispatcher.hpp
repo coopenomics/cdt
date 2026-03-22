@@ -7,9 +7,9 @@
 namespace eosio {
 
   /**
-   * @defgroup dispatcher Dispatcher
+   * @defgroup dispatcher Диспетчер (Dispatcher)
    * @ingroup contracts
-   * @brief Defines C++ functions to dispatch action to proper action handler inside a contract
+   * @brief Определяет функции C++ для маршрутизации действия к соответствующему обработчику внутри контракта
    */
 
 
@@ -27,13 +27,13 @@ namespace eosio {
    /// @endcond
 
    /**
-    * This method will dynamically dispatch an incoming set of actions to
+    * Динамически направляет входящие действия к обработчикам вида
     *
     * ```
     * static Contract::on( ActionType )
     * ```
     *
-    * For this to work the Actions must be derived from eosio::contract
+    * Контракт, принимающий действия, должен наследовать eosio::contract
     *
     * @ingroup dispatcher
     *
@@ -51,15 +51,15 @@ namespace eosio {
 
 
    /**
-    * Unpack the received action and execute the correponding action handler
+    * Распаковывает полученное действие и вызывает соответствующий обработчик
     *
     * @ingroup dispatcher
-    * @tparam T - The contract class that has the correponding action handler, this contract should be derived from eosio::contract
-    * @tparam Q - The namespace of the action handler function
-    * @tparam Args - The arguments that the action handler accepts, i.e. members of the action
-    * @param obj - The contract object that has the correponding action handler
-    * @param func - The action handler
-    * @return true
+    * @tparam T — класс контракта с обработчиком действия; должен наследовать eosio::contract
+    * @tparam Args — типы аргументов обработчика (поля действия)
+    * @param self — имя, передаваемое в конструктор экземпляра контракта
+    * @param code — код, передаваемый в конструктор экземпляра контракта
+    * @param func — указатель на метод-обработчик действия
+    * @return true — если действие распаковано и обработчик вызван
     */
    template<typename T, typename... Args>
    bool execute_action( name self, name code, void (T::*func)(Args...)  ) {
@@ -105,14 +105,14 @@ namespace eosio {
 /// @endcond
 
 /**
- * Convenient macro to create contract apply handler
+ * Удобный макрос для создания обработчика apply контракта
  *
  * @ingroup dispatcher
- * @note To be able to use this macro, the contract needs to be derived from eosio::contract
- * @param TYPE - The class name of the contract
- * @param MEMBERS - The sequence of available actions supported by this contract
+ * @note Чтобы использовать макрос, класс контракта должен наследовать eosio::contract
+ * @param TYPE — имя класса контракта
+ * @param MEMBERS — последовательность поддерживаемых действий контракта
  *
- * Example:
+ * Пример:
  * @code
  * EOSIO_DISPATCH( eosio::bios, (setpriv)(setalimits)(setglimits)(setprods)(reqauth) )
  * @endcode

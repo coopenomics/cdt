@@ -5,14 +5,14 @@
 
 
 /**
- * @defgroup contract Contract
+ * @defgroup contract Контракт (Contract)
  * @ingroup contracts
  * @ingroup types
- * @brief Defines contract type which is %base class for every EOSIO contract
+ * @brief Определяет тип контракта — %базовый класс для каждого контракта COOPOS
  */
 
 /**
- * Helper macros to reduce the verbosity for common contracts
+ * Вспомогательные макросы для сокращения шаблонного кода в типовых контрактах
  * @ingroup contract
  */
 #define CONTRACT class [[eosio::contract]]
@@ -22,72 +22,72 @@
 namespace eosio {
 
 /**
- * %Base class for EOSIO contract.
+ * %Базовый класс контракта COOPOS.
  *
  * @ingroup contract
- * @details %A new contract should derive from this class, so it can make use of EOSIO_ABI macro.
+ * @details Новый контракт должен наследовать этот класс, чтобы можно было использовать макрос EOSIO_ABI.
  */
 class contract {
    public:
       /**
-       * Construct a new contract given the contract name
+       * Создаёт контракт с заданными параметрами
        *
-       * @param self - The name of the account this contract is deployed on
-       * @param first_receiver - The account the incoming action was first received at.
-       * @param ds - The datastream used
+       * @param self — имя аккаунта, на котором развёрнут контракт
+       * @param first_receiver — аккаунт, на который действие впервые поступило
+       * @param ds — используемый поток данных (datastream)
        */
       contract( name self, name first_receiver, datastream<const char*> ds ):_self(self),_first_receiver(first_receiver),_ds(ds) {}
 
       /**
        *
-       * Get this contract name
+       * Имя этого контракта
        *
-       * @return name - The name of this contract
+       * @return name — имя контракта
        */
       inline name get_self()const { return _self; }
 
       /**
-       * The first_receiver name of the action this contract is processing.
+       * Имя first_receiver для обрабатываемого действия (устаревший метод).
        *
-       * @return name - The first_receiver name of the action this contract is processing.
+       * @return name — первый получатель текущего действия (параметр конструктора `first_receiver`)
        */
       [[deprecated]]
       inline name get_code()const { return _first_receiver; }
 
       /**
-       * The account the incoming action was first received at.
+       * Аккаунт, на который входящее действие впервые поступило.
        *
-       * @return name - The first_receiver name of the action this contract is processing.
+       * @return name — первый получатель текущего действия (параметр конструктора `first_receiver`)
        */
       inline name get_first_receiver()const { return _first_receiver; }
 
       /**
-       * Get the datastream for this contract
+       * Поток данных (datastream) этого контракта
        *
-       * @return datastream<const char*> - The datastream for this contract
+       * @return datastream<const char*> — поток данных контракта
        */
       inline datastream<const char*>& get_datastream() { return _ds; }
 
       /**
-       * Get the datastream for this contract
+       * Поток данных (datastream) этого контракта (константная версия)
        *
-       * @return datastream<const char*> - The datastream for this contract
+       * @return datastream<const char*> — поток данных контракта
        */
       inline const datastream<const char*>& get_datastream()const { return _ds; }
 
    protected:
       /**
-       * The name of the account this contract is deployed on.
+       * Имя аккаунта, на котором развёрнут контракт.
        */
       name _self;
 
       /**
-       * The account the incoming action was first received at.
+       * Аккаунт, на который входящее действие впервые поступило.
        */
       name _first_receiver;
 
       /**
-       * The datastream for this contract
+       * Поток данных (datastream) контракта
        */
       datastream<const char*> _ds = datastream<const char*>(nullptr, 0);
 };

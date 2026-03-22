@@ -76,7 +76,7 @@ namespace eosio {
    template<uint8_t Base, typename T = uint64_t>
    inline constexpr auto powers_of_base = detail::generate_array<detail::largest_power<T, Base>::exponent + 1>( detail::pow_generator<T, Base> );
 
-   /** @returns Base^exponent */
+   /** @return Возвращает Base в степени exponent (Base^exponent). */
    template<uint8_t Base, typename T = uint64_t>
    constexpr T pow( uint8_t exponent ) {
       const auto& lookup_table = powers_of_base<Base, T>;

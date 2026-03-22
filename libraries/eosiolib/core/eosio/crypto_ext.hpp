@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in cdt/LICENSE
+ *  @copyright см. cdt/LICENSE
  */
 #pragma once
 
@@ -51,34 +51,34 @@ namespace eosio {
    }
 
    /**
-    *  @defgroup crypto Crypto
+    *  @defgroup crypto Криптография
     *  @ingroup core
-    *  @brief Defines API for calculating and checking hashes which
-    *  require activating crypto protocol feature
+    *  @brief Определяет API вычисления и проверки хешей, для которых
+    *  требуется активация соответствующего криптопротокольного свойства в цепи COOPOS
     */
 
    /**
-    * Abstracts mutable G1 and G2 points
+    * Абстракция изменяемых точек G1 и G2
     *
     *  @ingroup crypto
     */
    template <std::size_t Size = 32>
    struct ec_point {
       /**
-       * Bytes of the x coordinate
+       * Байты координаты x
        */
       std::vector<char> x;
 
       /**
-       * Bytes of the y coordinate
+       * Байты координаты y
        */
       std::vector<char> y;
 
       /**
-       * Construct a point given x and y
+       * Создаёт точку по координатам x и y
        *
-       * @param x_ - The x coordinate, a vector of chars
-       * @param y_ - The y coordinate, a vector of chars
+       * @param x_ - Координата x, вектор символов
+       * @param y_ - Координата y, вектор символов
       */
       ec_point(std::vector<char>& x_, std::vector<char>& y_)
       :x(x_), y(y_)
@@ -88,9 +88,9 @@ namespace eosio {
       };
 
       /**
-       * Construct a point given a serialized point
+       * Создаёт точку из сериализованного представления
        *
-       * @param p - The serialized point
+       * @param p - Сериализованная точка
        */
       ec_point(std::vector<char>& p)
       :x(p.data(), p.data() + Size), y(p.data() + Size, p.data() + p.size())
@@ -99,7 +99,7 @@ namespace eosio {
       };
 
       /**
-       *  Return serialzed point containing only x and y
+       *  Возвращает сериализованную точку (только x и y)
        */
       std::vector<char> serialized() const {
          std::vector<char> x_and_y( x );
@@ -109,19 +109,19 @@ namespace eosio {
    };
 
    /**
-    * Abstracts read-only G1 and G2 points
+    * Абстракция точек G1 и G2 только для чтения
     *
     *  @ingroup crypto
     */
    template <std::size_t Size = 32>
    struct ec_point_view {
       /**
-       * Pointer to the x coordinate
+       * Указатель на координату x
        */
       const char* x;
 
       /**
-       * Pointer to the y coordinate
+       * Указатель на координату y
        */
       const char* y;
 
@@ -131,12 +131,12 @@ namespace eosio {
       uint32_t size;
 
       /**
-       * Construct a point view from x and y
+       * Создаёт представление точки по x и y
        *
-       * @param x_     - The x coordinate, poiter to chars
-       * @param x_size - x's size
-       * @param y_     - The y coordinate, poiter to chars
-       * @param y_size - y's size
+       * @param x_     - Координата x, указатель на байты
+       * @param x_size - Размер x
+       * @param y_     - Координата y, указатель на байты
+       * @param y_size - Размер y
        */
       ec_point_view(const char* x_, uint32_t x_size, const char* y_, uint32_t y_size)
       :x(x_), y(y_), size(x_size)
@@ -146,9 +146,9 @@ namespace eosio {
       };
 
       /**
-       * Construct a point view from a serialized point
+       * Создаёт представление точки из сериализованных данных
        *
-       * @param p - The serialized point
+       * @param p - Сериализованная точка
        */
       ec_point_view(const std::vector<char>& p)
       :x(p.data()), y(p.data() + Size), size(Size)
@@ -157,9 +157,9 @@ namespace eosio {
       };
 
       /**
-       * Construct a point view from a point
+       * Создаёт представление точки из объекта точки
        *
-       * @param p - The point
+       * @param p - Точка
        */
       ec_point_view(const ec_point<Size>& p)
       :x(p.x.data()), y(p.y.data()), size(Size)
@@ -167,7 +167,7 @@ namespace eosio {
       };
 
       /**
-       *  Return serialzed point containing only x and y
+       *  Возвращает сериализованную точку (только x и y)
        */
       std::vector<char> serialized() const {
          std::vector<char> x_and_y( x, x + size );
@@ -185,19 +185,19 @@ namespace eosio {
    using g2_point_view = ec_point_view<g2_coordinate_size>;
 
    /**
-    * Big integer.
+    * Большое целое.
     *
     *  @ingroup crypto
     */
    using bigint = std::vector<char>;
 
    /**
-    *  Addition operation on the elliptic curve `alt_bn128`
+    *  Сложение на эллиптической кривой `alt_bn128`
     *
     *  @ingroup crypto
-    *  @param op1 - operand 1
-    *  @param op2 - operand 2
-    *  @return result of the addition operation; throw if error
+    *  @param op1 - Операнд 1
+    *  @param op2 - Операнд 2
+    *  @return Результат сложения; при ошибке — исключение
     */
    template <typename T>
    inline g1_point alt_bn128_add( const T& op1, const T& op2 ) {
@@ -210,28 +210,28 @@ namespace eosio {
    }
 
    /**
-    *  Addition operation on the elliptic curve `alt_bn128` 
+    *  Сложение на эллиптической кривой `alt_bn128`
     *
     *  @ingroup crypto
-    *  @param op1 - operand 1
-    *  @param op1_len - size of operand 1
-    *  @param op2 - operand 2
-    *  @param op2_len - size of operand 2
-    *  @param result - result of the addition operation
-    *  @param result_len - size of result
-    *  @return -1 if there is an error otherwise 0
+    *  @param op1 - Операнд 1
+    *  @param op1_len - Размер операнда 1
+    *  @param op2 - Операнд 2
+    *  @param op2_len - Размер операнда 2
+    *  @param result - Результат сложения
+    *  @param result_len - Размер результата
+    *  @return -1 при ошибке, иначе 0
     */
    inline int32_t alt_bn128_add( const char* op1, uint32_t op1_len, const char* op2, uint32_t op2_len, char* result, uint32_t result_len ) {
       return internal_use_do_not_use::alt_bn128_add( op1, op1_len, op2, op2_len, result, result_len);
    }
 
    /**
-    *  Scalar multiplication operation on the elliptic curve `alt_bn128`
+    *  Скалярное умножение на эллиптической кривой `alt_bn128`
     *
     *  @ingroup crypto
-    *  @param g1 - G1 point
-    *  @param scalar - scalar factor
-    *  @return result of the scalar multiplication operation; throw if error
+    *  @param g1 - Точка G1
+    *  @param scalar - Скалярный множитель
+    *  @return Результат умножения; при ошибке — исключение
     */
    template <typename T>
    inline g1_point alt_bn128_mul( const T& g1, const bigint& scalar) {
@@ -243,27 +243,27 @@ namespace eosio {
    }
 
    /**
-    *  Scalar multiplication operation on the elliptic curve `alt_bn128` 
+    *  Скалярное умножение на эллиптической кривой `alt_bn128`
     *
     *  @ingroup crypto
-    *  @param g1 - G1 point
-    *  @param g1_len - size of G1 point
-    *  @param scalar - scalar factor
-    *  @param scalar_len - size of scalar
-    *  @param result - result of the scalar multiplication operation
-    *  @param result_len - size of result
-    *  @return -1 if there is an error otherwise 0
+    *  @param g1 - Точка G1
+    *  @param g1_len - Размер точки G1
+    *  @param scalar - Скалярный множитель
+    *  @param scalar_len - Размер скаляра
+    *  @param result - Результат скалярного умножения
+    *  @param result_len - Размер результата
+    *  @return -1 при ошибке, иначе 0
     */
    inline int32_t alt_bn128_mul( const char* g1, uint32_t g1_len, const char* scalar, uint32_t scalar_len, char* result, uint32_t result_len ) {
       return internal_use_do_not_use::alt_bn128_mul( g1, g1_len, scalar, scalar_len, result, result_len );
    }
 
    /**
-    *  Optimal-Ate pairing check elliptic curve `alt_bn128`
+    *  Проверка optimal-Ate pairing на кривой `alt_bn128`
     *
     *  @ingroup crypto
-    *  @param pairs - g1 and g2 pairs
-    *  @return -1 if there is an error, 1 if false and 0 if true and successful
+    *  @param pairs - Пары точек g1 и g2
+    *  @return -1 при ошибке, 1 если ложь, 0 если истина и успех
     */
    template <typename G1_T, typename G2_T>
    inline int32_t alt_bn128_pair( const std::vector<std::pair<G1_T, G2_T>>& pairs ) {
@@ -278,27 +278,27 @@ namespace eosio {
    }
 
    /**
-    *  Optimal-Ate pairing check elliptic curve `alt_bn128` 
+    *  Проверка optimal-Ate pairing на кривой `alt_bn128`
     *
     *  @ingroup crypto
-    *  @param pairs - g1 and g2 pairs
-    *  @param pairs_len - size of pairs
-    *  @return -1 if there is an error, 1 if false and 0 if true and successful
+    *  @param pairs - Пары g1 и g2
+    *  @param pairs_len - Размер данных пар
+    *  @return -1 при ошибке, 1 если ложь, 0 если истина и успех
     */
    inline int32_t alt_bn128_pair( const char* pairs, uint32_t pairs_len ) {
       return internal_use_do_not_use::alt_bn128_pair( pairs, pairs_len );
    }
    
    /**
-    *  Big integer modular exponentiation
-    *  returns an output ( BASE^EXP ) % MOD
+    *  Модульное возведение в степень для больших целых
+    *  Возвращает ( BASE^EXP ) % MOD
     *
     *  @ingroup crypto
-    *  @param base - base of the exponentiation (BASE)
-    *  @param exp - exponent to raise to that power (EXP)
-    *  @param mod - modulus (MOD)
-    *  @param result - result of the modular exponentiation
-    *  @return -1 if there is an error otherwise 0
+    *  @param base - Основание (BASE)
+    *  @param exp - Показатель степени (EXP)
+    *  @param mod - Модуль (MOD)
+    *  @param result - Результат модульного возведения в степень
+    *  @return -1 при ошибке, иначе 0
     */
 
    inline int32_t mod_exp( const bigint& base, const bigint& exp, const bigint& mod, bigint& result) {
@@ -308,19 +308,19 @@ namespace eosio {
    }
 
    /**
-    *  Big integer modular exponentiation
-    *  returns an output ( BASE^EXP ) % MOD
+    *  Модульное возведение в степень для больших целых
+    *  Возвращает ( BASE^EXP ) % MOD
     *
     *  @ingroup crypto
-    *  @param base - base of the exponentiation (BASE)
-    *  @param base_len - size of base
-    *  @param exp - exponent to raise to that power (EXP)
-    *  @param exp_len - size of exp
-    *  @param mod - modulus (MOD)
-    *  @param mod_len - size of mod
-    *  @param result - result of the modular exponentiation
-    *  @param result_len - size of result
-    *  @return -1 if there is an error otherwise 0
+    *  @param base - Основание (BASE)
+    *  @param base_len - Размер основания
+    *  @param exp - Показатель степени (EXP)
+    *  @param exp_len - Размер показателя
+    *  @param mod - Модуль (MOD)
+    *  @param mod_len - Размер модуля
+    *  @param result - Результат модульного возведения в степень
+    *  @param result_len - Размер результата
+    *  @return -1 при ошибке, иначе 0
     */
 
    inline int32_t mod_exp( const char* base, uint32_t base_len, const char* exp, uint32_t exp_len, const char* mod, uint32_t mod_len, char* result, uint32_t result_len ) {
@@ -330,18 +330,18 @@ namespace eosio {
    static constexpr size_t blake2f_result_size = 64;
 
    /**
-    *  BLAKE2 compression function "F"
+    *  Функция сжатия BLAKE2 «F»
     *  https://eips.ethereum.org/EIPS/eip-152
     *
     *  @ingroup crypto
-    *  @param rounds - the number of rounds
-    *  @param state - state vector
-    *  @param msg - message block vector
-    *  @param t0_offset - offset counters
-    *  @param t1_offset - offset counters
-    *  @param final - final block flag
-    *  @param result - the result of the compression
-    *  @return -1 if there is an error otherwise 0
+    *  @param rounds - Число раундов
+    *  @param state - Вектор состояния
+    *  @param msg - Вектор блока сообщения
+    *  @param t0_offset - Смещения счётчиков
+    *  @param t1_offset - Смещения счётчиков
+    *  @param final - Флаг последнего блока
+    *  @param result - Результат сжатия
+    *  @return -1 при ошибке, иначе 0
     */
    inline int32_t blake2_f( uint32_t rounds, const std::vector<char>& state, const std::vector<char>& msg, const std::vector<char>& t0_offset, const std::vector<char>& t1_offset, bool final, std::vector<char>& result) {
       eosio::check( result.size() >= blake2f_result_size, "blake2_f result parameter's size must be >= 64" );
@@ -349,23 +349,23 @@ namespace eosio {
    }
 
    /**
-    *  BLAKE2 compression function "F"
+    *  Функция сжатия BLAKE2 «F»
     *  https://eips.ethereum.org/EIPS/eip-152
     *
     *  @ingroup crypto
-    *  @param rounds - the number of rounds
-    *  @param state - state vector
-    *  @param state_len - size of state vector
-    *  @param msg - message block vector
-    *  @param msg_len - size of message block vector
-    *  @param t0_offset - offset counters 
-    *  @param t0_len - size of t0_offset
-    *  @param t1_offset - offset counters 
-    *  @param t1_len - size of t1_offset
-    *  @param final - final block flag
-    *  @param result - the result of the compression
-    *  @param result_len - size of result 
-    *  @return -1 if there is an error otherwise 0
+    *  @param rounds - Число раундов
+    *  @param state - Вектор состояния
+    *  @param state_len - Размер вектора состояния
+    *  @param msg - Вектор блока сообщения
+    *  @param msg_len - Размер блока сообщения
+    *  @param t0_offset - Смещения счётчиков
+    *  @param t0_len - Размер t0_offset
+    *  @param t1_offset - Смещения счётчиков
+    *  @param t1_len - Размер t1_offset
+    *  @param final - Флаг последнего блока
+    *  @param result - Результат сжатия
+    *  @param result_len - Размер результата
+    *  @return -1 при ошибке, иначе 0
     */
    inline int32_t blake2_f( uint32_t rounds, const char* state, uint32_t state_len, const char* msg, uint32_t msg_len, 
                      const char* t0_offset, uint32_t t0_len, const char* t1_offset, uint32_t t1_len, int32_t final, char* result, uint32_t result_len) {
@@ -373,35 +373,25 @@ namespace eosio {
    }
 
    /**
-    *  Hashes `data` using `sha3`
-    *
-    *  @param data - data you want to hash
-    *  @param length - size of data
-    *  @param keccak - whether to use `keccak` or NIST variant; keccak = 1 and NIST == 0
-    *  @return eosio::checksum256 - Computed digest
-    *
-    */
-
-   /**
-    *  Hashes `data` using SHA3 NIST.
+    *  Вычисляет хеш `data` алгоритмом SHA3 (вариант NIST).
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @return eosio::checksum256 - Computed digest
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @return eosio::checksum256 - Вычисленный дайджест
     */
    inline eosio::checksum256 sha3(const char* data, uint32_t length) {
       return internal_use_do_not_use::sha3_helper(data, length, false);
    }
 
    /**
-    *  Tests if the SHA3 hash generated from data matches the provided digest.
+    *  Проверяет, совпадает ли SHA3-хеш данных с переданным дайджестом.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @param hash - digest to compare to
-    *  @note !This method is not optimized away during replay
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @param hash - Дайджест для сравнения
+    *  @note Этот метод не вырезается при повторном воспроизведении
     */
    inline void assert_sha3(const char* data, uint32_t length, const eosio::checksum256& hash) {
       const auto& res = internal_use_do_not_use::sha3_helper(data, length, false);
@@ -409,25 +399,25 @@ namespace eosio {
    }
 
    /**
-    *  Hashes `data` using SHA3 Keccak.
+    *  Вычисляет хеш `data` алгоритмом SHA3 Keccak.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @return eosio::checksum256 - Computed digest
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @return eosio::checksum256 - Вычисленный дайджест
     */
    inline eosio::checksum256 keccak(const char* data, uint32_t length) {
       return internal_use_do_not_use::sha3_helper(data, length, true);
    }
 
    /**
-    *  Tests if the SHA3 keccak hash generated from data matches the provided digest.
+    *  Проверяет, совпадает ли Keccak-хеш данных с переданным дайджестом.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @param hash - digest to compare to
-    *  @note !This method is not optimized away during replay
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @param hash - Дайджест для сравнения
+    *  @note Этот метод не вырезается при повторном воспроизведении
     */
    inline void assert_keccak(const char* data, uint32_t length, const eosio::checksum256& hash) {
       const auto& res = internal_use_do_not_use::sha3_helper(data, length, true);
@@ -435,18 +425,18 @@ namespace eosio {
    }
 
    /**
-    *  Calculates the uncompressed public key used for a given signature on a given digest.
+    *  Вычисляет несжатый открытый ключ по подписи и дайджесту.
     *
     *  @ingroup crypto
-    *  @param sig - signature.
-    *  @param sig_len - size of signature
-    *  @param dig - digest of the message that was signed.
-    *  @param dig_len - size of digest
-    *  @param pub - public key result
-    *  @param pub_len - size of public key result
+    *  @param sig - Подпись
+    *  @param sig_len - Размер подписи
+    *  @param dig - Дайджест подписанного сообщения
+    *  @param dig_len - Размер дайджеста
+    *  @param pub - Буфер для открытого ключа
+    *  @param pub_len - Размер буфера открытого ключа
     *
-    *  @return -1 if there was an error 0 otherwise.
-   */
+    *  @return -1 при ошибке, иначе 0
+    */
    inline int32_t k1_recover( const char* sig, uint32_t sig_len, const char* dig, uint32_t dig_len, char* pub, uint32_t pub_len ) {
       return internal_use_do_not_use::k1_recover( sig, sig_len, dig, dig_len, pub, pub_len );
    }

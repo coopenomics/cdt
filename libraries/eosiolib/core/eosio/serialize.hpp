@@ -4,17 +4,17 @@
   OP t.elem
 
 /**
- *  @defgroup serialize Serialize
+ *  @defgroup serialize Сериализация
  *  @ingroup core
- *  @brief Defines C++ API to serialize and deserialize object
+ *  @brief Определяет C++ API сериализации и десериализации объектов
  */
 
 /**
- *  Defines serialization and deserialization for a class
+ *  Задаёт сериализацию и десериализацию для класса
  *
  *  @ingroup serialize
- *  @param TYPE - the class to have its serialization and deserialization defined
- *  @param MEMBERS - a sequence of member names.  (field1)(field2)(field3)
+ *  @param TYPE - Класс, для которого задаются сериализация и десериализация
+ *  @param MEMBERS - Последовательность имён полей: (field1)(field2)(field3)
  */
 #define EOSLIB_SERIALIZE( TYPE,  MEMBERS ) \
  template<typename DataStream> \
@@ -27,13 +27,13 @@
  }
 
 /**
- *  Defines serialization and deserialization for a class which inherits from other classes that
- *  have their serialization and deserialization defined
+ *  Задаёт сериализацию и десериализацию для класса, наследующего базовые классы,
+ *  у которых сериализация и десериализация уже определены
  *
  *  @ingroup serialize
- *  @param TYPE - the class to have its serialization and deserialization defined
- *  @param BASE - a sequence of base class names (basea)(baseb)(basec)
- *  @param MEMBERS - a sequence of member names.  (field1)(field2)(field3)
+ *  @param TYPE - Класс, для которого задаются сериализация и десериализация
+ *  @param BASE - Последовательность имён базовых классов: (basea)(baseb)(basec)
+ *  @param MEMBERS - Последовательность имён полей: (field1)(field2)(field3)
  */
 #define EOSLIB_SERIALIZE_DERIVED( TYPE, BASE, MEMBERS ) \
  template<typename DataStream> \

@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright см. файл LICENSE в корне репозитория CDT
  */
 
 #pragma once

@@ -11,7 +11,7 @@ extern "C" {
 /**
  * @addtogroup system
  * @ingroup c_api
- * @brief Defines API for interacting with system level intrinsics
+ * @brief Определяет API для вызова системных интринсиков
  * @{
  */
 
@@ -45,7 +45,7 @@ void  eosio_assert_message( uint32_t test, const char* msg, uint32_t msg_len );
 /**
  *  Aborts processing of this action and unwinds all pending changes if the test condition is true
  *
- *  @brief Aborts processing of this action and unwinds all pending changes
+ *  @brief Прервать обработку действия и откатить все ожидающие изменения
  *  @param test - 0 to abort, 1 to ignore
  *  @param code - the error code
  */

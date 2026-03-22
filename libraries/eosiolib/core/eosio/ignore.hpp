@@ -4,23 +4,23 @@
 
 namespace eosio {
    /**
-    * @defgroup ignore
+    * @defgroup ignore Игнорирование типа
     * @ingroup core
-    * @brief Enables telling the datastream to ignore this type, but allowing abi generator to add the correct type.
+    * @brief Указывает datastream игнорировать этот тип, сохраняя корректный тип для генератора ABI.
     */
 
    /**
-    * Tells the datastream to ignore this type, but allows the abi generator to add the correct type.
+    * Указывает datastream игнорировать этот тип при упаковке, при этом генератор ABI может вывести корректный тип.
     *
     * @ingroup ignore
-    * @details Currently non-ignore types can not succeed an ignore type in a method definition, i.e. void foo(float, ignore<int>) is allowed and void foo(float, ignore<int>, int) is not allowed.
-    * @note This restriction will be relaxed in a later release. Currently non-ignore types can not succeed an ignore type in a method definition, i.e. void foo(float, ignore<int>) is allowed and void foo(float, ignore<int>, int) is not allowed.
+    * @details Сейчас после параметра типа ignore в сигнатуре метода не могут следовать «обычные» типы: допустимо void foo(float, ignore<int>), недопустимо void foo(float, ignore<int>, int).
+    * @note Ограничение может быть ослаблено в будущих версиях. Формулировка та же: после ignore<int> в списке параметров нежелательны следующие не-ignore типы.
     */
    template <typename T>
    struct [[eosio::ignore]] ignore {};
 
     /**
-    * Wrapper class to allow sending inline actions with the correct payload
+    * Обёртка для корректной передачи полезной нагрузки при inline-действиях в COOPOS
     */
    template <typename T>
    struct ignore_wrapper {
@@ -34,13 +34,13 @@ namespace eosio {
    };
 
    /**
-    *  Serialize an ignored_wrapper type into a stream
+    *  Сериализация ignore_wrapper<T> в поток (пишется val.value)
     *
-    *  @brief Serialize ignored_wrapper<T>'s T value
-    *  @param ds - The stream to write
-    *  @param val - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Сериализация значения T из ignored_wrapper<T>
+    *  @param ds — поток записи
+    *  @param val — обёртка с полем value
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream, typename T>
    inline DataStream& operator<<(DataStream& ds, const ::eosio::ignore_wrapper<T>& val) {
@@ -49,13 +49,13 @@ namespace eosio {
    }
 
    /**
-    *  Serialize an ignored type into a stream
+    *  Сериализация ignore<T> — ничего не записывает
     *
-    *  @brief Serialize an ignored type
-    *  @param ds - The stream to write
-    *  @param ignore - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Сериализация игнорируемого типа
+    *  @param ds — поток записи
+    *  @param val — игнорируемое значение
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream, typename T>
    inline DataStream& operator<<(DataStream& ds, const ::eosio::ignore<T>& val) {
@@ -63,13 +63,12 @@ namespace eosio {
    }
 
    /**
-    *  Deserialize an ignored type from a stream
+    *  Десериализация ignore<T> — ничего не читает
     *
-    *  @brief Deserialize an ignored type
-    *  @param ds - The stream to read
-    *  @param ignored - The destination for deserialized value
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Десериализация игнорируемого типа
+    *  @param ds — поток чтения
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream, typename T>
    inline DataStream& operator>>(DataStream& ds, ::eosio::ignore<T>&) {

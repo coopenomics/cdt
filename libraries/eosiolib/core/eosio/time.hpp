@@ -9,9 +9,9 @@
 
 namespace eosio {
   /**
-   *  @defgroup time
+   *  @defgroup time Время
    *  @ingroup core
-   *  @brief Classes for working with time.
+   *  @brief Классы для работы со временем.
    */
 
 
@@ -99,7 +99,7 @@ namespace eosio {
   };
 
   /**
-   *  A lower resolution time_point accurate only to seconds from 1970
+   *  Момент времени с точностью до секунд с 1 января 1970 (UTC)
    *
    *  @ingroup time
    */
@@ -163,9 +163,8 @@ namespace eosio {
   };
 
    /**
-   *  This class is used in the block headers to represent the block time
-   *  It is a parameterised class that takes an Epoch in milliseconds and
-   *  an interval in milliseconds and computes the number of slots.
+   *  Время блока в заголовках блоков сети COOPOS: номер слота с шагом block_interval_ms
+   *  от эпохи block_timestamp_epoch (миллисекунды).
    *
    *  @ingroup time
    **/
@@ -223,7 +222,7 @@ namespace eosio {
          bool   operator !=( const block_timestamp& t )const   { return slot != t.slot; }
          uint32_t slot;
          static constexpr int32_t block_interval_ms = 500;
-         static constexpr int64_t block_timestamp_epoch = 946684800000ll;  // epoch is year 2000
+         static constexpr int64_t block_timestamp_epoch = 946684800000ll;  // эпоха — 1 января 2000 UTC (мс)
          /// @endcond
 
          EOSLIB_SERIALIZE( block_timestamp, (slot) )

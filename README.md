@@ -1,38 +1,39 @@
 # CDT (Contract Development Toolkit)
 
-Contract Development Toolkit (CDT) is a C/C++ toolchain targeting WebAssembly (WASM) and a set of tools to facilitate development of smart contracts written in C/C++ that are meant to be deployed to an [Antelope](https://github.com/AntelopeIO/) blockchain.
+**Contract Development Toolkit (CDT)** — это цепочка инструментов C/C++ для сборки WebAssembly (WASM) и набор утилит для разработки смарт-контрактов на C/C++, предназначенных для развёртывания в блокчейне **COOPOS** (совместим с протоколом [Antelope](https://github.com/AntelopeIO/)).
 
-In addition to being a general purpose WebAssembly toolchain, specific features and optimizations are available to support building Antelope-based smart contracts. This new toolchain is built around [Clang 9](https://github.com/AntelopeIO/cdt-llvm), which means that CDT inherits the optimizations and analyses from that version of LLVM, but as the WASM target is still considered experimental, some optimizations are incomplete or not available.
+Помимо универсальной сборки WebAssembly, CDT добавляет возможности и оптимизации именно под смарт-контракты. Инструментарий опирается на [Clang 9](https://github.com/coopenomics/cdt-llvm) и LLVM этого поколения; целевой WASM по-прежнему считается экспериментальным, поэтому часть оптимизаций может быть неполной или недоступной.
 
-## Repo organization
+## Структура репозитория
 
-The `main` branch is the development branch: do not use this for production. Refer to the [release page](https://github.com/AntelopeIO/cdt/releases) for current information on releases, pre-releases, and obsolete releases as well as the corresponding tags for those releases.
-## Binary packages
+Ветка `main` — ветка разработки: **не используйте её в продакшене**. Актуальные релизы, пре-релизы и устаревшие версии смотрите на [странице релизов](https://github.com/coopenomics/cdt/releases) и по соответствующим тегам.
 
-CDT currently supports Linux x86_64 Debian packages. Visit the [release page](https://github.com/AntelopeIO/cdt/releases) to download the package for the appropriate version of CDT. This is the fastest way to get started with the software.
-### Debian package install
+## Бинарные пакеты
 
-Download the appropriate version of the Debian package and then install it. To download and install the latest version, run the following:
+Поддерживаются пакеты Debian для Linux x86_64. Скачать сборку под нужную версию CDT можно на [странице релизов](https://github.com/coopenomics/cdt/releases) — это самый быстрый способ начать работу.
+
+### Установка пакета Debian
+
+Скачайте подходящий `.deb` и установите. Пример для актуального релиза **v4.2.0** (другие версии — на странице релизов):
 
 ```sh
-wget https://github.com/AntelopeIO/cdt/releases/download/v4.0.0/cdt_4.0.0_amd64.deb
-sudo apt install ./cdt_4.0.0_amd64.deb
+wget https://github.com/coopenomics/cdt/releases/download/v4.2.0/cdt_4.2.0-1_amd64.deb
+sudo apt install ./cdt_4.2.0-1_amd64.deb
 ```
-### Debian package uninstall
 
-To remove CDT that was installed using a Debian package, simply execute the following command:
+### Удаление пакета Debian
 
 ```sh
 sudo apt remove cdt
 ```
 
-## Building from source
+## Сборка из исходников
 
-Recent Ubuntu LTS releases are the only Linux distributions that we fully support. Other Linux distros and other POSIX operating systems (such as macOS) are tended to on a best-effort basis and may not be full featured. 
+Полностью поддерживаются недавние LTS-релизы Ubuntu. Другие дистрибутивы Linux и POSIX-системы (включая macOS) — по возможности, без гарантии полного набора функций.
 
-The instructions below assume that you are building on Ubuntu 20.04. 
+Ниже предполагается **Ubuntu 20.04**.
 
-### Install dependencies
+### Зависимости
 
 ```sh
 apt-get update && apt-get install   \
@@ -51,36 +52,32 @@ apt-get update && apt-get install   \
 python3 -m pip install pygments
 ```
 
-### Allowing integration tests to build
+### Интеграционные тесты
 
-Integration tests require access to a build of [Leap](https://github.com/AntelopeIO/leap), a C++ implementation of the Antelope protocol. Simply installing Leap from a binary package will not be sufficient.
+Для них нужна сборка [Leap](https://github.com/AntelopeIO/leap) (реализация протокола Antelope) из исходников; одного бинарного пакета Leap обычно недостаточно.
 
-If you do not wish to build Leap, you can continue with building CDT but without building the integration tests. Otherwise, follow the instructions below before running `cmake`.
-
-First, ensure that Leap has been built from source (see Leap's [README](https://github.com/AntelopeIO/leap#building-from-source) for details) and identify the build path, e.g. `/path/to/leap/build/`.
-
-Then, execute the following command in the same terminal session that you will use to build CDT:
+Если Leap собирать не планируете, CDT можно собрать без интеграционных тестов. Иначе перед `cmake` в той же сессии терминала задайте путь к сборке Leap, например:
 
 ```sh
 export leap_DIR=/path/to/leap/build/lib/cmake/leap
 ```
 
-Now you can continue with the steps to build CDT as described. When you run `cmake` make sure that it does not report `leap package not found`. If it does, this means CDT was not able to find a build of Leap at the specified path in `leap_DIR` and will therefore continue without building the integration tests.
+Далее при `cmake` не должно появляться сообщения вроде `leap package not found`; иначе интеграционные тесты не соберутся.
 
 ### ccache
 
-If issues persist with ccache when building CDT, you can disable ccache:
+При проблемах со сборкой через ccache можно отключить его:
 
 ```sh
 export CCACHE_DISABLE=1
 ```
 
-### Build CDT
+### Сборка CDT
 
-**A Warning On Parallel Compilation Jobs (`-j` flag)**: When building C/C++ software often the build is performed in parallel via a command such as `make -j $(nproc)` which uses the number of CPU cores as the number of compilation jobs to perform simultaneously. However, be aware that some compilation units (.cpp files) in CDT are extremely complex and can consume a large amount of memory to compile. If you are running into issues due to amount of memory available on your build host, you may need to reduce the level of parallelization used for the build. For example, instead of `make -j $(nproc)` you can try `make -j2`. Failures due to memory exhaustion will typically but not always manifest as compiler crashes.
+**Параллельная сборка (`-j`)**: часть единиц трансляции в CDT очень тяжёлые по памяти. Если компилятор падает или нехватает RAM, уменьшите параллелизм, например `make -j2` вместо `make -j $(nproc)`.
 
 ```sh
-git clone --recursive https://github.com/AntelopeIO/cdt
+git clone --recursive https://github.com/coopenomics/cdt
 cd cdt
 mkdir build
 cd build
@@ -88,69 +85,65 @@ cmake ..
 make -j $(nproc)
 ```
 
-The binaries will be located at in the `build/bin` directory. You can export the path to the directory to your `PATH` environment variable which allows you to conveniently use them to compile contracts without installing CDT globally. Alternatively, you can use CMake toolchain file located in `build/lib/cmake/CDTWasmToolchain.cmake` to compile the contracts in your CMake project, which also allows you to avoid installing CDT globally.
+Исполняемые файлы — в `build/bin`. Можно добавить каталог в `PATH`, либо использовать CMake toolchain `build/lib/cmake/CDTWasmToolchain.cmake` в своём проекте без глобальной установки CDT.
 
-If you would prefer to install CDT globally, see the section [Install CDT](#install-cdt) below.
+Глобальная установка описана в разделе [Установка CDT](#установка-cdt).
 
-#### Build CDT in debug mode
+#### Отладочная сборка
 
-To build CDT in debug mode (with debug symbols) you need to add the following flags to cmake command:
 ```sh
 cmake -DCMAKE_BUILD_TYPE="Debug" -DTOOLS_BUILD_TYPE="Debug" -DLIBS_BUILD_TYPE="Debug" ..
 ```
 
-### Run tests
+### Тесты
 
-#### Run unit tests
+#### Модульные
 
 ```sh
 cd build
-
 ctest
 ```
 
-#### Run integration tests (if built)
+#### Интеграционные (если собирались)
 
 ```sh
 cd build/tests/integration
-
 ctest
 ```
 
-### Install CDT
+### Установка CDT
 
-Installing CDT globally on your system will install the following tools in a location accessible to your `PATH`:
+Глобальная установка добавляет в `PATH`, среди прочего:
 
-* cdt-abidiff
-* cdt-ar
-* cdt-cc
-* cdt-cpp
-* cdt-init
-* cdt-ld
-* cdt-nm
-* cdt-objcopy
-* cdt-objdump
-* cdt-ranlib
-* cdt-readelf
-* cdt-strip
-* eosio-pp
-* eosio-wasm2wast
-* eosio-wast2wasm 
+* cdt-abidiff  
+* cdt-ar  
+* cdt-cc  
+* cdt-cpp  
+* cdt-init  
+* cdt-ld  
+* cdt-nm  
+* cdt-objcopy  
+* cdt-objdump  
+* cdt-ranlib  
+* cdt-readelf  
+* cdt-strip  
+* eosio-pp  
+* eosio-wasm2wast  
+* eosio-wast2wasm  
 
-It will also install CMake files for CDT accessible within a `cmake/cdt` directory located within your system's `lib` directory.
-#### Manual installation
+Также ставятся CMake-файлы CDT (каталог `cmake/cdt` в системном `lib`).
 
-One option for installing CDT globally is via `make install`. From within the `build` directory, run the following command:
+#### Ручная установка
+
+Из каталога `build`:
 
 ```
 sudo make install
 ```
 
-#### Package installation
+#### Установка из собранного пакета
 
-A better option for installing CDT globally is to generate a package and then install the package. This makes uninstalling CDT much easier.
-
-From within the `build` directory, run the following commands to generate a Debian package:
+Удобнее сгенерировать пакет и поставить его — так проще удалить CDT позже.
 
 ```sh
 cd packages
@@ -158,9 +151,9 @@ bash ./generate_package.sh deb ubuntu-20.04 amd64
 sudo apt install ./cdt_*_amd64.deb
 ```
 
-### Uninstall CDT
+### Удаление CDT
 
-#### Uninstall CDT after manual installation with make
+#### После `make install`
 
 ```sh
 sudo rm -fr /usr/local/cdt
@@ -169,12 +162,12 @@ sudo rm /usr/local/bin/eosio-*
 sudo rm /usr/local/bin/cdt-*
 ```
 
-#### Uninstall CDT that was installed using a Debian package
+#### После пакета Debian
 
 ```sh
 sudo apt remove cdt
 ```
 
-## License
+## Лицензия
 
 [MIT](./LICENSE)

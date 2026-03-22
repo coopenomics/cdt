@@ -12,7 +12,7 @@ extern "C" {
 * @defgroup permission_c Permissions C API
 * @ingroup c_api
 *
-* @brief Methods for testing against transactions, delays, keys and permissions
+* @brief Методы проверки относительно транзакций, задержек, ключей и разрешений
 * @{
 */
 

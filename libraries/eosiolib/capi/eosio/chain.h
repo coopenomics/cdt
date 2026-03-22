@@ -12,7 +12,7 @@ extern "C" {
 /**
  *  @addtogroup chain
  *  @ingroup c_api
- *  @brief Defines %C API for querying internal chain state
+ *  @brief Определяет C API для запроса внутреннего состояния цепи
  *  @{
  */
 

@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 
@@ -23,18 +23,18 @@ namespace eosio {
    }
 
    /**
-    *  @defgroup system System
+    *  @defgroup system Система
     *  @ingroup core
-    *  @brief Defines wrappers over eosio_assert
+    *  @brief Обёртки над eosio_assert
     */
 
 
    /**
-    *  Assert if the predicate fails and use the supplied message.
+    *  Прерывает выполнение контракта, если pred == false; сообщение msg передаётся в среду COOPOS.
     *
     *  @ingroup system
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  eosio::check(a == b, "a does not equal b");
     *  @endcode
@@ -45,11 +45,11 @@ namespace eosio {
    }
 
    /**
-    *  Assert if the predicate fails and use the supplied message.
+    *  Прерывает выполнение контракта, если pred == false; сообщение — C-строка msg.
     *
     *  @ingroup system
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  eosio::check(a == b, "a does not equal b");
     *  @endcode
@@ -61,11 +61,11 @@ namespace eosio {
    }
 
     /**
-    *  Assert if the predicate fails and use the supplied message.
+    *  Прерывает выполнение контракта, если pred == false; сообщение — std::string.
     *
     *  @ingroup system
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  eosio::check(a == b, "a does not equal b");
     *  @endcode
@@ -77,11 +77,11 @@ namespace eosio {
    }
 
    /**
-    *  Assert if the predicate fails and use the supplied message.
+    *  Прерывает выполнение контракта, если pred == false; сообщение — rvalue std::string.
     *
     *  @ingroup system
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  eosio::check(a == b, "a does not equal b");
     *  @endcode
@@ -94,11 +94,11 @@ namespace eosio {
 
 
    /**
-    *  Assert if the predicate fails and use a subset of the supplied message.
+    *  Прерывает выполнение контракта, если pred == false; в среду передаются первые n байт сообщения msg.
     *
     *  @ingroup system
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  const char* msg = "a does not equal b b does not equal a";
     *  eosio::check(a == b, "a does not equal b", 18);
@@ -111,11 +111,11 @@ namespace eosio {
    }
 
    /**
-    *  Assert if the predicate fails and use a subset of the supplied message.
+    *  Прерывает выполнение контракта, если pred == false; в среду передаются первые n символов строки msg.
     *
     *  @ingroup system
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  std::string msg = "a does not equal b b does not equal a";
     *  eosio::check(a == b, msg, 18);
@@ -128,11 +128,11 @@ namespace eosio {
    }
 
     /**
-    *  Assert if the predicate fails and use the supplied error code.
+    *  Прерывает выполнение контракта, если pred == false; передаётся числовой код ошибки code (eosio_assert_code).
     *
     *  @ingroup system
     *
-    *  Example:
+    *  Пример:
     *  @code
     *  eosio::check(a == b, 13);
     *  @endcode

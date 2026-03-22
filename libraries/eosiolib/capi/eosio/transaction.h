@@ -11,29 +11,25 @@ extern "C" {
 /**
  * @addtogroup transaction_c Transaction API
  * @ingroup c_api
- * @brief Defines C API for sending transactions and inline actions
+ * @brief Определяет C API для отправки транзакций и inline-действий
  *
- * @details Deferred transactions will not be processed until a future block.  They
- * can therefore have no effect on the success of failure of their parent
- * transaction so long as they appear well formed.  If any other condition
- * causes the parent transaction to be marked as failing, then the deferred
- * transaction will never be processed.
+ * @details Отложенные транзакции не выполняются до одного из будущих блоков. Поэтому
+ * при корректном виде они не влияют на успех или неудачу родительской транзакции.
+ * Если по иным причинам родительская транзакция помечается как неуспешная,
+ * отложенная транзакция никогда не будет обработана.
  *
- * Deferred transactions must adhere to the permissions available to the
- * parent transaction or, in the future, delegated to the contract account
- * for future use.
+ * Отложенные транзакции должны укладываться в разрешения, доступные родительской
+ * транзакции, либо (в будущем) делегированные учётной записи контракта.
  *
- * An inline message allows one contract to send another contract a message
- * which is processed immediately after the current message's processing
- * ends such that the success or failure of the parent transaction is
- * dependent on the success of the message. If an inline message fails in
- * processing then the whole tree of transactions and actions rooted in the
- * block will me marked as failing and none of effects on the database will
- * persist.
+ * Inline-сообщение позволяет одному контракту отправить другому сообщение,
+ * обрабатываемое сразу после завершения текущего сообщения; успех или неудача
+ * родительской транзакции зависит от успеха этого сообщения. При сбое обработки
+ * inline-сообщения всё дерево транзакций и действий, укоренённое в блоке,
+ * помечается как неуспешное, и эффекты в базе состояния не сохраняются.
  *
- * Inline actions and Deferred transactions must adhere to the permissions
- * available to the parent transaction or, in the future, delegated to the
- * contract account for future use.
+ * Inline-действия и отложенные транзакции должны укладываться в разрешения,
+ * доступные родительской транзакции, либо (в будущем) делегированные учётной
+ * записи контракта.
  * @{
  */
 
@@ -52,7 +48,7 @@ void send_deferred(const uint128_t* sender_id, capi_name payer, const char *seri
  /**
   *  Cancels a deferred transaction.
   *
-  *  @brief Cancels a deferred transaction.
+  *  @brief Отменить отложенную транзакцию
   *  @param sender_id - The id of the sender
   *
   *  @pre The deferred transaction ID exists.
@@ -74,7 +70,7 @@ int cancel_deferred(const uint128_t* sender_id);
 /**
  * Access a copy of the currently executing transaction.
  *
- * @brief Access a copy of the currently executing transaction.
+ * @brief Получить копию текущей выполняемой транзакции
  * @param buffer - a buffer to write the current transaction to
  * @param size - the size of the buffer, 0 to return required size
  * @return the size of the transaction written to the buffer, or number of bytes that can be copied if size==0 passed
@@ -85,7 +81,7 @@ size_t read_transaction(char *buffer, size_t size);
 /**
  * Gets the size of the currently executing transaction.
  *
- * @brief Gets the size of the currently executing transaction.
+ * @brief Получить размер текущей выполняемой транзакции
  * @return size of the currently executing transaction
  */
 __attribute__((eosio_wasm_import))
@@ -94,7 +90,7 @@ size_t transaction_size( void );
 /**
  * Gets the block number used for TAPOS on the currently executing transaction.
  *
- * @brief Gets the block number used for TAPOS on the currently executing transaction.
+ * @brief Получить номер блока TAPOS для текущей выполняемой транзакции
  * @return block number used for TAPOS on the currently executing transaction
  * Example:
  * @code
@@ -107,7 +103,7 @@ int tapos_block_num( void );
 /**
  * Gets the block prefix used for TAPOS on the currently executing transaction.
  *
- * @brief Gets the block prefix used for TAPOS on the currently executing transaction.
+ * @brief Получить префикс блока TAPOS для текущей выполняемой транзакции
  * @return block prefix used for TAPOS on the currently executing transaction
  * Example:
  * @code
@@ -120,7 +116,7 @@ int tapos_block_prefix( void );
 /**
  * Gets the expiration of the currently executing transaction.
  *
- * @brief Gets the expiration of the currently executing transaction.
+ * @brief Получить срок действия (expiration) текущей выполняемой транзакции
  * @return expiration of the currently executing transaction in seconds since Unix epoch
  * Example:
  * @code
@@ -132,9 +128,9 @@ __attribute__((eosio_wasm_import))
 uint32_t expiration( void );
 
 /**
- * Retrieves the indicated action from the active transaction.
+ * Извлечь указанное действие из активной транзакции
  *
- * @brief Retrieves the indicated action from the active transaction.
+ * @brief Извлечь указанное действие из активной транзакции
  * @param type - 0 for context free action, 1 for action
  * @param index - the index of the requested action
  * @param buff - output packed buff of the action
@@ -147,7 +143,7 @@ int get_action( uint32_t type, uint32_t index, char* buff, size_t size );
 /**
  * Retrieve the signed_transaction.context_free_data[index].
  *
- * @brief Retrieve the signed_transaction.context_free_data[index].
+ * @brief Извлечь signed_transaction.context_free_data[index]
  * @param index - the index of the context_free_data entry to retrieve
  * @param buff - output buff of the context_free_data entry
  * @param size - amount of context_free_data[index] to retrieve into buff, 0 to report required size

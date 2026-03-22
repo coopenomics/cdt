@@ -73,27 +73,27 @@ namespace eosio {
 
 using key_type = std::string;
 
-// to_key defines a conversion from a type to a sequence of bytes whose lexicograpical
-// ordering is the same as the ordering of the original type.
+// to_key задаёт преобразование типа в последовательность байт, лексикографический
+// порядок которой совпадает с порядком исходного типа.
 //
-// For any two objects of type T, a and b:
+// Для любых двух объектов типа T, a и b:
 //
-// - key(a) < key(b) iff a < b
-// - key(a) is not a prefix of key(b)
+// - key(a) < key(b) тогда и только тогда, когда a < b
+// - key(a) не является префиксом key(b)
 //
-// Overloads of to_key for user-defined types can be found by Koenig (ADL) lookup.
+// Перегрузки to_key для пользовательских типов находятся поиском Кёнига (ADL).
 //
-// to_key is specialized for the following types
-// - std::string and std::string_view
+// to_key специализирован для следующих типов
+// - std::string и std::string_view
 // - std::vector, std::list, std::deque
 // - std::tuple
 // - std::array
 // - std::optional
 // - std::variant
-// - Arithmetic types
-// - Scoped enumeration types
-// - Reflected structs
-// - All smart-contract related types defined by abieos
+// - арифметические типы
+// - типы областных перечислений (scoped enum)
+// - рефлектируемые структуры
+// - все типы, связанные со смарт-контрактами COOPOS, определённые в abieos
 template <typename T, typename S>
 void to_key(const T& obj, datastream<S>& stream);
 
@@ -176,15 +176,15 @@ void to_key(const std::optional<T>& obj, datastream<S>& stream) {
    to_key_optional(obj ? &*obj : nullptr, stream);
 }
 
-// The first byte holds:
-// 0-4 1's (number of additional bytes) 0 (terminator) bits
+// Первый байт содержит:
+// 0–4 единицы (число дополнительных байт), 0 (бит-терминатор)
 //
-// The number is represented as big-endian using the low order
-// bits of the first byte and all of the remaining bytes.
+// Число представляется в порядке big-endian с использованием младших
+// разрядов первого байта и всех оставшихся байт.
 //
-// Notes:
-// - values must be encoded using the minimum number of bytes,
-//   as non-canonical representations will break the sort order.
+// Примечания:
+// - значения должны кодироваться минимально возможным числом байт,
+//   иначе неканонические представления нарушат порядок сортировки.
 template <typename S>
 void to_key_varuint32(std::uint32_t obj, datastream<S>& stream) {
    int num_bytes;
@@ -205,23 +205,23 @@ void to_key_varuint32(std::uint32_t obj, datastream<S>& stream) {
    for (int i = num_bytes - 2; i >= 0; --i) { stream.write(static_cast<char>((obj >> i * 8) & 0xFFu)); }
 }
 
-// for non-negative values
-//  The first byte holds:
-//   1 (signbit) 0-4 1's (number of additional bytes) 0 (terminator) bits
-//  The value is represented as big endian
-// for negative values
-//  The first byte holds:
-//   0 (signbit) 0-4 0's (number of additional bytes) 1 (terminator) bits
-//   The value is adjusted to be positive based on the range that can
-//   be represented with this number of bytes and then encoded as big endian.
+// для неотрицательных значений
+//  Первый байт содержит:
+//   1 (бит знака) 0–4 единицы (число дополнительных байт) 0 (бит-терминатор)
+//  Значение представляется в порядке big-endian
+// для отрицательных значений
+//  Первый байт содержит:
+//   0 (бит знака) 0–4 нуля (число дополнительных байт) 1 (бит-терминатор)
+//   Значение приводится к положительному виду в допустимом диапазоне для
+//   данного числа байт и затем кодируется как big-endian.
 //
-// Notes:
-// - negative values must sort before positive values
-// - For negative value, numbers that need more bytes are smaller, hence
-//   the encoding of the width must be opposite the encoding used for
-//   non-negative values.
-// - A 5-byte varint can represent values in $[-2^34, 2^34)$.  In this case,
-//   the argument will be sign-extended.
+// Примечания:
+// - отрицательные значения должны сортироваться раньше положительных
+// - для отрицательных значений числа, требующие большего числа байт, меньше, поэтому
+//   кодирование ширины должно быть противоположно используемому для
+//   неотрицательных значений
+// - 5-байтовый varint может представлять значения в диапазоне $[-2^{34}, 2^{34})$; в этом случае
+//   аргумент дополняется знаком (sign-extended)
 template <typename S>
 void to_key_varint32(std::int32_t obj, datastream<S>& stream) {
    static_assert(std::is_same_v<S, void>, "to_key for varint32 has been temporarily disabled");

@@ -11,12 +11,12 @@
 /**
  *  @defgroup c_types
  *  @ingroup c_api
- *  @brief Specifies builtin types, typedefs and aliases
+ *  @brief Задаёт встроенные типы, typedef и псевдонимы
  */
 
 /**
  *  @addtogroup c_types
- *  @brief Specifies builtin types, typedefs and aliases
+ *  @brief Задаёт встроенные типы, typedef и псевдонимы
  *  @{
  */
 
@@ -30,7 +30,7 @@
 typedef uint64_t capi_name;
 
 /**
- * EOSIO Public Key. K1 and R1 keys are 34 bytes.  Newer keys can be variable-sized
+ * Публичный ключ COOPOS. Ключи K1 и R1 — 34 байта. Более новые типы ключей могут быть переменной длины
  */
 struct __attribute__((deprecated("newer public key types cannot be represented as a fixed size structure", "char[]")))
 capi_public_key {
@@ -38,7 +38,7 @@ capi_public_key {
 };
 
 /**
- * EOSIO Signature. K1 and R1 signatures are 66 bytes. Newer signatures can be variable-sized
+ * Подпись COOPOS. Подписи K1 и R1 — 66 байт. Более новые типы подписей могут быть переменной длины
  */
 struct __attribute__((deprecated("newer signature types cannot be represented as a fixed size structure", "char[]")))
 capi_signature {

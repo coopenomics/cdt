@@ -96,18 +96,18 @@ namespace eosio {
    template const std::array<uint64_t, 20>  powers_of_base<10, uint64_t>;
 
    /**
-    *  Writes a number as a string to the provided char buffer
+    *  Записывает число в виде строки в заданный символьный буфер.
     *
-    *  @brief Writes number x 10^(-num_decimal_places) (optionally negative) as a string to the provided char buffer
-    *  @pre The range [begin, end) must be a valid range of memory to write to.
-    *  @param begin - The start of the char buffer
-    *  @param end - Just past the end of the char buffer
-    *  @param dry_run - If true, do not actually write anything into the range.
-    *  @param number - The number to print before shifting the decimal point to the left by num_decimal_places.
-    *  @param num_decimal_places - The number of decimal places to shift the decimal point.
-    *  @param negative - Whether to print a minus sign in the front.
-    *  @return char* - Just past the end of the last character that would be written assuming dry_run == false and end was large enough to provide sufficient space. (Meaning only applies if returned pointer >= begin.)
-    *  @post If the output string fits within the range [begin, end), the range [begin, returned pointer) contains the string representation of the number. Nothing is written if dry_run == true or returned pointer > end (insufficient space) or if returned pointer < begin (overflow in calculating desired end).
+    *  @brief Записывает число x·10^(−num_decimal_places) (при необходимости со знаком минус) в виде строки в заданный символьный буфер.
+    *  @pre Диапазон [begin, end) должен быть допустимой областью памяти для записи.
+    *  @param begin — начало символьного буфера.
+    *  @param end — позиция сразу за концом символьного буфера.
+    *  @param dry_run — если true, ничего не записывать в диапазон.
+    *  @param number — число для вывода до сдвига десятичной точки влево на num_decimal_places позиций.
+    *  @param num_decimal_places — на сколько позиций сдвинуть десятичную точку влево.
+    *  @param negative — выводить ли знак минус в начале.
+    *  @return char* — указатель сразу за последним символом, который был бы записан при dry_run == false и достаточном end (смысл только если возвращённый указатель >= begin).
+    *  @post Если результирующая строка помещается в [begin, end), диапазон [begin, возвращённый указатель) содержит строковое представление числа. Ничего не записывается при dry_run == true, если возвращённый указатель > end (недостаточно места) или < begin (переполнение при расчёте нужного конца).
     */
    char* write_decimal( char* begin, char* end, bool dry_run, uint64_t number, uint8_t num_decimal_places, bool negative ) {
       const auto& powers_of_ten = powers_of_base<10, uint64_t>;

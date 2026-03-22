@@ -1,6 +1,6 @@
 /**
  * @file
- * @copyright defined in eos/LICENSE
+ * @copyright как определено в eos/LICENSE
  */
 #pragma once
 
@@ -22,7 +22,7 @@
 #include <memory>
 
 /**
- * @defgroup multiindex Multi Index Table
+ * @defgroup multiindex Многоиндексная таблица (Multi Index)
  * @ingroup contracts
  */
 
@@ -341,13 +341,13 @@ namespace _multi_index_detail {
 }
 
 /**
- * The indexed_by struct is used to instantiate the indices for the Multi-Index table. In EOSIO, up to 16 secondary indices can be specified.
+ * Структура indexed_by используется для задания индексов многоиндексной таблицы. В COOPOS можно задать до 16 вторичных индексов.
  *
  * @ingroup multiindex
- * @tparam IndexName - is the name of the index. The name must be provided as an EOSIO base32 encoded 64-bit integer and must conform to the EOSIO naming requirements of a maximum of 13 characters, the first twelve from the lowercase characters a-z, digits 1-5, and ".", and if there is a 13th character, it is restricted to lowercase characters a-p and ".".
- * @tparam Extractor - is a function call operator that takes a const reference to the table object type and returns either a secondary key type or a reference to a secondary key type. It is recommended to use the `eosio::const_mem_fun` template.
+ * @tparam IndexName — имя индекса. Имя задаётся как 64-битное целое в кодировке base32 COOPOS и должно соответствовать правилам имён COOPOS: не более 13 символов; первые двенадцать — строчные буквы a–z, цифры 1–5 и «.»; если есть 13-й символ, допускаются только строчные a–p и «.».
+ * @tparam Extractor — функтор (оператор вызова функции), принимающий const-ссылку на тип объекта строки таблицы и возвращающий тип вторичного ключа или ссылку на него. Рекомендуется использовать шаблон `eosio::const_mem_fun`.
  *
- * Example:
+ * Пример:
  *
  *
  * @code
@@ -381,22 +381,22 @@ struct indexed_by {
 /**
  * @ingroup multiindex
  *
- * @brief Defines EOSIO Multi Index Table
- * @details EOSIO Multi-Index API provides a C++ interface to the EOSIO database. It is patterned after Boost Multi Index Container.
- * EOSIO Multi-Index table requires exactly a uint64_t primary key. For the table to be able to retrieve the primary key,
- * the object stored inside the table is required to have a const member function called primary_key() that returns uint64_t.
- * EOSIO Multi-Index table also supports up to 16 secondary indices. The type of the secondary indices could be any of:
+ * @brief Определяет многоиндексную таблицу COOPOS (Multi Index Table)
+ * @details API многоиндексных таблиц COOPOS даёт C++-интерфейс к базе данных COOPOS и устроен по образцу Boost Multi Index Container.
+ * Многоиндексная таблица COOPOS требует ровно один первичный ключ типа uint64_t. Чтобы таблица могла получать первичный ключ,
+ * у хранимого в ней объекта должна быть const-функция-член primary_key(), возвращающая uint64_t.
+ * Многоиндексная таблица COOPOS также поддерживает до 16 вторичных индексов. Тип вторичного индекса может быть одним из:
  * - uint64_t
  * - uint128_t
  * - double
  * - long double
  * - eosio::checksum256
  *
- * @tparam TableName - name of the table
- * @tparam T - type of the data stored inside the table
- * @tparam Indices - secondary indices for the table, up to 16 indices is supported here
+ * @tparam TableName — имя таблицы
+ * @tparam T — тип данных, хранимых в таблице
+ * @tparam Indices — вторичные индексы таблицы; поддерживается до 16 индексов
  *
- * Example:
+ * Пример:
  *
  * @code
  * #include <eosiolib/eosio.hpp>
@@ -644,24 +644,24 @@ class multi_index
             }
 
             /**
-             * Gets the object with the smallest primary key in the case where the secondary key is not unique.
+             * Возвращает объект с наименьшим первичным ключом, если вторичный ключ не уникален.
              * 
-             * Avoid the common pitfall of copy-assigning the T& reference returned 
-             * to a stack-allocated local variable and then passing that into modify of the multi-index.
-             * The most common mistake is when the local variable is defined as auto 
-             * typename, instead it should be of type auto& or decltype(auto).
+             * Избегайте типичной ошибки: присвоить возвращённую ссылку T& локальной переменной на стеке
+             * и передать её в modify многоиндексной таблицы.
+             * Часто ошибка в том, что локальная переменная объявлена как auto без ссылки;
+             * нужно использовать auto& или decltype(auto).
              */
             const T& get( secondary_key_type&& secondary, const char* error_msg = "unable to find secondary key" )const {
                return get( secondary, error_msg );
             }
 
             /**
-             * Gets the object with the smallest primary key in the case where the secondary key is not unique.
+             * Возвращает объект с наименьшим первичным ключом, если вторичный ключ не уникален.
              * 
-             * Avoid the common pitfall of copy-assigning the T& reference returned 
-             * to a stack-allocated local variable and then passing that into modify of the multi-index.
-             * The most common mistake is when the local variable is defined as auto 
-             * typename, instead it should be of type auto& or decltype(auto).
+             * Избегайте типичной ошибки: присвоить возвращённую ссылку T& локальной переменной на стеке
+             * и передать её в modify многоиндексной таблицы.
+             * Часто ошибка в том, что локальная переменная объявлена как auto без ссылки;
+             * нужно использовать auto& или decltype(auto).
              */
             const T& get( const secondary_key_type& secondary, const char* error_msg = "unable to find secondary key" )const {
                auto result = find( secondary );
@@ -705,9 +705,9 @@ class multi_index
                return {this, &mi};
             }
             /**
-             * Warning: the interator_to can have undefined behavior if the caller 
-             * passes in a reference to a stack-allocated object rather than the 
-             * reference returned by get or by dereferencing a const_iterator.
+             * Предупреждение: iterator_to может вести себя неопределённо, если вызывающий код
+             * передаёт ссылку на объект на стеке вместо ссылки, возвращённой get
+             * или полученной разыменованием const_iterator.
              */
             const_iterator iterator_to( const T& obj ) {
                using namespace _multi_index_detail;
@@ -843,27 +843,27 @@ class multi_index
 
    public:
       /**
-       * Constructs an instance of a Multi-Index table.
+       * Создаёт экземпляр многоиндексной таблицы.
        * @ingroup multiindex
        *
-       * @param code - Account that owns table
-       * @param scope - Scope identifier within the code hierarchy
+       * @param code — аккаунт-владелец таблицы
+       * @param scope — идентификатор области (scope) в иерархии кода
        *
-       * @pre code and scope member properties are initialized
-       * @post each secondary index table initialized
-       * @post Secondary indices are updated to refer to the newly added object. If the secondary index tables do not exist, they are created.
-       * @post The payer is charged for the storage usage of the new object and, if the table (and secondary index tables) must be created, for the overhead of the table creation.
+       * @pre свойства code и scope заданы
+       * @post каждая таблица вторичного индекса инициализирована
+       * @post Вторичные индексы обновлены для ссылки на новый объект; при отсутствии таблиц вторичных индексов они создаются.
+       * @post С плательщика взимается хранение нового объекта и, при необходимости создания таблицы (и таблиц вторичных индексов), накладные расходы на создание.
        *
-       * Notes
-       * The `eosio::multi_index` template has template parameters `<name::raw TableName, typename T, typename... Indices>`, where:
-       * - `TableName` is the name of the table, maximum 12 characters long, characters in the name from the set of lowercase letters, digits 1 to 5, and the "." (period) character and is converted to a eosio::raw - which wraps uint64_t;
-       * - `T` is the object type (i.e., row definition);
-       * - `Indices` is a list of up to 16 secondary indices.
-       * - Each must be a default constructable class or struct
-       * - Each must have a function call operator that takes a const reference to the table object type and returns either a secondary key type or a reference to a secondary key type
-       * - It is recommended to use the eosio::const_mem_fun template
+       * Замечания
+       * Шаблон `eosio::multi_index` имеет параметры `<name::raw TableName, typename T, typename... Indices>`, где:
+       * - `TableName` — имя таблицы, не более 12 символов из набора строчных букв, цифр 1–5 и «.»; преобразуется в eosio::raw (обёртка над uint64_t);
+       * - `T` — тип объекта (определение строки);
+       * - `Indices` — список до 16 вторичных индексов.
+       * - Каждый элемент должен быть классом или структурой с конструктором по умолчанию
+       * - У каждого должен быть оператор вызова, принимающий const-ссылку на тип объекта строки и возвращающий вторичный ключ или ссылку на него
+       * - Рекомендуется шаблон eosio::const_mem_fun
        *
-       * Example:
+       * Пример:
        *
        * @code
        * #include <eosiolib/eosio.hpp>
@@ -894,12 +894,12 @@ class multi_index
       {}
 
       /**
-       * Returns the `code` member property.
+       * Возвращает свойство-член `code`.
        * @ingroup multiindex
        *
-       * @return Account name of the Code that owns the Primary Table.
+       * @return Имя аккаунта кода, которому принадлежит первичная таблица.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -915,12 +915,12 @@ class multi_index
       name get_code()const      { return _code; }
 
       /**
-       * Returns the `scope` member property.
+       * Возвращает свойство-член `scope`.
        * @ingroup multiindex
        *
-       * @return Scope id of the Scope within the Code of the Current Receiver under which the desired Primary Table instance can be found.
+       * @return Идентификатор области (scope) в коде текущего получателя, под которым находится нужный экземпляр первичной таблицы.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -999,12 +999,12 @@ class multi_index
       typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
       /**
-       * Returns an iterator pointing to the object_type with the lowest primary key value in the Multi-Index table.
+       * Возвращает итератор на объект с наименьшим значением первичного ключа в многоиндексной таблице.
        * @ingroup multiindex
        *
-       * @return An iterator pointing to the object_type with the lowest primary key value in the Multi-Index table.
+       * @return Итератор на объект с наименьшим первичным ключом в многоиндексной таблице.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1025,12 +1025,12 @@ class multi_index
       }
 
       /**
-       * Returns an iterator pointing to the object_type with the lowest primary key value in the Multi-Index table.
+       * Возвращает итератор на объект с наименьшим значением первичного ключа в многоиндексной таблице.
        * @ingroup multiindex
        *
-       * @return An iterator pointing to the object_type with the lowest primary key value in the Multi-Index table.
+       * @return Итератор на объект с наименьшим первичным ключом в многоиндексной таблице.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1049,12 +1049,12 @@ class multi_index
       const_iterator begin()const  { return cbegin(); }
 
       /**
-       * Returns an iterator referring to the `past-the-end` element in the multi index container. The `past-the-end` element is the theoretical element that would follow the last element in the vector. It does not point to any element, and thus shall not be dereferenced.
+       * Возвращает итератор на элемент «после последнего» в контейнере multi_index. Такой элемент — теоретический следующий за последним; на реальный объект не указывает и разыменовывать его нельзя.
        * @ingroup multiindex
        *
-       * @return An iterator referring to the `past-the-end` element in the multi index container.
+       * @return Итератор на позицию «после последнего» в контейнере multi_index.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1073,12 +1073,12 @@ class multi_index
       const_iterator cend()const   { return const_iterator( this ); }
 
       /**
-       * Returns an iterator referring to the `past-the-end` element in the multi index container. The `past-the-end` element is the theoretical element that would follow the last element in the vector. It does not point to any element, and thus shall not be dereferenced.
+       * Возвращает итератор на элемент «после последнего» в контейнере multi_index. Такой элемент — теоретический следующий за последним; на реальный объект не указывает и разыменовывать его нельзя.
        * @ingroup multiindex
        *
-       * @return An iterator referring to the `past-the-end` element in the multi index container.
+       * @return Итератор на позицию «после последнего» в контейнере multi_index.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1097,12 +1097,12 @@ class multi_index
       const_iterator end()const    { return cend(); }
 
       /**
-       * Returns a reverse iterator pointing to the `object_type` with the highest primary key value in the Multi-Index table.
+       * Возвращает обратный итератор на объект с наибольшим первичным ключом в многоиндексной таблице.
        * @ingroup multiindex
        *
-       * @return A reverse iterator pointing to the `object_type` with the highest primary key value in the Multi-Index table.
+       * @return Обратный итератор на объект с наибольшим первичным ключом в многоиндексной таблице.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1132,12 +1132,12 @@ class multi_index
       const_reverse_iterator crbegin()const { return std::make_reverse_iterator(cend()); }
 
       /**
-       * Returns a reverse iterator pointing to the `object_type` with the highest primary key value in the Multi-Index table.
+       * Возвращает обратный итератор на объект с наибольшим первичным ключом в многоиндексной таблице.
        * @ingroup multiindex
        *
-       * @return A reverse iterator pointing to the `object_type` with the highest primary key value in the Multi-Index table.
+       * @return Обратный итератор на объект с наибольшим первичным ключом в многоиндексной таблице.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1167,12 +1167,12 @@ class multi_index
       const_reverse_iterator rbegin()const  { return crbegin(); }
 
       /**
-       * Returns an iterator pointing to the `object_type` with the lowest primary key value in the Multi-Index table.
+       * Возвращает итератор на объект с наименьшим первичным ключом в многоиндексной таблице.
        * @ingroup multiindex
        *
-       * @return An iterator pointing to the `object_type` with the lowest primary key value in the Multi-Index table.
+       * @return Итератор на объект с наименьшим первичным ключом в многоиндексной таблице.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1203,12 +1203,12 @@ class multi_index
       const_reverse_iterator crend()const   { return std::make_reverse_iterator(cbegin()); }
 
       /**
-       * Returns an iterator pointing to the `object_type` with the lowest primary key value in the Multi-Index table.
+       * Возвращает итератор на объект с наименьшим первичным ключом в многоиндексной таблице.
        * @ingroup multiindex
        *
-       * @return An iterator pointing to the `object_type` with the lowest primary key value in the Multi-Index table.
+       * @return Итератор на объект с наименьшим первичным ключом в многоиндексной таблице.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1239,13 +1239,13 @@ class multi_index
       const_reverse_iterator rend()const    { return crend(); }
 
       /**
-       * Searches for the `object_type` with the lowest primary key that is greater than or equal to a given primary key.
+       * Ищет объект с наименьшим первичным ключом, который больше или равен заданному первичному ключу.
        * @ingroup multiindex
        *
-       * @param primary - Primary key that establishes the target value for the lower bound search.
-       * @return An iterator pointing to the `object_type` that has the lowest primary key that is greater than or equal to `primary`. If an object could not be found, or if the table does not exist**, it will return the `end` iterator.
+       * @param primary — первичный ключ, задающий целевое значение для поиска нижней границы
+       * @return Итератор на объект с наименьшим первичным ключом ≥ `primary`. Если объект не найден или таблицы нет**, возвращается итератор `end`.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the get_index() example below. Replace myaction() {...}
@@ -1287,13 +1287,13 @@ class multi_index
       }
 
       /**
-       * Searches for the `object_type` with the lowest primary key that is greater than a given primary key.
+       * Ищет объект с наименьшим первичным ключом, строго большим заданного первичного ключа.
        * @ingroup multiindex
        *
-       * @param primary - Primary key that establishes the target value for the upper bound search
-       * @return An iterator pointing to the `object_type` that has the lowest primary key that is greater than a given `primary` key. If an object could not be found, or if the table does not exist**, it will return the `end` iterator.
+       * @param primary — первичный ключ, задающий целевое значение для поиска верхней границы
+       * @return Итератор на объект с наименьшим первичным ключом, большим `primary`. Если объект не найден или таблицы нет**, возвращается итератор `end`.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the get_index() example below. Replace myaction() {...}
@@ -1333,16 +1333,16 @@ class multi_index
       }
 
       /**
-       * Returns an available primary key.
+       * Возвращает свободный первичный ключ.
        * @ingroup multiindex
        *
-       * @return An available (unused) primary key value.
+       * @return Доступное (неиспользованное) значение первичного ключа.
        *
-       * Notes:
-       * Intended to be used in tables in which the primary keys of the table are strictly intended to be auto-incrementing, and thus will never be set to custom values by the contract.  Violating this expectation could result in the table appearing to be full due to inability to allocate an available primary key.
-       * Ideally this method would only be used to determine the appropriate primary key to use within new objects added to a table in which the primary keys of the table are strictly intended from the beginning to be autoincrementing and thus will not ever be set to custom arbitrary values by the contract. Violating this agreement could result in the table appearing full when in reality there is plenty of space left.
+       * Замечания:
+       * Предназначено для таблиц, где первичные ключи строго автоинкрементируются и контракт никогда не задаёт произвольные значения. Нарушение этого ожидания может привести к тому, что таблица будет казаться заполненной из‑за невозможности выделить свободный первичный ключ.
+       * В идеале метод используют только для выбора первичного ключа новых строк в таблицах, изначально рассчитанных на автоинкремент без произвольных значений со стороны контракта. Нарушение этого соглашения может дать ложное ощущение переполнения при наличии свободного места.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1383,14 +1383,14 @@ class multi_index
       }
 
       /**
-       * Returns an appropriately typed Secondary Index.
+       * Возвращает вторичный индекс нужного типа.
        * @ingroup multiindex
        *
-       * @tparam IndexName - the ID of the desired secondary index
+       * @tparam IndexName — идентификатор нужного вторичного индекса
        *
-       * @return An index of the appropriate type: Primitive 64-bit unsigned integer key (idx64), Primitive 128-bit unsigned integer key (idx128), 128-bit fixed-size lexicographical key (idx128), 256-bit fixed-size lexicographical key (idx256), Floating point key, Double precision floating point key, Long Double (quadruple) precision floating point key
+       * @return Индекс соответствующего типа: 64-битный беззнаковый целочисленный ключ (idx64), 128-битный беззнаковый целочисленный ключ (idx128), 128-битный ключ фиксированной длины в лексикографическом порядке (idx128), 256-битный ключ фиксированной длины (idx256), ключ с плавающей точкой, ключ double, ключ long double (четверная точность)
        *
-       * Example:
+       * Пример:
        *
        * @code
        * #include <eosiolib/eosio.hpp>
@@ -1437,14 +1437,14 @@ class multi_index
       }
 
       /**
-       * Returns an appropriately typed Secondary Index.
+       * Возвращает вторичный индекс нужного типа.
        * @ingroup multiindex
        *
-       * @tparam IndexName - the ID of the desired secondary index
+       * @tparam IndexName — идентификатор нужного вторичного индекса
        *
-       * @return An index of the appropriate type: Primitive 64-bit unsigned integer key (idx64), Primitive 128-bit unsigned integer key (idx128), 128-bit fixed-size lexicographical key (idx128), 256-bit fixed-size lexicographical key (idx256), Floating point key, Double precision floating point key, Long Double (quadruple) precision floating point key
+       * @return Индекс соответствующего типа: 64-битный беззнаковый целочисленный ключ (idx64), 128-битный беззнаковый целочисленный ключ (idx128), 128-битный ключ фиксированной длины в лексикографическом порядке (idx128), 256-битный ключ фиксированной длины (idx256), ключ с плавающей точкой, ключ double, ключ long double (четверная точность)
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the get_index() example. Replace myaction() {...}
@@ -1488,14 +1488,14 @@ class multi_index
       }
 
       /**
-       * Returns an iterator to the given object in a Multi-Index table.
+       * Возвращает итератор на заданный объект в многоиндексной таблице.
        * @ingroup multiindex
        *
-       * @param obj - A reference to the desired object
+       * @param obj — ссылка на нужный объект
        *
-       * @return An iterator to the given object
+       * @return Итератор на этот объект
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the get_index() example. Replace myaction() {...}
@@ -1522,9 +1522,9 @@ class multi_index
        * EOSIO_DISPATCH( addressbook, (myaction) )
        * @endcode
        * 
-       * Warning: the interator_to can have undefined behavior if the caller 
-       * passes in a reference to a stack-allocated object rather than the 
-       * reference returned by get or by dereferencing a const_iterator.
+       * Предупреждение: iterator_to может вести себя неопределённо, если вызывающий код
+       * передаёт ссылку на объект на стеке вместо ссылки, возвращённой get
+       * или полученной разыменованием const_iterator.
        */
       const_iterator iterator_to( const T& obj )const {
          const auto& objitem = static_cast<const item&>(obj);
@@ -1532,22 +1532,22 @@ class multi_index
          return {this, &objitem};
       }
       /**
-       * Adds a new object (i.e., row) to the table.
+       * Добавляет в таблицу новый объект (строку).
        * @ingroup multiindex
        *
-       * @param payer - Account name of the payer for the Storage usage of the new object
-       * @param constructor - Lambda function that does an in-place initialization of the object to be created in the table
+       * @param payer — имя аккаунта-плательщика за хранение нового объекта
+       * @param constructor — лямбда для инициализации создаваемого объекта на месте
        *
-       * @pre A multi index table has been instantiated
-       * @post A new object is created in the Multi-Index table, with a unique primary key (as specified in the object).  The object is serialized and written to the table. If the table does not exist, it is created.
-       * @post Secondary indices are updated to refer to the newly added object. If the secondary index tables do not exist, they are created.
-       * @post The payer is charged for the storage usage of the new object and, if the table (and secondary index tables) must be created, for the overhead of the table creation.
+       * @pre создан экземпляр многоиндексной таблицы
+       * @post В многоиндексной таблице создан новый объект с уникальным первичным ключом (как в объекте). Объект сериализуется и записывается; при отсутствии таблицы она создаётся.
+       * @post Вторичные индексы обновлены для нового объекта; при отсутствии таблиц вторичных индексов они создаются.
+       * @post С плательщика взимается хранение нового объекта и при необходимости создания таблицы (и вторичных индексов) — накладные расходы.
        *
-       * @return A primary key iterator to the newly created object
+       * @return Итератор по первичному ключу на созданный объект
        *
-       * Exception - The account is not authorized to write to the table.
+       * Исключение — аккаунт не уполномочен записывать в таблицу.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1614,26 +1614,26 @@ class multi_index
       }
 
       /**
-       * Modifies an existing object in a table.
+       * Изменяет существующий объект в таблице.
        * @ingroup multiindex
        *
-       * @param itr - an iterator pointing to the object to be updated
-       * @param payer - account name of the payer for the storage usage of the updated row
-       * @param updater - lambda function that updates the target object
+       * @param itr — итератор на обновляемый объект
+       * @param payer — имя аккаунта-плательщика за хранение обновлённой строки
+       * @param updater — лямбда, обновляющая целевой объект
        *
-       * @pre itr points to an existing element
-       * @pre payer is a valid account that is authorized to execute the action and be billed for storage usage.
+       * @pre itr указывает на существующий элемент
+       * @pre payer — действительный аккаунт, уполномоченный выполнять действие и оплачивать хранение
        *
-       * @post The modified object is serialized, then replaces the existing object in the table.
-       * @post Secondary indices are updated; the primary key of the updated object is not changed.
-       * @post The payer is charged for the storage usage of the updated object.
-       * @post If payer is the same as the existing payer, payer only pays for the usage difference between existing and updated object (and is refunded if this difference is negative).
-       * @post If payer is different from the existing payer, the existing payer is refunded for the storage usage of the existing object.
+       * @post Изменённый объект сериализуется и заменяет прежний в таблице.
+       * @post Вторичные индексы обновлены; первичный ключ объекта не меняется.
+       * @post С плательщика взимается хранение обновлённого объекта.
+       * @post Если payer совпадает с прежним плательщиком, списывается только разница объёма хранения (при отрицательной разнице — возврат).
+       * @post Если payer другой, прежнему плательщику возвращается стоимость хранения старого объекта.
        *
-       * Exceptions:
-       * If called with an invalid precondition, execution is aborted.
+       * Исключения:
+       * При нарушении предусловий выполнение прерывается.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1661,26 +1661,26 @@ class multi_index
       }
 
       /**
-       * Modifies an existing object in a table.
+       * Изменяет существующий объект в таблице.
        * @ingroup multiindex
        *
-       * @param obj - a reference to the object to be updated
-       * @param payer - account name of the payer for the storage usage of the updated row
-       * @param updater - lambda function that updates the target object
+       * @param obj — ссылка на обновляемый объект
+       * @param payer — имя аккаунта-плательщика за хранение обновлённой строки
+       * @param updater — лямбда, обновляющая целевой объект
        *
-       * @pre obj is an existing object in the table
-       * @pre payer is a valid account that is authorized to execute the action and be billed for storage usage.
+       * @pre obj — существующий объект в таблице
+       * @pre payer — действительный аккаунт, уполномоченный выполнять действие и оплачивать хранение
        *
-       * @post The modified object is serialized, then replaces the existing object in the table.
-       * @post Secondary indices are updated; the primary key of the updated object is not changed.
-       * @post The payer is charged for the storage usage of the updated object.
-       * @post If payer is the same as the existing payer, payer only pays for the usage difference between existing and updated object (and is refunded if this difference is negative).
-       * @post If payer is different from the existing payer, the existing payer is refunded for the storage usage of the existing object.
+       * @post Изменённый объект сериализуется и заменяет прежний в таблице.
+       * @post Вторичные индексы обновлены; первичный ключ объекта не меняется.
+       * @post С плательщика взимается хранение обновлённого объекта.
+       * @post Если payer совпадает с прежним плательщиком, списывается только разница объёма хранения (при отрицательной разнице — возврат).
+       * @post Если payer другой, прежнему плательщику возвращается стоимость хранения старого объекта.
        *
-       * Exceptions:
-       * If called with an invalid precondition, execution is aborted.
+       * Исключения:
+       * При нарушении предусловий выполнение прерывается.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1753,15 +1753,15 @@ class multi_index
       }
 
       /**
-       * Retrieves an existing object from a table using its primary key.
+       * Извлекает существующий объект из таблицы по первичному ключу.
        * @ingroup multiindex
        *
-       * @param primary - Primary key value of the object.
-       * @return A constant reference to the object containing the specified primary key. 
+       * @param primary — значение первичного ключа объекта
+       * @return Константная ссылка на объект с указанным первичным ключом
        *
-       * Exception - No object matches the given key. 
+       * Исключение — нет объекта с данным ключом
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1777,12 +1777,12 @@ class multi_index
        * EOSIO_DISPATCH( addressbook, (myaction) )
        * @endcode
        * 
-       * Warning: 
+       * Предупреждение:
        * 
-       * Avoid the common pitfall of copy-assigning the T& reference returned 
-       * to a stack-allocated local variable and then passing that into modify of the multi-index.
-       * The most common mistake is when the local variable is defined as auto 
-       * typename, instead it should be of type auto& or decltype(auto).
+       * Избегайте присвоения возвращённой ссылки T& локальной переменной на стеке
+       * и передачи её в modify многоиндексной таблицы.
+       * Частая ошибка — объявить локальную переменную как auto без ссылки;
+       * нужно auto& или decltype(auto).
        */
       template<typename PK>
       const T& get( PK primary, const char* error_msg = "unable to find key" )const {
@@ -1792,13 +1792,13 @@ class multi_index
       }
 
       /**
-       * Search for an existing object in a table using its primary key.
+       * Ищет существующий объект в таблице по первичному ключу.
        * @ingroup multiindex
        *
-       * @param primary - Primary key value of the object
-       * @return An iterator to the found object which has a primary key equal to `primary` OR the `end` iterator of the referenced table if an object with primary key `primary` is not found.
+       * @param primary — значение первичного ключа объекта
+       * @return Итератор на найденный объект с первичным ключом `primary` либо итератор `end`, если объекта с ключом `primary` нет.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1831,12 +1831,12 @@ class multi_index
       }
 
       /**
-       * Search for an existing object in a table using its primary key.
+       * Ищет существующий объект в таблице по первичному ключу.
        * @ingroup multiindex
        *
-       * @param primary - Primary key value of the object
-       * @param error_msg - error message if an object with primary key `primary` is not found.
-       * @return An iterator to the found object which has a primary key equal to `primary` OR throws an exception if an object with primary key `primary` is not found.
+       * @param primary — значение первичного ключа объекта
+       * @param error_msg — сообщение об ошибке, если объекта с ключом `primary` нет
+       * @return Итератор на объект с первичным ключом `primary` либо выброс исключения, если объекта нет
        */
 
       template<typename PK>
@@ -1856,24 +1856,24 @@ class multi_index
       }
 
       /**
-       * Remove an existing object from a table using its primary key.
+       * Удаляет существующий объект из таблицы (по итератору).
        * @ingroup multiindex
        *
-       * @param itr - An iterator pointing to the object to be removed
+       * @param itr — итератор на удаляемый объект
        *
-       * @pre itr points to an existing element
-       * @post The object is removed from the table and all associated storage is reclaimed.
-       * @post Secondary indices associated with the table are updated.
-       * @post The existing payer for storage usage of the object is refunded for the table and secondary indices usage of the removed object, and if the table and indices are removed, for the associated overhead.
+       * @pre itr указывает на существующий элемент
+       * @post Объект удалён из таблицы, связанное хранение освобождено.
+       * @post Обновлены вторичные индексы таблицы.
+       * @post Прежнему плательщику за хранение возвращается стоимость таблицы и вторичных индексов для удалённого объекта; при удалении таблицы и индексов — также накладные расходы.
        *
-       * @return For the signature with `const_iterator`, returns a pointer to the object following the removed object.
+       * @return Для сигнатуры с `const_iterator` — итератор на объект, следующий за удалённым.
        *
-       * Exceptions:
-       * The object to be removed is not in the table.
-       * The action is not authorized to modify the table.
-       * The given iterator is invalid.
+       * Исключения:
+       * Удаляемого объекта нет в таблице.
+       * Действие не уполномочено изменять таблицу.
+       * Недопустимый итератор.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}
@@ -1903,22 +1903,22 @@ class multi_index
       }
 
       /**
-       * Remove an existing object from a table using its primary key.
+       * Удаляет существующий объект из таблицы.
        * @ingroup multiindex
        *
-       * @param obj - Object to be removed
+       * @param obj — удаляемый объект
        *
-       * @pre obj is an existing object in the table
-       * @post The object is removed from the table and all associated storage is reclaimed.
-       * @post Secondary indices associated with the table are updated.
-       * @post The existing payer for storage usage of the object is refunded for the table and secondary indices usage of the removed object, and if the table and indices are removed, for the associated overhead.
+       * @pre obj — существующий объект в таблице
+       * @post Объект удалён из таблицы, связанное хранение освобождено.
+       * @post Обновлены вторичные индексы таблицы.
+       * @post Прежнему плательщику за хранение возвращается стоимость таблицы и вторичных индексов для удалённого объекта; при удалении таблицы и индексов — также накладные расходы.
        *
-       * Exceptions:
-       * The object to be removed is not in the table.
-       * The action is not authorized to modify the table.
-       * The given iterator is invalid.
+       * Исключения:
+       * Удаляемого объекта нет в таблице.
+       * Действие не уполномочено изменять таблицу.
+       * Недопустимый итератор.
        *
-       * Example:
+       * Пример:
        *
        * @code
        * // This assumes the code from the constructor example. Replace myaction() {...}

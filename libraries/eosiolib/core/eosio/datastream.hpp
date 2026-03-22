@@ -1,6 +1,6 @@
 /**
  *  @file datastream.hpp
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 #include "check.hpp"
@@ -22,41 +22,41 @@
 namespace eosio {
 
 /**
- * @defgroup datastream Data Stream
+ * @defgroup datastream Поток данных
  * @ingroup core
- * @brief Defines data stream for reading and writing data in the form of bytes
+ * @brief Определяет поток данных для чтения и записи в виде байтов
  */
 
 /**
- *  A data stream for reading and writing data in the form of bytes
+ *  Поток данных для чтения и записи в виде байтов
  *
- *  @tparam T - Type of the datastream buffer
+ *  @tparam T - Тип буфера потока данных
  */
 template<typename T>
 class datastream {
    public:
       /**
-       * Construct a new datastream object
+       * Создаёт новый объект потока данных
        *
-       * @details Construct a new datastream object given the size of the buffer and start position of the buffer
-       * @param start - The start position of the buffer
-       * @param s - The size of the buffer
+       * @details Создаёт новый объект потока данных по размеру буфера и начальной позиции буфера
+       * @param start - Начальная позиция буфера
+       * @param s - Размер буфера
        */
       datastream( T start, size_t s )
       :_start(start),_pos(start),_end(start+s){}
 
      /**
-      *  Skips a specified number of bytes from this stream
+      *  Пропускает заданное число байт в этом потоке
       *
-      *  @param s - The number of bytes to skip
+      *  @param s - Число байт для пропуска
       */
       inline void skip( size_t s ){ _pos += s; }
 
      /**
-      *  Reads a specified number of bytes from the stream into a buffer
+      *  Читает заданное число байт из потока в буфер
       *
-      *  @param d - The pointer to the destination buffer
-      *  @param s - the number of bytes to read
+      *  @param d - Указатель на буфер назначения
+      *  @param s - Число байт для чтения
       *  @return true
       */
       inline bool read( void* d, size_t s ) {
@@ -67,10 +67,10 @@ class datastream {
       }
 
      /**
-      *  Writes a specified number of bytes into the stream from a buffer
+      *  Записывает заданное число байт в поток из буфера
       *
-      *  @param d - The pointer to the source buffer
-      *  @param s - The number of bytes to write
+      *  @param d - Указатель на исходный буфер
+      *  @param s - Число байт для записи
       *  @return true
       */
       inline bool write( const char* d, size_t s ) {
@@ -81,9 +81,9 @@ class datastream {
       }
 
      /**
-      *  Writes a specified byte into the stream from a buffer
+      *  Записывает один байт в поток из буфера
       *
-      *  @param d - The byte to be written
+      *  @param d - Байт для записи
       *  @return true
       */
       inline bool write( char d ) {
@@ -93,10 +93,10 @@ class datastream {
       }
 
      /**
-      *  Writes a specified number of bytes into the stream from a buffer
+      *  Записывает заданное число байт в поток из буфера
       *
-      *  @param d - The pointer to the source buffer
-      *  @param s - The number of bytes to write
+      *  @param d - Указатель на исходный буфер
+      *  @param s - Число байт для записи
       *  @return true
       */
       inline bool write( const void* d, size_t s ) {
@@ -107,9 +107,9 @@ class datastream {
       }
 
      /**
-      *  Writes a byte into the stream
+      *  Записывает байт в поток
       *
-      *  @param c byte to write
+      *  @param c Байт для записи
       *  @return true
       */
       inline bool put(char c) {
@@ -120,17 +120,17 @@ class datastream {
       }
 
      /**
-      *  Reads a byte from the stream
+      *  Читает байт из потока
       *
-      *  @param c - The reference to destination byte
+      *  @param c - Ссылка на байт назначения
       *  @return true
       */
       inline bool get( unsigned char& c ) { return get( *(char*)&c ); }
 
      /**
-      *  Reads a byte from the stream
+      *  Читает байт из потока
       *
-      *  @param c - The reference to destination byte
+      *  @param c - Ссылка на байт назначения
       *  @return true
       */
       inline bool get( char& c )
@@ -142,144 +142,144 @@ class datastream {
       }
 
      /**
-      *  Retrieves the current position of the stream
+      *  Возвращает текущую позицию в потоке
       *
-      *  @return T - The current position of the stream
+      *  @return T - Текущая позиция в потоке
       */
       T pos()const { return _pos; }
       inline bool valid()const { return _pos <= _end && _pos >= _start;  }
 
      /**
-      *  Sets the position within the current stream
+      *  Устанавливает позицию в текущем потоке
       *
-      *  @param p - The offset relative to the origin
-      *  @return true if p is within the range
-      *  @return false if p is not within the rawnge
+      *  @param p - Смещение относительно начала
+      *  @return true, если p в пределах диапазона
+      *  @return false, если p вне диапазона
       */
       inline bool seekp(size_t p) { _pos = _start + p; return _pos <= _end; }
 
      /**
-      *  Gets the position within the current stream
+      *  Возвращает позицию в текущем потоке
       *
-      *  @return p - The position within the current stream
+      *  @return p - Позиция в текущем потоке
       */
       inline size_t tellp()const      { return size_t(_pos - _start); }
 
      /**
-      *  Returns the number of remaining bytes that can be read/skipped
+      *  Возвращает число оставшихся байт, доступных для чтения/пропуска
       *
-      *  @return size_t - The number of remaining bytes
+      *  @return size_t - Число оставшихся байт
       */
       inline size_t remaining()const  { return _end - _pos; }
     private:
       /**
-       * The start position of the buffer
+       * Начальная позиция буфера
        */
       T _start;
       /**
-       * The current position of the buffer
+       * Текущая позиция буфера
        */
       T _pos;
       /**
-       * The end position of the buffer
+       * Конечная позиция буфера
        */
       T _end;
 };
 
 /**
- * Specialization of datastream used to help determine the final size of a serialized value
+ * Специализация datastream для определения итогового размера сериализованного значения
  */
 template<>
 class datastream<size_t> {
    public:
       /**
-       * Construct a new specialized datastream object given the initial size
+       * Создаёт новый специализированный объект потока данных с заданным начальным размером
        *
-       * @param init_size - The initial size
+       * @param init_size - Начальный размер
        */
      datastream( size_t init_size = 0):_size(init_size){}
 
      /**
-      *  Increment the size by s. This behaves the same as write( const char* ,size_t s ).
+      *  Увеличивает размер на s. Ведёт себя так же, как write( const char* ,size_t s ).
       *
-      *  @param s - The amount of size to increase
+      *  @param s - Величина увеличения размера
       *  @return true
       */
      inline bool     skip( size_t s )                 { _size += s; return true;  }
 
      /**
-      *  Increment the size by s. This behaves the same as skip( size_t s )
+      *  Увеличивает размер на s. Ведёт себя так же, как skip( size_t s )
       *
-      *  @param s - The amount of size to increase
+      *  @param s - Величина увеличения размера
       *  @return true
       */
      inline bool     write( const char* ,size_t s )  { _size += s; return true;  }
 
      /**
-      *  Increment the size by s. This behaves the same as skip( size_t s )
+      *  Увеличивает размер на s. Ведёт себя так же, как skip( size_t s )
       *
-      *  @param s - The amount of size to increase
+      *  @param s - Величина увеличения размера
       *  @return true
       */
      inline bool     write( char )  { _size++; return true;  }
 
      /**
-      *  Increment the size by s. This behaves the same as skip( size_t s )
+      *  Увеличивает размер на s. Ведёт себя так же, как skip( size_t s )
       *
-      *  @param s - The amount of size to increase
+      *  @param s - Величина увеличения размера
       *  @return true
       */
      inline bool     write( const void* ,size_t s )  { _size += s; return true;  }
 
      /**
-      *  Increment the size by one
+      *  Увеличивает размер на единицу
       *
       *  @return true
       */
      inline bool     put(char )                      { ++_size; return  true;    }
 
      /**
-      *  Check validity. It's always valid
+      *  Проверка допустимости. Всегда допустимо
       *
       *  @return true
       */
      inline bool     valid()const                     { return true;              }
 
      /**
-      * Set new size
+      * Устанавливает новый размер
       *
-      * @param p - The new size
+      * @param p - Новый размер
       * @return true
       */
      inline bool     seekp(size_t p)                  { _size = p;  return true;  }
 
      /**
-      * Get the size
+      * Возвращает размер
       *
-      * @return size_t - The size
+      * @return size_t - Размер
       */
      inline size_t   tellp()const                     { return _size;             }
 
      /**
-      * Always returns 0
+      * Всегда возвращает 0
       *
       * @return size_t - 0
       */
      inline size_t   remaining()const                 { return 0;                 }
   private:
      /**
-      * The size used to determine the final size of a serialized value.
+      * Размер, используемый для определения итогового размера сериализованного значения.
       */
      size_t _size;
 };
 
 /**
- *  Serialize an std::list into a stream
+ *  Сериализует std::list в поток
  *
- *  @param ds - The stream to write
- *  @param opt - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param opt - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 inline datastream<Stream>& operator<<(datastream<Stream>& ds, const std::list<T>& l) {
@@ -290,12 +290,12 @@ inline datastream<Stream>& operator<<(datastream<Stream>& ds, const std::list<T>
 }
 
 /**
- *  Deserialize an std::list from a stream
+ *  Десериализует std::list из потока
  *
- *  @param ds - The stream to read
- *  @param opt - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param opt - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::list<T>& l) {
@@ -308,12 +308,12 @@ inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::list<T>& l) {
 }
 
 /**
- *  Serialize an std::deque into a stream
+ *  Сериализует std::deque в поток
  *
- *  @param ds - The stream to write
- *  @param opt - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param opt - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 inline datastream<Stream>& operator<<(datastream<Stream>& ds, const std::deque<T>& d) {
@@ -324,12 +324,12 @@ inline datastream<Stream>& operator<<(datastream<Stream>& ds, const std::deque<T
 }
 
 /**
- *  Deserialize an std::deque from a stream
+ *  Десериализует std::deque из потока
  *
- *  @param ds - The stream to read
- *  @param opt - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param opt - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::deque<T>& d) {
@@ -342,12 +342,12 @@ inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::deque<T>& d) 
 }
 
 /**
- *  Serialize an std::variant into a stream
+ *  Сериализует std::variant в поток
  *
- *  @param ds - The stream to write
- *  @param opt - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param opt - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename... Ts>
 inline datastream<Stream>& operator<<(datastream<Stream>& ds, const std::variant<Ts...>& var) {
@@ -373,12 +373,12 @@ void deserialize(datastream<Stream>& ds, std::variant<Ts...>& var, int i) {
 }
 
 /**
- *  Deserialize an std::variant from a stream
+ *  Десериализует std::variant из потока
  *
- *  @param ds - The stream to read
- *  @param opt - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param opt - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename... Ts>
 inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::variant<Ts...>& var) {
@@ -389,13 +389,13 @@ inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::variant<Ts...
 }
 
 /**
- *  Serialize an std::pair
+ *  Сериализует std::pair
  *
- *  @param ds - The stream to write
- *  @param t - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam Args - Type of the objects contained in the tuple
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param t - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam Args - Типы элементов кортежа
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T1, typename T2>
 datastream<Stream>& operator<<( datastream<Stream>& ds, const std::pair<T1, T2>& t ) {
@@ -405,13 +405,13 @@ datastream<Stream>& operator<<( datastream<Stream>& ds, const std::pair<T1, T2>&
 }
 
 /**
- *  Deserialize an std::pair
+ *  Десериализует std::pair
  *
- *  @param ds - The stream to read
- *  @param t - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam Args - Type of the objects contained in the tuple
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param t - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam Args - Типы элементов кортежа
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T1, typename T2>
 datastream<Stream>& operator>>( datastream<Stream>& ds, std::pair<T1, T2>& t ) {
@@ -424,12 +424,12 @@ datastream<Stream>& operator>>( datastream<Stream>& ds, std::pair<T1, T2>& t ) {
 }
 
 /**
- *  Serialize an optional into a stream
+ *  Сериализует optional в поток
  *
- *  @param ds - The stream to write
- *  @param opt - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param opt - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 inline datastream<Stream>& operator<<(datastream<Stream>& ds, const std::optional<T>& opt) {
@@ -441,12 +441,12 @@ inline datastream<Stream>& operator<<(datastream<Stream>& ds, const std::optiona
 }
 
 /**
- *  Deserialize an optional from a stream
+ *  Десериализует optional из потока
  *
- *  @param ds - The stream to read
- *  @param opt - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param opt - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::optional<T>& opt) {
@@ -462,12 +462,12 @@ inline datastream<Stream>& operator>>(datastream<Stream>& ds, std::optional<T>& 
 
 
 /**
- *  Serialize a bool into a stream
+ *  Сериализует bool в поток
  *
- *  @param ds - The stream to read
- *  @param d - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param d - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream>
 inline datastream<Stream>& operator<<(datastream<Stream>& ds, const bool& d) {
@@ -475,12 +475,12 @@ inline datastream<Stream>& operator<<(datastream<Stream>& ds, const bool& d) {
 }
 
 /**
- *  Deserialize a bool from a stream
+ *  Десериализует bool из потока
  *
- *  @param ds - The stream to read
- *  @param d - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param d - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream>
 inline datastream<Stream>& operator>>(datastream<Stream>& ds, bool& d) {
@@ -491,12 +491,12 @@ inline datastream<Stream>& operator>>(datastream<Stream>& ds, bool& d) {
 }
 
 /**
- *  Serialize a string into a stream
+ *  Сериализует строку в поток
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream>
 datastream<Stream>& operator << ( datastream<Stream>& ds, const std::string& v ) {
@@ -507,12 +507,12 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::string& v )
 }
 
 /**
- *  Deserialize a string from a stream
+ *  Десериализует строку из потока
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream>
 datastream<Stream>& operator >> ( datastream<Stream>& ds, std::string& v ) {
@@ -526,14 +526,14 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::string& v ) {
 }
 
 /**
- *  Serialize a fixed size std::array
+ *  Сериализует std::array фиксированного размера
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the array
- *  @tparam N - Size of the array
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов массива
+ *  @tparam N - Размер массива
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::size_t N>
 datastream<Stream>& operator << ( datastream<Stream>& ds, const std::array<T,N>& v ) {
@@ -544,14 +544,14 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::array<T,N>&
 
 
 /**
- *  Deserialize a fixed size std::array
+ *  Десериализует std::array фиксированного размера
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the array
- *  @tparam N - Size of the array
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов массива
+ *  @tparam N - Размер массива
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::size_t N>
 datastream<Stream>& operator >> ( datastream<Stream>& ds, std::array<T,N>& v ) {
@@ -562,11 +562,11 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::array<T,N>& v ) {
 
 namespace _datastream_detail {
    /**
-    * Check if type T is a pointer
+    * Проверяет, является ли тип T указателем
     *
-    * @tparam T - The type to be checked
-    * @return true if T is a pointer
-    * @return false otherwise
+    * @tparam T - Проверяемый тип
+    * @return true, если T — указатель
+    * @return false в противном случае
     */
    template<typename T>
    constexpr bool is_pointer() {
@@ -576,11 +576,11 @@ namespace _datastream_detail {
    }
 
    /**
-    * Check if type T is a primitive type
+    * Проверяет, является ли тип T примитивным
     *
-    * @tparam T - The type to be checked
-    * @return true if T is a primitive type
-    * @return false otherwise
+    * @tparam T - Проверяемый тип
+    * @return true, если T — примитивный тип
+    * @return false в противном случае
     */
    template<typename T>
    constexpr bool is_primitive() {
@@ -589,9 +589,9 @@ namespace _datastream_detail {
    }
 
    /*
-    * Check if type T is a specialization of datastream
+    * Проверяет, является ли T специализацией datastream
     *
-    * @tparam T - The type to be checked
+    * @tparam T - Проверяемый тип
     */
    template<typename T>
    struct is_datastream { static constexpr bool value = false; };
@@ -600,14 +600,14 @@ namespace _datastream_detail {
 }
 
 /**
- *  Deserialize a pointer
+ *  Десериализует указатель
  *
- *  @brief Pointer should not be serialized, so this function will always throws an error
- *  @param ds - The stream to read
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the pointer
- *  @return datastream<Stream>& - Reference to the datastream
- *  @post Throw an exception if it is a pointer
+ *  @brief Указатель не должен сериализоваться; эта перегрузка всегда приводит к ошибке
+ *  @param ds - Поток для чтения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип указателя
+ *  @return datastream<Stream>& - Ссылка на поток данных
+ *  @post Выбрасывает исключение, если это указатель
  */
 template<typename Stream, typename T, std::enable_if_t<_datastream_detail::is_pointer<T>()>* = nullptr>
 datastream<Stream>& operator >> ( datastream<Stream>& ds, T ) {
@@ -616,13 +616,13 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, T ) {
 }
 
 /**
- *  Serialize a fixed size C array of non-primitive and non-pointer type
+ *  Сериализует C-массив фиксированного размера из непримитивного и не указательного типа
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the pointer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элемента массива
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::size_t N,
          std::enable_if_t<!_datastream_detail::is_primitive<T>() &&
@@ -635,13 +635,13 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const T (&v)[N] ) {
 }
 
 /**
- *  Serialize a fixed size C array of primitive type
+ *  Сериализует C-массив фиксированного размера примитивного типа
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the pointer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элемента массива
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::size_t N,
          std::enable_if_t<_datastream_detail::is_primitive<T>()>* = nullptr>
@@ -652,14 +652,14 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const T (&v)[N] ) {
 }
 
 /**
- *  Deserialize a fixed size C array of non-primitive and non-pointer type
+ *  Десериализует C-массив фиксированного размера из непримитивного и не указательного типа
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam T - Type of the object contained in the array
- *  @tparam N - Size of the array
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam T - Тип элементов массива
+ *  @tparam N - Размер массива
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::size_t N,
          std::enable_if_t<!_datastream_detail::is_primitive<T>() &&
@@ -674,14 +674,14 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, T (&v)[N] ) {
 }
 
 /**
- *  Deserialize a fixed size C array of primitive type
+ *  Десериализует C-массив фиксированного размера примитивного типа
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam T - Type of the object contained in the array
- *  @tparam N - Size of the array
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam T - Тип элементов массива
+ *  @tparam N - Размер массива
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::size_t N,
          std::enable_if_t<_datastream_detail::is_primitive<T>()>* = nullptr>
@@ -694,12 +694,12 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, T (&v)[N] ) {
 }
 
 /**
- *  Serialize a vector of T, where T is a primitive data type
+ *  Сериализует vector из T, где T — примитивный тип данных
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, 
 	std::enable_if_t<_datastream_detail::is_primitive<T>()>* = nullptr>
@@ -710,13 +710,13 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::vector<T>& 
 }
 
 /**
- *  Serialize a vector
+ *  Сериализует vector
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the vector
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов vector
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T,
 	std::enable_if_t<!_datastream_detail::is_primitive<T>()>* = nullptr>
@@ -728,12 +728,12 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::vector<T>& 
 }
 
 /**
- *  Deserialize a vector of T, where T is a primitive data type
+ *  Десериализует vector из T, где T — примитивный тип данных
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T,
 	std::enable_if_t<_datastream_detail::is_primitive<T>()>* = nullptr>
@@ -746,13 +746,13 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::vector<T>& v ) {
 }
 
 /**
- *  Deserialize a vector
+ *  Десериализует vector
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the vector
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов vector
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T,
 	std::enable_if_t<!_datastream_detail::is_primitive<T>()>* = nullptr>
@@ -766,13 +766,13 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::vector<T>& v ) {
 }
 
 /**
- *  Serialize a basic_string<T>
+ *  Сериализует basic_string<T>
  *
- *  @param ds - The stream to write
- *  @param s - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the basic_string
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param s - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов basic_string
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 datastream<Stream>& operator << ( datastream<Stream>& ds, const std::basic_string<T>& s ) {
@@ -783,13 +783,13 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::basic_strin
 }
 
 /**
- *  Deserialize a basic_string<T>
+ *  Десериализует basic_string<T>
  *
- *  @param ds - The stream to read
- *  @param s - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the basic_string
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param s - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов basic_string
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 datastream<Stream>& operator >> ( datastream<Stream>& ds, std::basic_string<T>& s ) {
@@ -801,13 +801,13 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::basic_string<T>& 
 }
 
 /**
- *  Serialize a basic_string<uint8_t>
+ *  Сериализует basic_string<uint8_t>
  *
- *  @param ds - The stream to write
- *  @param s - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the basic_string
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param s - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов basic_string
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream>
 datastream<Stream>& operator << ( datastream<Stream>& ds, const std::basic_string<uint8_t>& s ) {
@@ -818,13 +818,13 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::basic_strin
 }
 
 /**
- *  Deserialize a basic_string<uint8_t>
+ *  Десериализует basic_string<uint8_t>
  *
- *  @param ds - The stream to read
- *  @param s - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the basic_string
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param s - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов basic_string
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream>
 datastream<Stream>& operator >> ( datastream<Stream>& ds, std::basic_string<uint8_t>& s ) {
@@ -837,13 +837,13 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::basic_string<uint
 
 
 /**
- *  Serialize a set
+ *  Сериализует std::set
  *
- *  @param ds - The stream to write
- *  @param s - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the set
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param s - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов множества
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 datastream<Stream>& operator << ( datastream<Stream>& ds, const std::set<T>& s ) {
@@ -856,13 +856,13 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::set<T>& s )
 
 
 /**
- *  Deserialize a set
+ *  Десериализует std::set
  *
- *  @param ds - The stream to read
- *  @param s - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the object contained in the set
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param s - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Тип элементов множества
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T>
 datastream<Stream>& operator >> ( datastream<Stream>& ds, std::set<T>& s ) {
@@ -878,14 +878,14 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::set<T>& s ) {
 }
 
 /**
- *  Serialize a map
+ *  Сериализует std::map
  *
- *  @param ds - The stream to write
- *  @param m - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam K - Type of the key contained in the map
- *  @tparam V - Type of the value contained in the map
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param m - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam K - Тип ключа в map
+ *  @tparam V - Тип значения в map
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename K, typename V>
 datastream<Stream>& operator << ( datastream<Stream>& ds, const std::map<K,V>& m ) {
@@ -897,14 +897,14 @@ datastream<Stream>& operator << ( datastream<Stream>& ds, const std::map<K,V>& m
 }
 
 /**
- *  Deserialize a map
+ *  Десериализует std::map
  *
- *  @param ds - The stream to read
- *  @param m - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam K - Type of the key contained in the map
- *  @tparam V - Type of the value contained in the map
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param m - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam K - Тип ключа в map
+ *  @tparam V - Тип значения в map
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename K, typename V>
 datastream<Stream>& operator >> ( datastream<Stream>& ds, std::map<K,V>& m ) {
@@ -920,13 +920,13 @@ datastream<Stream>& operator >> ( datastream<Stream>& ds, std::map<K,V>& m ) {
 }
 
 /**
- *  Serialize a tuple
+ *  Сериализует std::tuple
  *
- *  @param ds - The stream to write
- *  @param t - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam Args - Type of the objects contained in the tuple
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param t - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam Args - Типы элементов кортежа
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename... Args>
 datastream<Stream>& operator<<( datastream<Stream>& ds, const std::tuple<Args...>& t ) {
@@ -937,13 +937,13 @@ datastream<Stream>& operator<<( datastream<Stream>& ds, const std::tuple<Args...
 }
 
 /**
- *  Deserialize a tuple
+ *  Десериализует std::tuple
  *
- *  @param ds - The stream to read
- *  @param t - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam Args - Type of the objects contained in the tuple
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param t - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam Args - Типы элементов кортежа
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename... Args>
 datastream<Stream>& operator>>( datastream<Stream>& ds, std::tuple<Args...>& t ) {
@@ -954,13 +954,13 @@ datastream<Stream>& operator>>( datastream<Stream>& ds, std::tuple<Args...>& t )
 }
 
 /**
- *  Serialize a class
+ *  Сериализует класс
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam DataStream - Type of datastream
- *  @tparam T - Type of class
- *  @return DataStream& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam DataStream - Тип потока данных
+ *  @tparam T - Тип класса
+ *  @return DataStream& - Ссылка на поток данных
  */
 template<typename DataStream, typename T, std::enable_if_t<std::is_class<T>::value && _datastream_detail::is_datastream<DataStream>::value>* = nullptr>
 DataStream& operator<<( DataStream& ds, const T& v ) {
@@ -971,13 +971,13 @@ DataStream& operator<<( DataStream& ds, const T& v ) {
 }
 
 /**
- *  Deserialize a class
+ *  Десериализует класс
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam DataStream - Type of datastream
- *  @tparam T - Type of class
- *  @return DataStream& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam DataStream - Тип потока данных
+ *  @tparam T - Тип класса
+ *  @return DataStream& - Ссылка на поток данных
  */
 template<typename DataStream, typename T, std::enable_if_t<std::is_class<T>::value && _datastream_detail::is_datastream<DataStream>::value>* = nullptr>
 DataStream& operator>>( DataStream& ds, T& v ) {
@@ -988,13 +988,13 @@ DataStream& operator>>( DataStream& ds, T& v ) {
 }
 
 /**
- *  Serialize a primitive type
+ *  Сериализует примитивный тип
  *
- *  @param ds - The stream to write
- *  @param v - The value to serialize
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the primitive type
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для записи
+ *  @param v - Значение для сериализации
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Примитивный тип
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::enable_if_t<_datastream_detail::is_primitive<T>()>* = nullptr>
 datastream<Stream>& operator<<( datastream<Stream>& ds, const T& v ) {
@@ -1003,13 +1003,13 @@ datastream<Stream>& operator<<( datastream<Stream>& ds, const T& v ) {
 }
 
 /**
- *  Deserialize a primitive type
+ *  Десериализует примитивный тип
  *
- *  @param ds - The stream to read
- *  @param v - The destination for deserialized value
- *  @tparam Stream - Type of datastream buffer
- *  @tparam T - Type of the primitive type
- *  @return datastream<Stream>& - Reference to the datastream
+ *  @param ds - Поток для чтения
+ *  @param v - Назначение для десериализованного значения
+ *  @tparam Stream - Тип буфера потока данных
+ *  @tparam T - Примитивный тип
+ *  @return datastream<Stream>& - Ссылка на поток данных
  */
 template<typename Stream, typename T, std::enable_if_t<_datastream_detail::is_primitive<T>()>* = nullptr>
 datastream<Stream>& operator>>( datastream<Stream>& ds, T& v ) {
@@ -1018,13 +1018,13 @@ datastream<Stream>& operator>>( datastream<Stream>& ds, T& v ) {
 }
 
 /**
- * Unpack data inside a fixed size buffer as T
+ * Распаковывает данные из буфера фиксированного размера как T
  *
  * @ingroup datastream
- * @tparam T - Type of the unpacked data
- * @param buffer - Pointer to the buffer
- * @param len - Length of the buffer
- * @return T - The unpacked data
+ * @tparam T - Тип распакованных данных
+ * @param buffer - Указатель на буфер
+ * @param len - Длина буфера
+ * @return T - Распакованные данные
  */
 template<typename T>
 T unpack( const char* buffer, size_t len ) {
@@ -1035,14 +1035,13 @@ T unpack( const char* buffer, size_t len ) {
 }
 
 /**
- * Unpack data inside a fixed size buffer as T
+ * Распаковывает данные из буфера фиксированного размера как T
  *
  * @ingroup datastream
- * @tparam T - Type of the unpacked data
- * @param res - Variable to fill with the unpacking
- * @param buffer - Pointer to the buffer
- * @param len - Length of the buffer
- * @return T - The unpacked data
+ * @tparam T - Тип распакованных данных
+ * @param res - Переменная для заполнения результатом распаковки
+ * @param buffer - Указатель на буфер
+ * @param len - Длина буфера
  */
 template<typename T>
 void unpack( T& res, const char* buffer, size_t len ) {
@@ -1051,12 +1050,12 @@ void unpack( T& res, const char* buffer, size_t len ) {
 }
 
 /**
- * Unpack data inside a variable size buffer as T
+ * Распаковывает данные из буфера переменного размера как T
  *
  * @ingroup datastream
- * @tparam T - Type of the unpacked data
- * @param bytes - Buffer
- * @return T - The unpacked data
+ * @tparam T - Тип распакованных данных
+ * @param bytes - Буфер
+ * @return T - Распакованные данные
  */
 template<typename T>
 T unpack( const std::vector<char>& bytes ) {
@@ -1064,12 +1063,12 @@ T unpack( const std::vector<char>& bytes ) {
 }
 
 /**
- * Get the size of the packed data
+ * Возвращает размер упакованных данных
  *
  * @ingroup datastream
- * @tparam T - Type of the data to be packed
- * @param value - Data to be packed
- * @return size_t - Size of the packed data
+ * @tparam T - Тип упаковываемых данных
+ * @param value - Данные для упаковки
+ * @return size_t - Размер упакованных данных
  */
 template<typename T>
 size_t pack_size( const T& value ) {
@@ -1079,12 +1078,12 @@ size_t pack_size( const T& value ) {
 }
 
 /**
- * Get packed data
+ * Возвращает упакованные данные
  *
  * @ingroup datastream
- * @tparam T - Type of the data to be packed
- * @param value - Data to be packed
- * @return bytes - The packed data
+ * @tparam T - Тип упаковываемых данных
+ * @param value - Данные для упаковки
+ * @return Упакованные данные (байты)
  */
 template<typename T>
 std::vector<char> pack( const T& value ) {

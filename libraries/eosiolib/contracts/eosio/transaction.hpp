@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 #include "action.hpp"
@@ -43,23 +43,20 @@ namespace eosio {
    }
 
   /**
-   *  @defgroup transaction Transaction
+   *  @defgroup transaction Транзакция
    *  @ingroup contracts
-   *  @brief Type-safe C++ wrappers for transaction C API
+   *  @brief Типобезопасные C++-обёртки над C API транзакций COOPOS
    *
-   *  @details An inline message allows one contract to send another contract a message
-   *  which is processed immediately after the current message's processing
-   *  ends such that the success or failure of the parent transaction is
-   *  dependent on the success of the message. If an inline message fails in
-   *  processing then the whole tree of transactions and actions rooted in the
-   *  block will me marked as failing and none of effects on the database will
-   *  persist.
+   *  @details Встроенное (inline) сообщение позволяет одному контракту отправить другому контракту сообщение,
+   *  которое обрабатывается сразу после завершения обработки текущего сообщения,
+   *  так что успех или неудача родительской транзакции зависят от успеха этого сообщения.
+   *  Если встроенное сообщение завершается с ошибкой при обработке, то всё дерево транзакций и действий,
+   *  укоренённое в блоке, помечается как неуспешное, и ни один эффект в базе данных не сохраняется.
    *
-   *  Inline actions and Deferred transactions must adhere to the permissions
-   *  available to the parent transaction or, in the future, delegated to the
-   *  contract account for future use.
+   *  Встроенные действия и отложенные транзакции должны соблюдать разрешения (permissions),
+   *  доступные родительской транзакции или, в будущем, делегированные аккаунту контракта для последующего использования.
    *
-   *  @note There are some methods from the @ref transactioncapi that can be used directly from C++
+   *  @note Некоторые методы из @ref transactioncapi можно вызывать напрямую из C++
    */
 
   /**
@@ -73,19 +70,19 @@ namespace eosio {
    typedef std::vector<extension> extensions_type;
 
    /**
-    *  Class transaction_header contains details about the transaction
+    *  Класс transaction_header содержит сведения о транзакции
     *
     *  @ingroup transaction
-    *  @brief Contains details about the transaction
+    *  @brief Содержит сведения о транзакции
     */
 
    class transaction_header {
    public:
 
       /**
-       * Construct a new transaction_header with an expiration of now + 60 seconds.
+       * Создаёт новый transaction_header со сроком действия «сейчас + 60 с».
        *
-       * @brief Construct a new transaction_header object initialising the transaction header expiration to now + 60 seconds
+       * @brief Создаёт объект transaction_header со сроком действия заголовка транзакции «сейчас + 60 с»
        */
       transaction_header( time_point_sec exp = time_point_sec(current_time_point()) + 60)
          :expiration(exp)
@@ -94,15 +91,15 @@ namespace eosio {
       time_point_sec  expiration;
       uint16_t        ref_block_num;
       uint32_t        ref_block_prefix;
-      unsigned_int    max_net_usage_words = 0UL; /// number of 8 byte words this transaction can serialize into after compressions
-      uint8_t         max_cpu_usage_ms = 0UL; /// number of CPU usage units to bill transaction for
-      unsigned_int    delay_sec = 0UL; /// number of seconds to delay transaction, default: 0
+      unsigned_int    max_net_usage_words = 0UL; /// число 8-байтовых слов, в которые может быть сериализована транзакция после сжатия
+      uint8_t         max_cpu_usage_ms = 0UL; /// число единиц использования CPU для тарификации транзакции
+      unsigned_int    delay_sec = 0UL; /// задержка транзакции в секундах, по умолчанию: 0
 
       EOSLIB_SERIALIZE( transaction_header, (expiration)(ref_block_num)(ref_block_prefix)(max_net_usage_words)(max_cpu_usage_ms)(delay_sec) )
    };
 
    /**
-    *  Class transaction contains the actions, context_free_actions and extensions type for a transaction
+    *  Класс transaction содержит действия, context_free_actions и расширения транзакции
     *
     *  @ingroup transaction
     */
@@ -110,17 +107,16 @@ namespace eosio {
    public:
 
       /**
-       * Construct a new transaction with an expiration of now + 60 seconds.
+       * Создаёт новую транзакцию со сроком действия «сейчас + 60 с».
        */
       transaction(time_point_sec exp = time_point_sec(current_time_point()) + 60) : transaction_header( exp ) {}
 
       /**
-       *  Sends this transaction, packs the transaction then sends it as a deferred transaction
+       *  Отправляет эту транзакцию: упаковывает её и отправляет как отложенную (deferred)
        *
-       *  @details Writes the symbol_code as a string to the provided char buffer
-       *  @param sender_id - ID of sender
-       *  @param payer - Account paying for RAM
-       *  @param replace_existing - Defaults to false, if this is `0`/false then if the provided sender_id is already in use by an in-flight transaction from this contract, which will be a failing assert. If `1` then transaction will atomically cancel/replace the inflight transaction
+       *  @param sender_id — идентификатор отправителя
+       *  @param payer — аккаунт, оплачивающий RAM
+       *  @param replace_existing — по умолчанию false: при `0`/false, если указанный sender_id уже занят выполняющейся транзакцией этого контракта, сработает неуспешный assert. При `1` транзакция атомарно отменит/заменит текущую «в полёте»
        */
       void send(const uint128_t& sender_id, name payer, bool replace_existing = false) const {
          auto serialize = pack(*this);
@@ -135,7 +131,7 @@ namespace eosio {
    };
 
    /**
-    *  Struct onerror contains and sender id and packed transaction
+    *  Структура onerror содержит идентификатор отправителя и упакованную транзакцию
     *
     *  @ingroup transaction
     */
@@ -144,7 +140,7 @@ namespace eosio {
       std::vector<char> sent_trx;
 
      /**
-      *  from_current_action unpacks and returns a onerror struct
+      *  Распаковывает из текущего действия и возвращает структуру onerror
       *
       *  @ingroup transaction
       */
@@ -153,7 +149,7 @@ namespace eosio {
       }
 
      /**
-      * Unpacks and returns a transaction
+      * Распаковывает и возвращает транзакцию
       */
       transaction unpack_sent_trx() const {
          return unpack<transaction>(sent_trx);
@@ -163,25 +159,25 @@ namespace eosio {
    };
 
    /**
-    *  Send a deferred transaction
+    *  Отправляет отложенную транзакцию
     *
     *  @ingroup transaction
-    *  @param sender_id - Account name of the sender of this deferred transaction
-    *  @param payer - Account name responsible for paying the RAM for this deferred transaction
-    *  @param serialized_transaction - The packed transaction to be deferred
-    *  @param size - The size of the packed transaction, required for persistence.
-    *  @param replace - If true, will replace an existing transaction.
+    *  @param sender_id — имя аккаунта отправителя этой отложенной транзакции
+    *  @param payer — имя аккаунта, отвечающего за оплату RAM для этой отложенной транзакции
+    *  @param serialized_transaction — упакованная транзакция для отложенного выполнения
+    *  @param size — размер упакованной транзакции, необходим для сохранения
+    *  @param replace — если true, заменяет существующую транзакцию
     */
    inline void send_deferred(const uint128_t& sender_id, name payer, const char* serialized_transaction, size_t size, bool replace = false) {
      internal_use_do_not_use::send_deferred(sender_id, payer.value, serialized_transaction, size, replace);
    }
    /**
-    *  Retrieve the indicated action from the active transaction.
+    *  Возвращает указанное действие из активной транзакции
     *
     *  @ingroup transaction
-    *  @param type - 0 for context free action, 1 for action
-    *  @param index - the index of the requested action
-    *  @return the indicated action
+    *  @param type — 0 для действия без контекста (context free), 1 для обычного действия
+    *  @param index — индекс запрашиваемого действия
+    *  @return запрошенное действие
     */
    inline action get_action( uint32_t type, uint32_t index ) {
       constexpr size_t max_stack_buffer_size = 512;
@@ -195,29 +191,28 @@ namespace eosio {
    }
 
    /**
-    *  Access a copy of the currently executing transaction.
+    *  Читает текущую выполняемую транзакцию в буфер
     *
     *  @ingroup transaction
-    *  @return the currently executing transaction
+    *  @return число байт, записанных в ptr
     */
    inline size_t read_transaction(char* ptr, size_t sz) {
       return internal_use_do_not_use::read_transaction( ptr, sz );
    }
 
-    /**
-     *  Cancels a deferred transaction.
-     *
-     *  @ingroup transaction
-     *  @param sender_id - The id of the sender
-     *
-     *  @pre The deferred transaction ID exists.
-     *  @pre The deferred transaction ID has not yet been published.
-     *  @post Deferred transaction canceled.
-     *
-     *  @return 1 if transaction was canceled, 0 if transaction was not found
-     *
-     *  Example:
-*
+   /**
+    *  Отменяет отложенную транзакцию
+    *
+    *  @ingroup transaction
+    *  @param sender_id — идентификатор отправителя
+    *
+    *  @pre Идентификатор отложенной транзакции существует.
+    *  @pre Отложенная транзакция с этим идентификатором ещё не опубликована.
+    *  @post Отложенная транзакция отменена.
+    *
+    *  @return 1, если транзакция отменена; 0, если транзакция не найдена
+    *
+    *  Пример:
      *  @code
      *  id = 0xffffffffffffffff
      *  cancel_deferred( id );
@@ -228,21 +223,21 @@ namespace eosio {
    }
 
    /**
-    *  Gets the size of the currently executing transaction.
+    *  Возвращает размер текущей выполняемой транзакции
     *
     *  @ingroup transaction
-    *  @return size of the currently executing transaction
+    *  @return размер текущей выполняемой транзакции (байт)
     */
    inline size_t transaction_size() {
       return internal_use_do_not_use::transaction_size();
    }
 
    /**
-    *  Gets the block number used for TAPOS on the currently executing transaction.
+    *  Возвращает номер блока, используемый для TAPOS в текущей выполняемой транзакции.
     *
     *  @ingroup transaction
-    *  @return block number used for TAPOS on the currently executing transaction
-    *  Example:
+    *  @return номер блока TAPOS для текущей транзакции
+    *  Пример:
     *  @code
     *  int tbn = tapos_block_num();
     *  @endcode
@@ -252,11 +247,11 @@ namespace eosio {
    }
 
    /**
-    *  Gets the block prefix used for TAPOS on the currently executing transaction.
+    *  Возвращает префикс блока, используемый для TAPOS в текущей выполняемой транзакции
     *
     *  @ingroup transaction
-    *  @return block prefix used for TAPOS on the currently executing transaction
-    *  Example:
+    *  @return префикс блока TAPOS для текущей транзакции
+    *  Пример:
     *  @code
     *  int tbp = tapos_block_prefix();
     *  @endcode
@@ -266,24 +261,24 @@ namespace eosio {
    }
 
    /**
-    *  Gets the expiration of the currently executing transaction.
+    *  Возвращает срок действия (expiration) текущей выполняемой транзакции.
     *
     *  @ingroup transaction
-    *  @brief Gets the expiration of the currently executing transaction.
-    *  @return expiration of the currently executing transaction in seconds since Unix epoch
+    *  @brief Возвращает срок действия текущей выполняемой транзакции.
+    *  @return срок действия текущей выполняемой транзакции в секундах с начала эпохи Unix
     */
    inline uint32_t expiration() {
       return internal_use_do_not_use::expiration();
    }
 
    /**
-    * Retrieve the signed_transaction.context_free_data[index].
+    *  Извлекает signed_transaction.context_free_data[index]
     *
     *  @ingroup transaction
-    *  @param index - the index of the context_free_data entry to retrieve
-    *  @param buff - output buff of the context_free_data entry
-    *  @param size - amount of context_free_data[index] to retrieve into buff, 0 to report required size
-    *  @return size copied, or context_free_data[index].size() if 0 passed for size, or -1 if index not valid
+    *  @param index — индекс записи context_free_data
+    *  @param buff — выходной буфер для данных context_free_data
+    *  @param size — сколько байт context_free_data[index] поместить в buff; 0 — вернуть требуемый размер
+    *  @return число скопированных байт, либо context_free_data[index].size() при size == 0, либо -1 при неверном index
     */
    inline int get_context_free_data( uint32_t index, char* buff, size_t size ) {
       return internal_use_do_not_use::get_context_free_data(index, buff, size);

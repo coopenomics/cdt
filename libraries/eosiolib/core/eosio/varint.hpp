@@ -1,38 +1,38 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 
 namespace eosio {
    /**
-    * @defgroup varint Variable Length Integer Type
+    * @defgroup varint Целое переменной длины
     * @ingroup core
     * @ingroup types
-    * @brief Defines variable length integer type which provides more efficient serialization
+    * @brief Определяет тип целого переменной длины для более эффективной сериализации
     */
 
    /**
-    *  Variable Length Unsigned Integer. This provides more efficient serialization of 32-bit unsigned int.
-    *  It serialuzes a 32-bit unsigned integer in as few bytes as possible
-    *  `varuint32` is unsigned and uses [VLQ or Base-128 encoding](https://en.wikipedia.org/wiki/Variable-length_quantity)
+    *  Целое без знака переменной длины. Обеспечивает более эффективную сериализацию 32-битного беззнакового int.
+    *  Сериализует 32-битное беззнаковое целое минимально возможным числом байт.
+    *  `varuint32` без знака и использует [VLQ или кодирование Base-128](https://en.wikipedia.org/wiki/Variable-length_quantity)
     *
     *  @ingroup varint
     */
    struct unsigned_int {
        /**
-        * Construct a new unsigned int object
+        * Создаёт новый объект беззнакового целого
         *
-        * @param v - Source
+        * @param v - Источник
         */
        constexpr unsigned_int( uint32_t v = 0 ):value(v){}
 
        /**
-        * Construct a new unsigned int object from a type that is convertible to uint32_t
+        * Создаёт новый объект беззнакового целого из типа, приводимого к uint32_t
         *
-        * @tparam T - Type of the source
-        * @param v - Source
-        * @pre T must be convertible to uint32_t
+        * @tparam T - Тип источника
+        * @param v - Источник
+        * @pre T должен быть приводим к uint32_t
         */
        template<typename T>
        constexpr unsigned_int( T v ):value(v){}
@@ -41,10 +41,10 @@ namespace eosio {
        //operator uint64_t()const { return value; }
 
        /**
-        * Convert unsigned_int as T
+        * Приводит unsigned_int к типу T
         *
-        * @tparam T - Target type of conversion
-        * @return T - Converted target
+        * @tparam T - Целевой тип преобразования
+        * @return T - Результат преобразования
         */
        template<typename T>
        constexpr operator T()const { return static_cast<T>(value); }
@@ -52,139 +52,139 @@ namespace eosio {
        /// @cond OPERATORS
 
        /**
-        * Assign 32-bit unsigned integer
+        * Присваивает 32-битное беззнаковое целое
         *
-        * @param v - Soruce
-        * @return unsigned_int& - Reference to this object
+        * @param v - Источник
+        * @return unsigned_int& - Ссылка на этот объект
         */
        constexpr unsigned_int& operator=( uint32_t v ) { value = v; return *this; }
 
        /// @endcond
 
        /**
-        * Contained value
+        * Содержащееся значение
         */
        uint32_t value;
 
        /// @cond OPERATORS
 
        /**
-        * Check equality between a unsigned_int object and 32-bit unsigned integer
+        * Проверка равенства между unsigned_int и 32-битным беззнаковым целым
         *
-        * @param i - unsigned_int object to compare
-        * @param v - 32-bit unsigned integer to compare
-        * @return true - if equal
-        * @return false - otherwise
+        * @param i - Объект unsigned_int для сравнения
+        * @param v - 32-битное беззнаковое целое для сравнения
+        * @return true - если равны
+        * @return false - иначе
         */
        constexpr friend bool operator==( const unsigned_int& i, const uint32_t& v ) { return i.value == v; }
 
        /**
-        * Check equality between 32-bit unsigned integer and  a unsigned_int object
+        * Проверка равенства между 32-битным беззнаковым целым и unsigned_int
         *
-        * @param i - 32-bit unsigned integer to compare
-        * @param v - unsigned_int object to compare
-        * @return true - if equal
-        * @return false - otherwise
+        * @param i - 32-битное беззнаковое целое для сравнения
+        * @param v - Объект unsigned_int для сравнения
+        * @return true - если равны
+        * @return false - иначе
         */
        constexpr friend bool operator==( const uint32_t& i, const unsigned_int& v ) { return i == v.value; }
 
        /**
-        * Check equality between two unsigned_int objects
+        * Проверка равенства двух объектов unsigned_int
         *
-        * @param i - First unsigned_int object to compare
-        * @param v - Second unsigned_int object to compare
-        * @return true - if equal
-        * @return false - otherwise
+        * @param i - Первый unsigned_int для сравнения
+        * @param v - Второй unsigned_int для сравнения
+        * @return true - если равны
+        * @return false - иначе
         */
        constexpr friend bool operator==( const unsigned_int& i, const unsigned_int& v ) { return i.value == v.value; }
 
        /**
-        * Check inequality between a unsigned_int object and 32-bit unsigned integer
+        * Проверка неравенства между unsigned_int и 32-битным беззнаковым целым
         *
-        * @param i - unsigned_int object to compare
-        * @param v - 32-bit unsigned integer to compare
-        * @return true - if inequal
-        * @return false - otherwise
+        * @param i - Объект unsigned_int для сравнения
+        * @param v - 32-битное беззнаковое целое для сравнения
+        * @return true - если не равны
+        * @return false - иначе
         */
        constexpr friend bool operator!=( const unsigned_int& i, const uint32_t& v ) { return i.value != v; }
 
        /**
-        * Check inequality between 32-bit unsigned integer and  a unsigned_int object
+        * Проверка неравенства между 32-битным беззнаковым целым и unsigned_int
         *
-        * @param i - 32-bit unsigned integer to compare
-        * @param v - unsigned_int object to compare
-        * @return true - if unequal
-        * @return false - otherwise
+        * @param i - 32-битное беззнаковое целое для сравнения
+        * @param v - Объект unsigned_int для сравнения
+        * @return true - если не равны
+        * @return false - иначе
         */
        constexpr friend bool operator!=( const uint32_t& i, const unsigned_int& v ) { return i != v.value; }
 
        /**
-        * Check inequality between two unsigned_int objects
+        * Проверка неравенства двух объектов unsigned_int
         *
-        * @param i - First unsigned_int object to compare
-        * @param v - Second unsigned_int object to compare
-        * @return true - if inequal
-        * @return false - otherwise
+        * @param i - Первый unsigned_int для сравнения
+        * @param v - Второй unsigned_int для сравнения
+        * @return true - если не равны
+        * @return false - иначе
         */
        constexpr friend bool operator!=( const unsigned_int& i, const unsigned_int& v ) { return i.value != v.value; }
 
        /**
-        * Check if the given unsigned_int object is less than the given 32-bit unsigned integer
+        * Проверяет, меньше ли unsigned_int заданного 32-битного беззнакового целого
         *
-        * @param i - unsigned_int object to compare
-        * @param v - 32-bit unsigned integer to compare
-        * @return true - if i less than v
-        * @return false - otherwise
+        * @param i - Объект unsigned_int для сравнения
+        * @param v - 32-битное беззнаковое целое для сравнения
+        * @return true - если i меньше v
+        * @return false - иначе
         */
        constexpr friend bool operator<( const unsigned_int& i, const uint32_t& v ) { return i.value < v; }
 
        /**
-        * Check if the given 32-bit unsigned integer is less than the given unsigned_int object
+        * Проверяет, меньше ли 32-битное беззнаковое целое заданного unsigned_int
         *
-        * @param i - 32-bit unsigned integer to compare
-        * @param v - unsigned_int object to compare
-        * @return true -  if i less than v
-        * @return false - otherwise
+        * @param i - 32-битное беззнаковое целое для сравнения
+        * @param v - Объект unsigned_int для сравнения
+        * @return true - если i меньше v
+        * @return false - иначе
         */
        constexpr friend bool operator<( const uint32_t& i, const unsigned_int& v ) { return i < v.value; }
 
        /**
-        * Check if the first given unsigned_int is less than the second given unsigned_int object
+        * Проверяет, меньше ли первый unsigned_int второго
         *
-        * @param i - First unsigned_int object to compare
-        * @param v - Second unsigned_int object to compare
-        * @return true -  if i less than v
-        * @return false - otherwise
+        * @param i - Первый unsigned_int для сравнения
+        * @param v - Второй unsigned_int для сравнения
+        * @return true - если i меньше v
+        * @return false - иначе
         */
        constexpr friend bool operator<( const unsigned_int& i, const unsigned_int& v ) { return i.value < v.value; }
 
        /**
-        * Check if the given unsigned_int object is greater or equal to the given 32-bit unsigned integer
+        * Проверяет, больше или равен ли unsigned_int заданному 32-битному беззнаковому целому
         *
-        * @param i - unsigned_int object to compare
-        * @param v - 32-bit unsigned integer to compare
-        * @return true - if i is greater or equal to v
-        * @return false - otherwise
+        * @param i - Объект unsigned_int для сравнения
+        * @param v - 32-битное беззнаковое целое для сравнения
+        * @return true - если i больше или равен v
+        * @return false - иначе
         */
        constexpr friend bool operator>=( const unsigned_int& i, const uint32_t& v ) { return i.value >= v; }
 
        /**
-        * Check if the given 32-bit unsigned integer is greater or equal to the given unsigned_int object
+        * Проверяет, больше или равно ли 32-битное беззнаковое целое заданному unsigned_int
         *
-        * @param i - 32-bit unsigned integer to compare
-        * @param v - unsigned_int object to compare
-        * @return true -  if i is greater or equal to v
-        * @return false - otherwise
+        * @param i - 32-битное беззнаковое целое для сравнения
+        * @param v - Объект unsigned_int для сравнения
+        * @return true - если i больше или равен v
+        * @return false - иначе
         */
        constexpr friend bool operator>=( const uint32_t& i, const unsigned_int& v ) { return i >= v.value; }
 
        /**
-        * Check if the first given unsigned_int is greater or equal to the second given unsigned_int object
+        * Проверяет, больше или равен ли первый unsigned_int второму
         *
-        * @param i - First unsigned_int object to compare
-        * @param v - Second unsigned_int object to compare
-        * @return true -  if i is greater or equal to v
-        * @return false - otherwise
+        * @param i - Первый unsigned_int для сравнения
+        * @param v - Второй unsigned_int для сравнения
+        * @return true - если i больше или равен v
+        * @return false - иначе
         */
        constexpr friend bool operator>=( const unsigned_int& i, const unsigned_int& v ) { return i.value >= v.value; }
 
@@ -194,12 +194,12 @@ namespace eosio {
        /// @cond IMPLEMENTATIONS
 
        /**
-        *  Serialize an unsigned_int object with as few bytes as possible
+        *  Сериализует unsigned_int минимально возможным числом байт
         *
-        *  @param ds - The stream to write
-        *  @param v - The value to serialize
-        *  @tparam DataStream - Type of datastream
-        *  @return DataStream& - Reference to the datastream
+        *  @param ds - Поток для записи
+        *  @param v - Значение для сериализации
+        *  @tparam DataStream - Тип потока данных
+        *  @return DataStream& - Ссылка на поток данных
         */
        template<typename DataStream>
        friend DataStream& operator << ( DataStream& ds, const unsigned_int& v ){
@@ -214,12 +214,12 @@ namespace eosio {
        }
 
        /**
-        *  Deserialize an unsigned_int object
+        *  Десериализует unsigned_int
         *
-        *  @param ds - The stream to read
-        *  @param vi - The destination for deserialized value
-        *  @tparam DataStream - Type of datastream
-        *  @return DataStream& - Reference to the datastream
+        *  @param ds - Поток для чтения
+        *  @param vi - Назначение для десериализованного значения
+        *  @tparam DataStream - Тип потока данных
+        *  @return DataStream& - Ссылка на поток данных
         */
        template<typename DataStream>
        friend DataStream& operator >> ( DataStream& ds, unsigned_int& vi ){
@@ -237,182 +237,182 @@ namespace eosio {
    };
 
    /**
-    *  Variable Length Signed Integer. This provides more efficient serialization of 32-bit signed int.
-    *  It serializes a 32-bit signed integer in as few bytes as possible.
+    *  Целое со знаком переменной длины. Обеспечивает более эффективную сериализацию 32-битного знакового int.
+    *  Сериализует 32-битное знаковое целое минимально возможным числом байт.
     *
     *  @ingroup varint
-    *  @note `varint32' is signed and uses [Zig-Zag encoding](https://developers.google.com/protocol-buffers/docs/encoding#signed-integers)
+    *  @note `varint32` со знаком и использует [кодирование Zig-Zag](https://developers.google.com/protocol-buffers/docs/encoding#signed-integers)
     */
    struct signed_int {
        /**
-        * Construct a new signed int object
+        * Создаёт новый объект знакового целого
         *
-        * @param v - Source
+        * @param v - Источник
         */
        constexpr signed_int( int32_t v = 0 ):value(v){}
 
        /// @cond OPERATORS
 
        /**
-        * Convert signed_int to primitive 32-bit signed integer
+        * Приводит signed_int к примитивному 32-битному знаковому целому
         *
-        * @return int32_t - The converted result
+        * @return int32_t - Результат преобразования
         */
        constexpr operator int32_t()const { return value; }
 
 
        /**
-        * Assign an object that is convertible to int32_t
+        * Присваивает объект, приводимый к int32_t
         *
-        * @tparam T - Type of the assignment object
-        * @param v - Source
-        * @return unsigned_int& - Reference to this object
+        * @tparam T - Тип присваиваемого объекта
+        * @param v - Источник
+        * @return signed_int& - Ссылка на этот объект
         */
        template<typename T>
        constexpr signed_int& operator=( const T& v ) { value = v; return *this; }
 
        /**
-        * Increment operator
+        * Оператор инкремента (постфиксный)
         *
-        * @return signed_int - New signed_int with value incremented from the current object's value
+        * @return signed_int - Новый signed_int со значением, увеличенным относительно текущего
         */
        constexpr signed_int operator++(int) { return value++; }
 
        /**
-        * Increment operator
+        * Оператор инкремента (префиксный)
         *
-        * @return signed_int - Reference to current object
+        * @return signed_int& - Ссылка на текущий объект
         */
        constexpr signed_int& operator++(){ ++value; return *this; }
 
        /// @endcond
 
        /**
-        * Contained value
+        * Содержащееся значение
         */
        int32_t value;
 
        /// @cond OPERATORS
 
        /**
-        * Check equality between a signed_int object and 32-bit integer
+        * Проверка равенства между signed_int и 32-битным целым
         *
-        * @param i - signed_int object to compare
-        * @param v - 32-bit integer to compare
-        * @return true - if equal
-        * @return false - otherwise
+        * @param i - Объект signed_int для сравнения
+        * @param v - 32-битное целое для сравнения
+        * @return true - если равны
+        * @return false - иначе
         */
        constexpr friend bool operator==( const signed_int& i, const int32_t& v ) { return i.value == v; }
 
        /**
-        * Check equality between 32-bit integer and  a signed_int object
+        * Проверка равенства между 32-битным целым и signed_int
         *
-        * @param i - 32-bit integer to compare
-        * @param v - signed_int object to compare
-        * @return true - if equal
-        * @return false - otherwise
+        * @param i - 32-битное целое для сравнения
+        * @param v - Объект signed_int для сравнения
+        * @return true - если равны
+        * @return false - иначе
         */
        constexpr friend bool operator==( const int32_t& i, const signed_int& v ) { return i == v.value; }
 
        /**
-        * Check equality between two signed_int objects
+        * Проверка равенства двух объектов signed_int
         *
-        * @param i - First signed_int object to compare
-        * @param v - Second signed_int object to compare
-        * @return true - if equal
-        * @return false - otherwise
+        * @param i - Первый signed_int для сравнения
+        * @param v - Второй signed_int для сравнения
+        * @return true - если равны
+        * @return false - иначе
         */
        constexpr friend bool operator==( const signed_int& i, const signed_int& v ) { return i.value == v.value; }
 
 
        /**
-        * Check inequality between a signed_int object and 32-bit integer
+        * Проверка неравенства между signed_int и 32-битным целым
         *
-        * @param i - signed_int object to compare
-        * @param v - 32-bit integer to compare
-        * @return true - if inequal
-        * @return false - otherwise
+        * @param i - Объект signed_int для сравнения
+        * @param v - 32-битное целое для сравнения
+        * @return true - если не равны
+        * @return false - иначе
         */
        constexpr friend bool operator!=( const signed_int& i, const int32_t& v )    { return i.value != v; }
 
        /**
-        * Check inequality between 32-bit integer and  a signed_int object
+        * Проверка неравенства между 32-битным целым и signed_int
         *
-        * @param i - 32-bit integer to compare
-        * @param v - signed_int object to compare
-        * @return true - if unequal
-        * @return false - otherwise
+        * @param i - 32-битное целое для сравнения
+        * @param v - Объект signed_int для сравнения
+        * @return true - если не равны
+        * @return false - иначе
         */
        constexpr friend bool operator!=( const int32_t& i, const signed_int& v ) { return i != v.value; }
 
        /**
-        * Check inequality between two signed_int objects
+        * Проверка неравенства двух объектов signed_int
         *
-        * @param i - First signed_int object to compare
-        * @param v - Second signed_int object to compare
-        * @return true - if inequal
-        * @return false - otherwise
+        * @param i - Первый signed_int для сравнения
+        * @param v - Второй signed_int для сравнения
+        * @return true - если не равны
+        * @return false - иначе
         */
        constexpr friend bool operator!=( const signed_int& i, const signed_int& v ) { return i.value != v.value; }
 
        /**
-        * Check if the given signed_int object is less than the given 32-bit integer
+        * Проверяет, меньше ли signed_int заданного 32-битного целого
         *
-        * @param i - signed_int object to compare
-        * @param v - 32-bit integer to compare
-        * @return true - if i less than v
-        * @return false - otherwise
+        * @param i - Объект signed_int для сравнения
+        * @param v - 32-битное целое для сравнения
+        * @return true - если i меньше v
+        * @return false - иначе
         */
        constexpr friend bool operator<( const signed_int& i, const int32_t& v ) { return i.value < v; }
 
        /**
-        * Check if the given 32-bit integer is less than the given signed_int object
+        * Проверяет, меньше ли 32-битное целое заданного signed_int
         *
-        * @param i - 32-bit integer to compare
-        * @param v - signed_int object to compare
-        * @return true -  if i less than v
-        * @return false - otherwise
+        * @param i - 32-битное целое для сравнения
+        * @param v - Объект signed_int для сравнения
+        * @return true - если i меньше v
+        * @return false - иначе
         */
        constexpr friend bool operator<( const int32_t& i, const signed_int& v ) { return i < v.value; }
 
        /**
-        * Check if the first given signed_int is less than the second given signed_int object
+        * Проверяет, меньше ли первый signed_int второго
         *
-        * @param i - First signed_int object to compare
-        * @param v - Second signed_int object to compare
-        * @return true -  if i less than v
-        * @return false - otherwise
+        * @param i - Первый signed_int для сравнения
+        * @param v - Второй signed_int для сравнения
+        * @return true - если i меньше v
+        * @return false - иначе
         */
        constexpr friend bool operator<( const signed_int& i, const signed_int& v ) { return i.value < v.value; }
 
 
        /**
-        * Check if the given signed_int object is greater or equal to the given 32-bit integer
+        * Проверяет, больше или равен ли signed_int заданному 32-битному целому
         *
-        * @param i - signed_int object to compare
-        * @param v - 32-bit integer to compare
-        * @return true - if i is greater or equal to v
-        * @return false - otherwise
+        * @param i - Объект signed_int для сравнения
+        * @param v - 32-битное целое для сравнения
+        * @return true - если i больше или равен v
+        * @return false - иначе
         */
        constexpr friend bool operator>=( const signed_int& i, const int32_t& v ) { return i.value >= v; }
 
        /**
-        * Check if the given 32-bit integer is greater or equal to the given signed_int object
+        * Проверяет, больше или равно ли 32-битное целое заданному signed_int
         *
-        * @param i - 32-bit integer to compare
-        * @param v - signed_int object to compare
-        * @return true -  if i is greater or equal to v
-        * @return false - otherwise
+        * @param i - 32-битное целое для сравнения
+        * @param v - Объект signed_int для сравнения
+        * @return true - если i больше или равен v
+        * @return false - иначе
         */
        constexpr friend bool operator>=( const int32_t& i, const signed_int& v ) { return i >= v.value; }
 
        /**
-        * Check if the first given signed_int is greater or equal to the second given signed_int object
+        * Проверяет, больше или равен ли первый signed_int второму
         *
-        * @param i - First signed_int object to compare
-        * @param v - Second signed_int object to compare
-        * @return true -  if i is greater or equal to v
-        * @return false - otherwise
+        * @param i - Первый signed_int для сравнения
+        * @param v - Второй signed_int для сравнения
+        * @return true - если i больше или равен v
+        * @return false - иначе
         */
        constexpr friend bool operator>=( const signed_int& i, const signed_int& v ) { return i.value >= v.value; }
 
@@ -421,12 +421,12 @@ namespace eosio {
        /// @cond IMPLEMENTATIONS
 
        /**
-        *  Serialize an signed_int object with as few bytes as possible
+        *  Сериализует signed_int минимально возможным числом байт
         *
-        *  @param ds - The stream to write
-        *  @param v - The value to serialize
-        *  @tparam DataStream - Type of datastream
-        *  @return DataStream& - Reference to the datastream
+        *  @param ds - Поток для записи
+        *  @param v - Значение для сериализации
+        *  @tparam DataStream - Тип потока данных
+        *  @return DataStream& - Ссылка на поток данных
         */
        template<typename DataStream>
        friend DataStream& operator << ( DataStream& ds, const signed_int& v ){
@@ -441,12 +441,12 @@ namespace eosio {
        }
 
        /**
-        *  Deserialize an signed_int object
+        *  Десериализует signed_int
         *
-        *  @param ds - The stream to read
-        *  @param vi - The destination for deserialized value
-        *  @tparam DataStream - Type of datastream
-        *  @return DataStream& - Reference to the datastream
+        *  @param ds - Поток для чтения
+        *  @param vi - Назначение для десериализованного значения
+        *  @tparam DataStream - Тип потока данных
+        *  @return DataStream& - Ссылка на поток данных
         */
        template<typename DataStream>
        friend DataStream& operator >> ( DataStream& ds, signed_int& vi ){

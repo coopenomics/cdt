@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 #include "datastream.hpp"
@@ -38,17 +38,17 @@ namespace eosio {
    /// @endcond
 
     /**
-     *  @defgroup fixed_bytes Fixed Size Byte Array
+     *  @defgroup fixed_bytes Массив байт фиксированного размера
      *  @ingroup core
      *  @ingroup types
-     *  @brief Fixed size array of bytes sorted lexicographically
+     *  @brief Массив байт фиксированного размера с лексикографическим упорядочиванием
      */
 
    /**
-    *  Fixed size byte array sorted lexicographically
+    *  Массив байт фиксированного размера с лексикографическим сравнением по словам
     *
     *  @ingroup fixed_bytes
-    *  @tparam Size - Size of the fixed_bytes object
+    *  @tparam Size — размер в байтах
     */
    template<size_t Size>
    class fixed_bytes {
@@ -94,26 +94,25 @@ namespace eosio {
          typedef uint128_t word_t;
 
          /**
-          * Get number of words contained in this fixed_bytes object. A word is defined to be 16 bytes in size
+          * Число «слов» (word_t) внутри объекта; размер слова — 16 байт (uint128_t)
           */
 
          static constexpr size_t num_words() { return (Size + sizeof(word_t) - 1) / sizeof(word_t); }
 
          /**
-          * Get number of padded bytes contained in this fixed_bytes object. Padded bytes are the remaining bytes
-          * inside the fixed_bytes object after all the words are allocated
+          * Число дополняющих (неиспользуемых) байт в последнем слове после выравнивания по word_t
           */
          static constexpr size_t padded_bytes() { return num_words() * sizeof(word_t) - Size; }
 
          /**
-         * Default constructor to fixed_bytes object which initializes all bytes to zero
+         * Конструктор по умолчанию; все байты нулевые
          */
          constexpr fixed_bytes() : _data() {}
 
          /**
-         * Constructor to fixed_bytes object from std::array of num_words() word_t types
+         * Конструктор из std::array из num_words() элементов word_t
          *
-         * @param arr    data
+         * @param arr — исходные данные
          */
          fixed_bytes(const std::array<word_t, num_words()>& arr)
          {
@@ -121,9 +120,9 @@ namespace eosio {
          }
 
          /**
-         * Constructor to fixed_bytes object from std::array of Word types smaller in size than word_t
+         * Конструктор из std::array слов Word меньше word_t (сборка в слова хранения)
          *
-         * @param arr - Source data
+         * @param arr — исходные данные
          */
          template<typename Word, size_t NumWords,
                   typename Enable = typename std::enable_if<std::is_integral<Word>::value &&
@@ -140,9 +139,9 @@ namespace eosio {
          }
 
          /**
-         * Constructor to fixed_bytes object from fixed-sized C array of Word types smaller in size than word_t
+         * Конструктор из C-массива слов Word меньше word_t
          *
-         * @param arr - Source data
+         * @param arr — исходные данные
          */
          template<typename Word, size_t NumWords,
                   typename Enable = typename std::enable_if<std::is_integral<Word>::value &&
@@ -159,12 +158,12 @@ namespace eosio {
          }
 
          /**
-         *  Create a new fixed_bytes object from a sequence of words
+         *  Создаёт fixed_bytes из последовательности слов (аргументы функции)
          *
-         *  @tparam FirstWord - The type of the first word in the sequence
-         *  @tparam Rest - The type of the remaining words in the sequence
-         *  @param first_word - The first word in the sequence
-         *  @param rest - The remaining words in the sequence
+         *  @tparam FirstWord — тип первого слова
+         *  @tparam Rest — типы остальных слов
+         *  @param first_word — первое слово
+         *  @param rest — остальные слова
          */
          template<typename FirstWord, typename... Rest>
          static
@@ -188,34 +187,34 @@ namespace eosio {
          }
 
          /**
-          * Get the contained std::array
+          * Константная ссылка на внутренний std::array слов
           */
          const auto& get_array()const { return _data; }
 
          /**
-          * Get the underlying data of the contained std::array
+          * Указатель на сырые данные массива слов
           */
          auto data() { return _data.data(); }
 
          /// @cond INTERNAL
 
          /**
-          * Get the underlying data of the contained std::array
+          * Указатель на сырые данные (const)
           */
          auto data()const { return _data.data(); }
 
          /// @endcond
 
          /**
-          * Get the size of the contained std::array
+          * Число слов word_t во внутреннем массиве
           */
          auto size()const { return _data.size(); }
 
 
          /**
-          * Extract the contained data as an array of bytes
+          * Извлекает байты фиксированной длины Size в порядке старшинства для сериализации
           *
-          * @return - the extracted data as array of bytes
+          * @return массив из Size байт
           */
          std::array<uint8_t, Size> extract_as_byte_array()const {
             std::array<uint8_t, Size> arr;
@@ -244,9 +243,8 @@ namespace eosio {
          }
 
          /**
-          * Prints fixed_bytes as a hexidecimal string
+          * Печать в шестнадцатеричном виде в лог контракта COOPOS
           *
-          * @param val to be printed
           */
          inline void print()const {
             auto arr = extract_as_byte_array();
@@ -277,11 +275,11 @@ namespace eosio {
   /// @cond IMPLEMENTATIONS
 
    /**
-    * Lexicographically compares two fixed_bytes variables c1 and c2
+    * Лексикографическое сравнение: равенство
     *
-    * @param c1 - First fixed_bytes object to compare
-    * @param c2 - Second fixed_bytes object to compare
-    * @return if c1 == c2, return true, otherwise false
+    * @param c1 — первый операнд
+    * @param c2 — второй операнд
+    * @return true — c1 равен c2
     */
    template<size_t Size>
    bool operator ==(const fixed_bytes<Size> &c1, const fixed_bytes<Size> &c2) {
@@ -289,11 +287,11 @@ namespace eosio {
    }
 
    /**
-    * Lexicographically compares two fixed_bytes variables c1 and c2
+    * Лексикографическое сравнение: неравенство
     *
-    * @param c1 - First fixed_bytes object to compare
-    * @param c2 - Second fixed_bytes object to compare
-    * @return if c1 != c2, return true, otherwise false
+    * @param c1 — первый операнд
+    * @param c2 — второй операнд
+    * @return true — c1 не равен c2
     */
    template<size_t Size>
    bool operator !=(const fixed_bytes<Size> &c1, const fixed_bytes<Size> &c2) {
@@ -301,11 +299,11 @@ namespace eosio {
    }
 
    /**
-    * Lexicographically compares two fixed_bytes variables c1 and c2
+    * Лексикографическое сравнение: больше
     *
-    * @param c1 - First fixed_bytes object to compare
-    * @param c2 - Second fixed_bytes object to compare
-    * @return if c1 > c2, return true, otherwise false
+    * @param c1 — первый операнд
+    * @param c2 — второй операнд
+    * @return true — c1 больше c2
     */
    template<size_t Size>
    bool operator >(const fixed_bytes<Size>& c1, const fixed_bytes<Size>& c2) {
@@ -313,11 +311,11 @@ namespace eosio {
    }
 
    /**
-    * Lexicographically compares two fixed_bytes variables c1 and c2
+    * Лексикографическое сравнение: меньше
     *
-    * @param c1 - First fixed_bytes object to compare
-    * @param c2 - Second fixed_bytes object to compare
-    * @return if c1 < c2, return true, otherwise false
+    * @param c1 — первый операнд
+    * @param c2 — второй операнд
+    * @return true — c1 меньше c2
     */
    template<size_t Size>
    bool operator <(const fixed_bytes<Size> &c1, const fixed_bytes<Size> &c2) {
@@ -325,11 +323,11 @@ namespace eosio {
    }
 
    /**
-    * Lexicographically compares two fixed_bytes variables c1 and c2
+    * Лексикографическое сравнение: больше или равно
     *
-    * @param c1 - First fixed_bytes object to compare
-    * @param c2 - Second fixed_bytes object to compare
-    * @return if c1 >= c2, return true, otherwise false
+    * @param c1 — первый операнд
+    * @param c2 — второй операнд
+    * @return true — c1 не меньше c2
     */
    template<size_t Size>
    bool operator >=(const fixed_bytes<Size>& c1, const fixed_bytes<Size>& c2) {
@@ -337,11 +335,11 @@ namespace eosio {
    }
 
    /**
-    * Lexicographically compares two fixed_bytes variables c1 and c2
+    * Лексикографическое сравнение: меньше или равно
     *
-    * @param c1 - First fixed_bytes object to compare
-    * @param c2 - Second fixed_bytes object to compare
-    * @return if c1 <= c2, return true, otherwise false
+    * @param c1 — первый операнд
+    * @param c2 — второй операнд
+    * @return true — c1 не больше c2
     */
    template<size_t Size>
    bool operator <=(const fixed_bytes<Size> &c1, const fixed_bytes<Size> &c2) {
@@ -354,13 +352,13 @@ namespace eosio {
    using checksum512 = fixed_bytes<64>;
 
    /**
-    *  Serialize a fixed_bytes into a stream
+    *  Сериализация fixed_bytes в поток
     *
-    *  @brief Serialize a fixed_bytes
-    *  @param ds - The stream to write
-    *  @param d - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Сериализация fixed_bytes
+    *  @param ds — поток записи
+    *  @param d — значение
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream, size_t Size>
    inline DataStream& operator<<(DataStream& ds, const fixed_bytes<Size>& d) {
@@ -370,13 +368,13 @@ namespace eosio {
    }
 
    /**
-    *  Deserialize a fixed_bytes from a stream
+    *  Десериализация fixed_bytes из потока
     *
-    *  @brief Deserialize a fixed_bytes
-    *  @param ds - The stream to read
-    *  @param d - The destination for deserialized value
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Десериализация fixed_bytes
+    *  @param ds — поток чтения
+    *  @param d — приёмник значения
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream, size_t Size>
    inline DataStream& operator>>(DataStream& ds, fixed_bytes<Size>& d) {

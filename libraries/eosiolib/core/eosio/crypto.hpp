@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright см. eos/LICENSE
  */
 #pragma once
 
@@ -14,29 +14,29 @@
 namespace eosio {
 
    /**
-    *  @defgroup public_key Public Key Type
+    *  @defgroup public_key Тип открытого ключа
     *  @ingroup core
     *  @ingroup types
-    *  @brief Specifies public key type
+    *  @brief Задаёт тип открытого ключа
     */
 
    /**
-    *  EOSIO ECC public key data
+    *  Данные открытого ключа ECC в COOPOS
     *
-    *  Fixed size representation of either a K1 or R1 compressed public key
+    *  Представление фиксированного размера: сжатый открытый ключ K1 или R1
 
     *  @ingroup public_key
     */
    using ecc_public_key = std::array<char, 33>;
 
    /**
-    *  EOSIO WebAuthN public key
+    *  Открытый ключ WebAuthN в COOPOS
     *
     *  @ingroup public_key
     */
    struct webauthn_public_key {
       /**
-       * Enumeration of the various results of a Test of User Presence
+       * Перечисление возможных результатов проверки присутствия пользователя
        * @see https://w3c.github.io/webauthn/#test-of-user-presence
        */
       enum class user_presence_t : uint8_t {
@@ -46,18 +46,18 @@ namespace eosio {
       };
 
       /**
-       * The ECC key material
+       * Материал ключа ECC
        */
       ecc_public_key     key;
 
       /**
-       * expected result of the test of user presence for a valid signature
+       * Ожидаемый результат проверки присутствия пользователя для действительной подписи
        * @see https://w3c.github.io/webauthn/#test-of-user-presence
        */
       user_presence_t    user_presence;
 
       /**
-       * the Relying Party Identifier for WebAuthN
+       * Идентификатор доверенной стороны (Relying Party) для WebAuthN
        * @see https://w3c.github.io/webauthn/#relying-party-identifier
        */
       std::string        rpid;
@@ -87,12 +87,12 @@ namespace eosio {
    };
 
    /**
-    *  EOSIO Public Key
+    *  Открытый ключ COOPOS
     *
-    *  A public key is a variant of
-    *   0 : a ECC K1 public key
-    *   1 : a ECC R1 public key
-    *   2 : a WebAuthN public key (requires the host chain to activate the WEBAUTHN_KEY consensus upgrade)
+    *  Открытый ключ — вариант из:
+    *   0 : открытый ключ ECC K1
+    *   1 : открытый ключ ECC R1
+    *   2 : открытый ключ WebAuthN (требуется активация на цепи-хосте COOPOS консенсусного обновления WEBAUTHN_KEY)
     *
     *  @ingroup public_key
     */
@@ -102,13 +102,13 @@ namespace eosio {
    /// @cond IMPLEMENTATIONS
 
    /**
-    *  Serialize an eosio::webauthn_public_key into a stream
+    *  Сериализует eosio::webauthn_public_key в поток
     *
     *  @ingroup public_key
-    *  @param ds - The stream to write
-    *  @param pubkey - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @param ds - Поток для записи
+    *  @param pubkey - Значение для сериализации
+    *  @tparam DataStream - Тип буфера потока данных
+    *  @return DataStream& - Ссылка на поток данных
     */
    template<typename DataStream>
    inline DataStream& operator<<(DataStream& ds, const eosio::webauthn_public_key& pubkey) {
@@ -117,13 +117,13 @@ namespace eosio {
    }
 
    /**
-    *  Deserialize an eosio::webauthn_public_key from a stream
+    *  Десериализует eosio::webauthn_public_key из потока
     *
     *  @ingroup public_key
-    *  @param ds - The stream to read
-    *  @param pubkey - The destination for deserialized value
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @param ds - Поток для чтения
+    *  @param pubkey - Назначение для десериализованного значения
+    *  @tparam DataStream - Тип буфера потока данных
+    *  @return DataStream& - Ссылка на поток данных
     */
    template<typename DataStream>
    inline DataStream& operator>>(DataStream& ds, eosio::webauthn_public_key& pubkey) {
@@ -134,40 +134,40 @@ namespace eosio {
    /// @endcond
 
    /**
-    *  @defgroup signature Signature
+    *  @defgroup signature Подпись
     *  @ingroup core
     *  @ingroup types
-    *  @brief Specifies signature type
+    *  @brief Задаёт тип подписи
     */
 
    /**
-    *  EOSIO ECC signature data
+    *  Данные подписи ECC в COOPOS
     *
-    *  Fixed size representation of either a K1 or R1 ECC compact signature
+    *  Представление фиксированного размера: компактная подпись ECC K1 или R1
 
     *  @ingroup signature
     */
    using ecc_signature = std::array<char, 65>;
 
    /**
-    *  EOSIO WebAuthN signature
+    *  Подпись WebAuthN (формат COOPOS / совместимый с протоколом)
     *
     *  @ingroup signature
     */
    struct webauthn_signature {
       /**
-       * The ECC signature data
+       * Данные подписи ECC
        */
       ecc_signature                     compact_signature;
 
       /**
-       * The Encoded Authenticator Data returned from WebAuthN ceremony
+       * Закодированные данные аутентификатора, возвращённые церемонией WebAuthN
        * @see https://w3c.github.io/webauthn/#sctn-authenticator-data
        */
       std::vector<uint8_t>              auth_data;
 
       /**
-       * the JSON encoded Collected Client Data from a WebAuthN ceremony
+       * Данные клиента в JSON из церемонии WebAuthN
        * @see https://w3c.github.io/webauthn/#dictdef-collectedclientdata
        */
       std::string                       client_json;
@@ -185,12 +185,12 @@ namespace eosio {
    };
 
    /**
-    *  EOSIO Signature
+    *  Подпись COOPOS
     *
-    *  A signature is a variant of
-    *   0 : a ECC K1 signature
-    *   1 : a ECC R1 signatre
-    *   2 : a WebAuthN signature (requires the host chain to activate the WEBAUTHN_KEY consensus upgrade)
+    *  Подпись — вариант из:
+    *   0 : подпись ECC K1
+    *   1 : подпись ECC R1
+    *   2 : подпись WebAuthN (требуется активация на цепи-хосте COOPOS консенсусного обновления WEBAUTHN_KEY)
     *
     *  @ingroup signature
     */
@@ -199,12 +199,12 @@ namespace eosio {
    /// @cond IMPLEMENTATIONS
 
    /**
-    *  Serialize an eosio::webauthn_signature into a stream
+    *  Сериализует eosio::webauthn_signature в поток
     *
-    *  @param ds - The stream to write
-    *  @param sig - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @param ds - Поток для записи
+    *  @param sig - Значение для сериализации
+    *  @tparam DataStream - Тип буфера потока данных
+    *  @return DataStream& - Ссылка на поток данных
     */
    template<typename DataStream>
    inline DataStream& operator<<(DataStream& ds, const eosio::webauthn_signature& sig) {
@@ -213,12 +213,12 @@ namespace eosio {
    }
 
    /**
-    *  Deserialize an eosio::webauthn_signature from a stream
+    *  Десериализует eosio::webauthn_signature из потока
     *
-    *  @param ds - The stream to read
-    *  @param sig - The destination for deserialized value
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @param ds - Поток для чтения
+    *  @param sig - Назначение для десериализованного значения
+    *  @tparam DataStream - Тип буфера потока данных
+    *  @return DataStream& - Ссылка на поток данных
     */
    template<typename DataStream>
    inline DataStream& operator>>(DataStream& ds, eosio::webauthn_signature& sig) {
@@ -229,132 +229,132 @@ namespace eosio {
    /// @endcond
 
    /**
-    *  @defgroup crypto Crypto
+    *  @defgroup crypto Криптография
     *  @ingroup core
-    *  @brief Defines API for calculating and checking hashes
+    *  @brief Определяет API вычисления и проверки хешей
     */
 
    /**
-    *  Tests if the SHA256 hash generated from data matches the provided digest.
+    *  Проверяет, совпадает ли SHA256-хеш данных с переданным дайджестом.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @param hash - digest to compare to
-    *  @note This method is optimized to a NO-OP when in fast evaluation mode.
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @param hash - Дайджест для сравнения
+    *  @note В режиме быстрой оценки этот метод сводится к NO-OP.
     */
    void assert_sha256( const char* data, uint32_t length, const eosio::checksum256& hash );
 
    /**
-    *  Tests if the SHA1 hash generated from data matches the provided digest.
+    *  Проверяет, совпадает ли SHA1-хеш данных с переданным дайджестом.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @param hash - digest to compare to
-    *  @note This method is optimized to a NO-OP when in fast evaluation mode.
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @param hash - Дайджест для сравнения
+    *  @note В режиме быстрой оценки этот метод сводится к NO-OP.
     */
    void assert_sha1( const char* data, uint32_t length, const eosio::checksum160& hash );
 
    /**
-    *  Tests if the SHA512 hash generated from data matches the provided digest.
+    *  Проверяет, совпадает ли SHA512-хеш данных с переданным дайджестом.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @param hash - digest to compare to
-    *  @note This method is optimized to a NO-OP when in fast evaluation mode.
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @param hash - Дайджест для сравнения
+    *  @note В режиме быстрой оценки этот метод сводится к NO-OP.
     */
    void assert_sha512( const char* data, uint32_t length, const eosio::checksum512& hash );
 
    /**
-    *  Tests if the RIPEMD160 hash generated from data matches the provided digest.
+    *  Проверяет, совпадает ли RIPEMD160-хеш данных с переданным дайджестом.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @param hash - digest to compare to
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @param hash - Дайджест для сравнения
     */
    void assert_ripemd160( const char* data, uint32_t length, const eosio::checksum160& hash );
 
    /**
-    *  Hashes `data` using SHA256.
+    *  Вычисляет хеш `data` алгоритмом SHA256.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @return eosio::checksum256 - Computed digest
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @return eosio::checksum256 - Вычисленный дайджест
     */
    eosio::checksum256 sha256( const char* data, uint32_t length );
 
    /**
-    *  Hashes `data` using SHA1.
+    *  Вычисляет хеш `data` алгоритмом SHA1.
     *
     *  @ingroup crypto
     *
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @return eosio::checksum160 - Computed digest
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @return eosio::checksum160 - Вычисленный дайджест
     */
    eosio::checksum160 sha1( const char* data, uint32_t length );
 
    /**
-    *  Hashes `data` using SHA512.
+    *  Вычисляет хеш `data` алгоритмом SHA512.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @return eosio::checksum512 - Computed digest
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @return eosio::checksum512 - Вычисленный дайджест
     */
    eosio::checksum512 sha512( const char* data, uint32_t length );
 
    /**
-    *  Hashes `data` using RIPEMD160.
+    *  Вычисляет хеш `data` алгоритмом RIPEMD160.
     *
     *  @ingroup crypto
-    *  @param data - Data you want to hash
-    *  @param length - Data length
-    *  @return eosio::checksum160 - Computed digest
+    *  @param data - Данные для хеширования
+    *  @param length - Длина данных
+    *  @return eosio::checksum160 - Вычисленный дайджест
     */
    eosio::checksum160 ripemd160( const char* data, uint32_t length );
 
    /**
-    *  Calculates the public key used for a given signature on a given digest.
+    *  Вычисляет открытый ключ по дайджесту и подписи.
     *
     *  @ingroup crypto
-    *  @param digest - Digest of the message that was signed
-    *  @param sig - Signature
-    *  @return eosio::public_key - Recovered public key
+    *  @param digest - Дайджест подписанного сообщения
+    *  @param sig - Подпись
+    *  @return eosio::public_key - Восстановленный открытый ключ
     */
    eosio::public_key recover_key( const eosio::checksum256& digest, const eosio::signature& sig );
 
    /**
-    *  Tests a given public key with the recovered public key from digest and signature.
+    *  Сравнивает заданный открытый ключ с восстановленным по дайджесту и подписи.
     *
     *  @ingroup crypto
-    *  @param digest - Digest of the message that was signed
-    *  @param sig - Signature
-    *  @param pubkey - Public key
+    *  @param digest - Дайджест подписанного сообщения
+    *  @param sig - Подпись
+    *  @param pubkey - Открытый ключ
     */
    void assert_recover_key( const eosio::checksum256& digest, const eosio::signature& sig, const eosio::public_key& pubkey );
 
    /**
-    *  Tests a signature against a hash, verifies the recovered public key matches the expected one,
-    *  and checks that this public key belongs to the specified account permission.
+    *  Проверяет подпись по хешу, сверяет восстановленный открытый ключ с ожидаемым
+    *  и удостоверяется, что ключ привязан к указанному разрешению аккаунта.
     *
     *  @ingroup crypto
-    *  @param digest - Digest of the message that was signed
-    *  @param sig - Signature
-    *  @param pubkey - Expected public key
-    *  @param account - The account name to verify key ownership
-    *  @param permission - The permission name to check (e.g., "active"_n, "owner"_n)
+    *  @param digest - Дайджест подписанного сообщения
+    *  @param sig - Подпись
+    *  @param pubkey - Ожидаемый открытый ключ
+    *  @param account - Имя аккаунта для проверки владения ключом
+    *  @param permission - Имя разрешения (например, "active"_n, "owner"_n)
     *
-    *  @throw eosio::check will fail if:
-    *    - The signature is invalid
-    *    - The recovered key doesn't match the expected public key
-    *    - The account doesn't exist
-    *    - The permission doesn't exist for the account
-    *    - The public key doesn't belong to the specified account permission
+    *  @throw eosio::check завершится ошибкой, если:
+    *    - подпись недействительна;
+    *    - восстановленный ключ не совпадает с ожидаемым открытым ключом;
+    *    - аккаунт не существует;
+    *    - разрешение не существует для аккаунта;
+    *    - открытый ключ не принадлежит указанному разрешению аккаунта.
     */
    void assert_recover_key_account( const eosio::checksum256& digest, const eosio::signature& sig, const eosio::public_key& pubkey, eosio::name account, eosio::name permission );
 }

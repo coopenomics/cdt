@@ -12,7 +12,7 @@ extern "C" {
 /**
  *  @defgroup console_c Console C API
  *  @ingroup c_api
- *  @brief Defnes %C API to log/print text messages
+ *  @brief Определяет C API для журналирования и вывода текстовых сообщений
  *  @{
  */
 
@@ -48,7 +48,7 @@ void prints_l( const char* cstr, uint32_t len);
 /**
  * Prints value as a 64 bit signed integer
  *
- * @brief Prints value as a 64 bit signed integer
+ * @brief Вывести значение как 64-битное целое со знаком
  * @param value of 64 bit signed integer to be printed
  *
  *  Example:
@@ -165,7 +165,7 @@ void printn( uint64_t name );
  /**
  * Prints hexidecimal data of length datalen
  *
- * @brief Prints hexidecimal data of length datalen
+ * @brief Вывести шестнадцатеричные данные длиной datalen
  * @param data to be printed
  * @param datalen length of the data to be printed
  *

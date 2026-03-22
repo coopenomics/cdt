@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright определён в eos/LICENSE
  */
 #pragma once
 #include <cstdlib>
@@ -67,17 +67,17 @@ namespace eosio {
    };
 
    /**
-    *  @defgroup action Action
+    *  @defgroup action Действие
     *  @ingroup contracts
-    *  @brief Defines type-safe C++ wrappers for querying action and sending action
-    *  @note There are some methods from the @ref action that can be used directly from C++
+    *  @brief Типобезопасные C++-обёртки для чтения данных действия и отправки действия
+    *  @note Некоторые методы из @ref action можно вызывать напрямую из C++
     */
 
    /**
     *  @ingroup action
-    *  @return Unpacked action data casted as T.
+    *  @return Распакованные данные действия, приведённые к типу T.
     *
-    *  Example:
+    *  Пример:
     *
     *  @code
     *  struct dummy_action {
@@ -100,28 +100,28 @@ namespace eosio {
    }
 
    /**
-    *  Add the specified account to set of accounts to be notified
+    *  Добавляет указанный аккаунт в множество аккаунтов для уведомления
     *
     *  @ingroup action
-    *  @brief Add the specified account to set of accounts to be notified
-    *  @param notify_account - name of the account to be verified
+    *  @brief Добавляет указанный аккаунт в множество аккаунтов для уведомления
+    *  @param notify_account — имя аккаунта для проверки
     */
    inline void require_recipient( name notify_account ){
       internal_use_do_not_use::require_recipient( notify_account.value );
    }
 
    /**
-    *  All of the listed accounts will be added to the set of accounts to be notified
+    *  Все перечисленные аккаунты будут добавлены в множество аккаунтов для уведомления
     *
-    *  This helper method enables you to add multiple accounts to accounts to be notified list with a single
-    *  call rather than having to call the similar C API multiple times.
+    *  Вспомогательный метод позволяет добавить несколько аккаунтов в список уведомляемых одним
+    *  вызовом вместо многократного вызова аналогичного C API.
     *
     *  @ingroup action
-    *  @param notify_account account to be notified
-    *  @param remaining_accounts accounts to be notified
-    *  @note action.code is also considered as part of the set of notified accounts
+    *  @param notify_account аккаунт для уведомления
+    *  @param remaining_accounts аккаунты для уведомления
+    *  @note action.code также считается частью множества уведомляемых аккаунтов
     *
-    *  Example:
+    *  Пример:
     *
     *  @code
     *  require_recipient("Account1"_n, "Account2"_n, "Account3"_n); // throws exception if any of them not in set.
@@ -134,38 +134,38 @@ namespace eosio {
    }
 
    /**
-    *  Verifies that @ref name exists in the set of provided auths on a action. Fails if not found.
+    *  Проверяет, что @ref name входит в множество предоставленных полномочий (auths) для действия. Завершается с ошибкой, если не найдено.
     *
     *  @ingroup action
-    *  @param name - name of the account to be verified
+    *  @param name — имя проверяемого аккаунта
     */
    inline void require_auth( name n ) {
       internal_use_do_not_use::require_auth( n.value );
    }
 
    /**
-   *  Returns the time in microseconds from 1970 of the publication_time
+   *  Возвращает время в микросекундах с 1970 года для publication_time
    *
    *  @ingroup action
-   *  @return the time in microseconds from 1970 of the publication_time
+   *  @return время в микросекундах с 1970 года для publication_time
    */
    inline time_point  publication_time() {
      return time_point( microseconds ( internal_use_do_not_use::publication_time() ) );
    }
 
    /**
-   *  Get the current receiver of the action
-   *  @return the account which specifies the current receiver of the action
+   *  Возвращает текущего получателя действия
+   *  @return аккаунт — текущий получатель действия
    */
    inline name current_receiver() {
      return name{internal_use_do_not_use::current_receiver()};
    }
 
    /**
-   *  Get the hash of the code currently published on the given account
-   *  @param account Name of the account to hash the code of
-   *  @param full_result Optional: If a full result struct is desired, a pointer to the struct to populate
-   *  @return The SHA256 hash of the specified account's code
+   *  Возвращает хэш кода, опубликованного на указанном аккаунте
+   *  @param account имя аккаунта, код которого хэшируется
+   *  @param full_result необязательно: при необходимости полной структуры результата — указатель на заполняемую структуру
+   *  @return SHA256-хэш кода указанного аккаунта
    */
    inline checksum256 get_code_hash( name account, code_hash_result* full_result = nullptr ) {
        if (full_result == nullptr)
@@ -206,75 +206,75 @@ namespace eosio {
    }
 
    /**
-    *  Copy up to length bytes of current action data to the specified location
+    *  Копирует до len байт данных текущего действия в указанное место
     *
     *  @ingroup action
-    *  @param msg - a pointer where up to length bytes of the current action data will be copied
-    *  @param len - len of the current action data to be copied, 0 to report required size
-    *  @return the number of bytes copied to msg, or number of bytes that can be copied if len==0 passed
-    *  @pre `msg` is a valid pointer to a range of memory at least `len` bytes long
-    *  @post `msg` is filled with packed action data
+    *  @param msg — указатель, куда будут скопированы до len байт данных текущего действия
+    *  @param len — число байт данных текущего действия для копирования; 0 — вернуть требуемый размер
+    *  @return число скопированных в msg байт либо число байт, которые можно скопировать, если передан len==0
+    *  @pre `msg` — корректный указатель на область памяти длиной не менее `len` байт
+    *  @post `msg` заполнен упакованными данными действия
     */
    inline uint32_t read_action_data( void* msg, uint32_t len ) {
      return internal_use_do_not_use::read_action_data(msg, len);
    }
 
    /**
-    * Get the length of the current action's data field. This method is useful for dynamically sized actions
+    * Возвращает длину поля данных текущего действия. Полезно для действий с динамическим размером
     *
-    * @return the length of the current action's data field
+    * @return длина поля данных текущего действия
     */
    inline uint32_t action_data_size() {
      return internal_use_do_not_use::action_data_size();
    }
    /**
-    * Packed representation of a permission level (Authorization)
+    * Упакованное представление уровня разрешения (авторизация)
     *
     * @ingroup action
     */
    struct permission_level {
       /**
-       * Construct a new permission level object with actor name and permission name
+       * Создаёт объект уровня разрешения с именем актора и именем разрешения
        *
-       * @param a - Name of the account who owns this authorization
-       * @param p - Name of the permission
+       * @param a — имя аккаунта, которому принадлежит эта авторизация
+       * @param p — имя разрешения
        */
       permission_level( name a, name p ):actor(a),permission(p){}
 
       /**
-       * Default Constructor
+       * Конструктор по умолчанию
        *
        */
       permission_level(){}
 
       /**
-       * Name of the account who owns this permission
+       * Имя аккаунта, которому принадлежит это разрешение
        */
       name    actor;
       /**
-       * Name of the permission
+       * Имя разрешения
        */
       name    permission;
 
       /**
-       * Check equality of two permissions
+       * Проверка равенства двух разрешений
        *
-       * @param a - first permission to compare
-       * @param b - second permission to compare
-       * @return true if equal
-       * @return false if unequal
+       * @param a — первое сравниваемое разрешение
+       * @param b — второе сравниваемое разрешение
+       * @return true, если равны
+       * @return false, если не равны
        */
       friend constexpr bool operator == ( const permission_level& a, const permission_level& b ) {
          return std::tie( a.actor, a.permission ) == std::tie( b.actor, b.permission );
       }
 
       /**
-       * Lexicographically compares two permissions
+       * Лексикографическое сравнение двух разрешений
        *
-       * @param a - first permission to compare
-       * @param b - second permission to compare
-       * @return true if a < b
-       * @return false if a >= b
+       * @param a — первое сравниваемое разрешение
+       * @param b — второе сравниваемое разрешение
+       * @return true, если a < b
+       * @return false, если a >= b
        */
       friend constexpr bool operator < ( const permission_level& a, const permission_level& b ) {
          return std::tie( a.actor, a.permission ) < std::tie( b.actor, b.permission );
@@ -284,88 +284,88 @@ namespace eosio {
    };
 
    /**
-    *  Require the specified authorization for this action. If this action doesn't contain the specified auth, it will fail.
+    *  Требует указанную авторизацию для этого действия. Если действие не содержит указанной авторизации, выполнение завершится с ошибкой.
     *
     *  @ingroup action
-    *  @param level - Authorization to be required
+    *  @param level — требуемая авторизация
     */
    inline void require_auth( const permission_level& level ) {
       internal_use_do_not_use::require_auth2( level.actor.value, level.permission.value );
    }
 
    /**
-    *  Verifies that @ref n has auth.
+    *  Проверяет, что у @ref n есть авторизация в текущем действии.
     *
     *  @ingroup action
-    *  @param n - name of the account to be verified
+    *  @param n — имя проверяемого аккаунта
     */
    inline bool has_auth( name n ) {
       return internal_use_do_not_use::has_auth( n.value );
    }
 
    /**
-    *  Verifies that @ref n is an existing account.
+    *  Проверяет, что @ref n — существующий аккаунт.
     *
     *  @ingroup action
-    *  @param n - name of the account to check
+    *  @param n — имя проверяемого аккаунта
     */
    inline bool is_account( name n ) {
       return internal_use_do_not_use::is_account( n.value );
    }
 
    /**
-    *  This is the packed representation of an action along with
-    *  meta-data about the authorization levels.
+    *  Упакованное представление действия вместе с
+    *  метаданными об уровнях авторизации.
     *
     *  @ingroup action
     */
    struct action {
       /**
-       *  Name of the account the action is intended for
+       *  Имя аккаунта, для которого предназначено действие
        */
       name                       account;
 
       /**
-       *  Name of the action
+       *  Имя действия
        */
       name                       name;
 
       /**
-       *  List of permissions that authorize this action
+       *  Список разрешений, авторизующих это действие
        */
       std::vector<permission_level>   authorization;
 
       /**
-       *  Payload data
+       *  Полезная нагрузка (данные)
        */
       std::vector<char>               data;
 
       /**
-       *  Default Constructor
+       *  Конструктор по умолчанию
        */
       action() = default;
 
       /**
-       * Construct a new action object with the given permission, action receiver, action name, action struct
+       * Создаёт объект действия с заданным разрешением, получателем действия, именем действия и структурой действия
        *
-       * @tparam T  - Type of action struct, must be serializable by `pack(...)`
-       * @param auth - The permissions that authorizes this action
-       * @param a -  The name of the account this action is intended for (action receiver)
-       * @param n - The name of the action
-       * @param value - The action struct that will be serialized via pack into data
+       * @tparam T  — тип структуры действия, должен сериализоваться через `pack(...)`
+       * @param auth — разрешение, авторизующее это действие
+       * @param a — имя аккаунта-получателя действия
+       * @param n — имя действия
+       * @param value — структура действия, сериализуемая через pack в data
        */
       template<typename T>
       action( const permission_level& auth, struct name a, struct name n, T&& value )
       :account(a), name(n), authorization(1,auth), data(pack(std::forward<T>(value))) {}
 
       /**
-       * Construct a new action object with the given list of permissions, action receiver, action name, action struct
+       * Создаёт объект действия с заданным списком разрешений, получателем, именем действия и структурой действия
        *
-       * @tparam T  - Type of action struct, must be serializable by `pack(...)`
-       * @param auths - The list of permissions that authorize this action
-       * @param a -  The name of the account this action is intended for (action receiver)
-       * @param n - The name of the action
-       * @param value - The action struct that will be serialized via pack into data
+       * @tparam T  — тип структуры действия, должен сериализоваться через `pack(...)`
+       * @param auths — список разрешений, авторизующих это действие
+       * @param a — имя аккаунта-получателя действия
+       * @param n — имя действия
+       * @param value — структура действия, сериализуемая через pack в data
        */
       template<typename T>
       action( std::vector<permission_level> auths, struct name a, struct name n, T&& value )
@@ -378,7 +378,7 @@ namespace eosio {
       /// @endcond
 
       /**
-       * Send the action as inline action
+       * Отправляет действие как встроенное (inline)
        */
       void send() const {
          auto serialize = pack(*this);
@@ -386,9 +386,9 @@ namespace eosio {
       }
 
       /**
-       * Send the action as inline context free action
+       * Отправляет действие как встроенное контекстно-свободное (context free)
        *
-       * @pre This action should not contain any authorizations
+       * @pre это действие не должно содержать авторизаций
        */
       void send_context_free() const {
          eosio::check( authorization.size() == 0, "context free actions cannot have authorizations");
@@ -397,10 +397,10 @@ namespace eosio {
       }
 
       /**
-       * Retrieve the unpacked data as T
+       * Возвращает распакованные данные как T
        *
-       * @tparam T expected type of data
-       * @return the action data
+       * @tparam T ожидаемый тип данных
+       * @return данные действия
        */
       template<typename T>
       T data_as() {
@@ -488,10 +488,10 @@ namespace eosio {
    }
 
    /**
-    * Wrapper for an action object.
+    * Обёртка над объектом действия.
     *
-    * @brief Used to wrap an a particular action to simplify the process of other contracts sending inline actions to "wrapped" action.
-    * Example:
+    * @brief Обёртка для конкретного действия, упрощающая отправку встроенных (inline) действий к этому действию из других контрактов.
+    * Пример:
     * @code
     * // defined by contract writer of the actions
     * using transfer_act = action_wrapper<"transfer"_n, &token::transfer>;
@@ -628,29 +628,29 @@ INLINE_ACTION_SENDER3( CONTRACT_CLASS, NAME, ::eosio::name(#NAME) )
 #define INLINE_ACTION_SENDER(...) BLUEGRASS_META_OVERLOAD(INLINE_ACTION_SENDER,__VA_ARGS__)(__VA_ARGS__)
 
 /**
- * Send an inline-action from inside a contract.
+ * Отправка встроенного (inline) действия из контракта.
  *
- * @brief A macro to simplify calling inline actions
- * @details The send inline action macro is intended to simplify the process of calling inline actions. When calling new actions from existing actions
- * EOSIO supports two communication models, inline and deferred. Inline actions are executed as part of the current transaction. This macro
- * creates an @ref action using the supplied parameters and automatically calls action.send() on this newly created action.
+ * @brief Макрос для упрощения вызова встроенных (inline) действий
+ * @details Макрос отправки встроенного действия упрощает вызов встроенных действий. При вызове новых действий из уже выполняемых
+ * COOPOS поддерживает две модели обмена: встроенные (inline) и отложенные (deferred). Встроенные действия выполняются как часть текущей транзакции. Этот макрос
+ * создаёт @ref action с переданными параметрами и автоматически вызывает action.send() для этого действия.
  *
- * Example:
+ * Пример:
  * @code
  * SEND_INLINE_ACTION( *this, transfer, {st.issuer,N(active)}, {st.issuer, to, quantity, memo} );
  * @endcode
  *
- * The example above is taken from eosio.token.
- * This example:
- *       uses the passed in, dereferenced `this` pointer, to call this.get_self() i.e. the eosio.token contract;
- *       calls the eosio.token::transfer() action;
- *       uses the active permission of the "issuer" account;
- *       uses parameters st.issuer, to, quantity and memo.
- * This macro creates an action struct used to 'send()' (call) transfer(account_name from, account_name to, asset quantity, string memo)
+ * Приведённый выше пример взят из контракта токена COOPOS (аналог стандартного токена).
+ * В примере:
+ *       используется переданный разыменованный указатель `this` для вызова this.get_self(), т.е. контракта токена COOPOS;
+ *       вызывается действие transfer контракта токена COOPOS;
+ *       используется разрешение active аккаунта «issuer»;
+ *       передаются параметры st.issuer, to, quantity и memo.
+ * Макрос создаёт структуру действия для вызова send() — вызова transfer(account_name from, account_name to, asset quantity, string memo)
  *
- * @param CONTRACT - The contract to call, which contains the action being sent, maps to the @ref account
- * @param NAME - The name of the action to be called, maps to a @ref name
- * @param ... - The authorising permission, maps to an @ref authorization , followed by the parameters of the action, maps to a @ref data.
+ * @param CONTRACT — вызываемый контракт, содержащий отправляемое действие; соответствует @ref account
+ * @param NAME — имя вызываемого действия; соответствует @ref name
+ * @param ... — авторизующее разрешение; соответствует @ref authorization, затем параметры действия; соответствуют @ref data.
  */
 
 #define SEND_INLINE_ACTION( CONTRACT, NAME, ... )\

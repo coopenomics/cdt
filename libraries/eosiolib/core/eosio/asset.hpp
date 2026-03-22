@@ -13,39 +13,39 @@ namespace eosio {
    char* write_decimal( char* begin, char* end, bool dry_run, uint64_t number, uint8_t num_decimal_places, bool negative );
 
    /**
-    *  @defgroup asset Asset
+    *  @defgroup asset Актив
     *  @ingroup core
-    *  @brief Defines C++ API for managing assets
+    *  @brief Определяет C++ API для работы с активами
     */
 
    /**
-    *  Stores information for owner of asset
+    *  Хранит данные актива (количество и символ) для владельца.
     *
     *  @ingroup asset
     */
    struct asset {
       /**
-       * The amount of the asset
+       * Количество актива
        */
       int64_t      amount = 0;
 
       /**
-       * The symbol name of the asset
+       * Символ актива
        */
       symbol  symbol;
 
       /**
-       * Maximum amount possible for this asset. It's capped to 2^62 - 1
+       * Максимально допустимое значение количества для этого актива; ограничено 2^62 − 1
        */
       static constexpr int64_t max_amount    = (1LL << 62) - 1;
 
       asset() {}
 
       /**
-       * Construct a new asset given the symbol name and the amount
+       * Создаёт новый актив по символу и количеству
        *
-       * @param a - The amount of the asset
-       * @param s - The name of the symbol
+       * @param a — количество актива
+       * @param s — символ
        */
       asset( int64_t a, class symbol s )
       :amount(a),symbol{s}
@@ -55,25 +55,25 @@ namespace eosio {
       }
 
       /**
-       * Check if the amount doesn't exceed the max amount
+       * Проверяет, что количество не выходит за пределы максимума
        *
-       * @return true - if the amount doesn't exceed the max amount
-       * @return false - otherwise
+       * @return true — количество в допустимом диапазоне
+       * @return false — иначе
        */
       bool is_amount_within_range()const { return -max_amount <= amount && amount <= max_amount; }
 
       /**
-       * Check if the asset is valid. %A valid asset has its amount <= max_amount and its symbol name valid
+       * Проверяет корректность актива. Корректный актив: количество ≤ max_amount и допустимый символ
        *
-       * @return true - if the asset is valid
-       * @return false - otherwise
+       * @return true — актив корректен
+       * @return false — иначе
        */
       bool is_valid()const               { return is_amount_within_range() && symbol.is_valid(); }
 
       /**
-       * Set the amount of the asset
+       * Задаёт количество актива
        *
-       * @param a - New amount for the asset
+       * @param a — новое количество
        */
       void set_amount( int64_t a ) {
          amount = a;
@@ -83,9 +83,9 @@ namespace eosio {
       /// @cond OPERATORS
 
       /**
-       * Unary minus operator
+       * Унарный минус
        *
-       * @return asset - New asset with its amount is the negative amount of this asset
+       * @return asset — новый актив с противоположным по знаку количеством
        */
       asset operator-()const {
          asset r = *this;
@@ -94,11 +94,11 @@ namespace eosio {
       }
 
       /**
-       * Subtraction assignment operator
+       * Оператор вычитания с присваиванием
        *
-       * @param a - Another asset to subtract this asset with
-       * @return asset& - Reference to this asset
-       * @post The amount of this asset is subtracted by the amount of asset a
+       * @param a — вычитаемый актив
+       * @return asset& — ссылка на этот актив
+       * @post из количества этого актива вычитается количество a
        */
       asset& operator-=( const asset& a ) {
          eosio::check( a.symbol == symbol, "attempt to subtract asset with different symbol" );
@@ -109,11 +109,11 @@ namespace eosio {
       }
 
       /**
-       * Addition Assignment  operator
+       * Оператор сложения с присваиванием
        *
-       * @param a - Another asset to subtract this asset with
-       * @return asset& - Reference to this asset
-       * @post The amount of this asset is added with the amount of asset a
+       * @param a — прибавляемый актив
+       * @return asset& — ссылка на этот актив
+       * @post к количеству этого актива прибавляется количество a
        */
       asset& operator+=( const asset& a ) {
          eosio::check( a.symbol == symbol, "attempt to add asset with different symbol" );
@@ -124,11 +124,11 @@ namespace eosio {
       }
 
       /**
-       * Addition operator
+       * Оператор сложения
        *
-       * @param a - The first asset to be added
-       * @param b - The second asset to be added
-       * @return asset - New asset as the result of addition
+       * @param a — первый слагаемый актив
+       * @param b — второй слагаемый актив
+       * @return asset — сумма
        */
       inline friend asset operator+( const asset& a, const asset& b ) {
          asset result = a;
@@ -137,11 +137,11 @@ namespace eosio {
       }
 
       /**
-       * Subtraction operator
+       * Оператор вычитания
        *
-       * @param a - The asset to be subtracted
-       * @param b - The asset used to subtract
-       * @return asset - New asset as the result of subtraction of a with b
+       * @param a — уменьшаемый актив
+       * @param b — вычитаемый актив
+       * @return asset — разность a − b
        */
       inline friend asset operator-( const asset& a, const asset& b ) {
          asset result = a;
@@ -150,12 +150,12 @@ namespace eosio {
       }
 
       /**
-       * Multiplication assignment operator, with a number
+       * Умножение количества на число с присваиванием
        *
-       * @details Multiplication assignment operator. Multiply the amount of this asset with a number and then assign the value to itself.
-       * @param a - The multiplier for the asset's amount
-       * @return asset - Reference to this asset
-       * @post The amount of this asset is multiplied by a
+       * @details Умножает количество этого актива на число и записывает результат обратно в актив.
+       * @param a — множитель
+       * @return asset& — ссылка на этот актив
+       * @post количество умножено на a
        */
       asset& operator*=( int64_t a ) {
          int128_t tmp = (int128_t)amount * (int128_t)a;
@@ -166,12 +166,12 @@ namespace eosio {
       }
 
       /**
-       * Multiplication operator, with a number proceeding
+       * Оператор умножения; множитель справа (asset × int64_t)
        *
-       * @brief Multiplication operator, with a number proceeding
-       * @param a - The asset to be multiplied
-       * @param b - The multiplier for the asset's amount
-       * @return asset - New asset as the result of multiplication
+       * @brief Оператор умножения; множитель справа (asset × int64_t)
+       * @param a — умножаемый актив
+       * @param b — множитель (целое)
+       * @return asset — произведение
        */
       friend asset operator*( const asset& a, int64_t b ) {
          asset result = a;
@@ -181,11 +181,11 @@ namespace eosio {
 
 
       /**
-       * Multiplication operator, with a number preceeding
+       * Оператор умножения; множитель слева (int64_t × asset)
        *
-       * @param a - The multiplier for the asset's amount
-       * @param b - The asset to be multiplied
-       * @return asset - New asset as the result of multiplication
+       * @param a — множитель (целое)
+       * @param b — умножаемый актив
+       * @return asset — произведение
        */
       friend asset operator*( int64_t b, const asset& a ) {
          asset result = a;
@@ -194,12 +194,12 @@ namespace eosio {
       }
 
       /**
-       * @brief Division assignment operator, with a number
+       * @brief Оператор деления количества на число с присваиванием
        *
-       * @details Division assignment operator. Divide the amount of this asset with a number and then assign the value to itself.
-       * @param a - The divisor for the asset's amount
-       * @return asset - Reference to this asset
-       * @post The amount of this asset is divided by a
+       * @details Делит количество этого актива на число и записывает результат обратно в актив.
+       * @param a — делитель
+       * @return asset& — ссылка на этот актив
+       * @post количество разделено на a
        */
       asset& operator/=( int64_t a ) {
          eosio::check( a != 0, "divide by zero" );
@@ -209,11 +209,11 @@ namespace eosio {
       }
 
       /**
-       * Division operator, with a number proceeding
+       * Оператор деления актива на число
        *
-       * @param a - The asset to be divided
-       * @param b - The divisor for the asset's amount
-       * @return asset - New asset as the result of division
+       * @param a — делимый актив
+       * @param b — делитель (целое)
+       * @return asset — частное
        */
       friend asset operator/( const asset& a, int64_t b ) {
          asset result = a;
@@ -222,12 +222,12 @@ namespace eosio {
       }
 
       /**
-       * Division operator, with another asset
+       * Оператор деления одного актива на другой (по количествам)
        *
-       * @param a - The asset which amount acts as the dividend
-       * @param b - The asset which amount acts as the divisor
-       * @return int64_t - the resulted amount after the division
-       * @pre Both asset must have the same symbol
+       * @param a — актив, количество которого — делимое
+       * @param b — актив, количество которого — делитель
+       * @return int64_t — целочисленное частное двух количеств (a.amount / b.amount)
+       * @pre у обоих активов один и тот же символ
        */
       friend int64_t operator/( const asset& a, const asset& b ) {
          eosio::check( b.amount != 0, "divide by zero" );
@@ -236,13 +236,13 @@ namespace eosio {
       }
 
       /**
-       * Equality operator
+       * Оператор равенства
        *
-       * @param a - The first asset to be compared
-       * @param b - The second asset to be compared
-       * @return true - if both asset has the same amount
-       * @return false - otherwise
-       * @pre Both asset must have the same symbol
+       * @param a — первый актив
+       * @param b — второй актив
+       * @return true — количества равны
+       * @return false — иначе
+       * @pre у обоих активов один и тот же символ
        */
       friend bool operator==( const asset& a, const asset& b ) {
          eosio::check( a.symbol == b.symbol, "comparison of assets with different symbols is not allowed" );
@@ -250,26 +250,26 @@ namespace eosio {
       }
 
       /**
-       * Inequality operator
+       * Оператор неравенства
        *
-       * @param a - The first asset to be compared
-       * @param b - The second asset to be compared
-       * @return true - if both asset doesn't have the same amount
-       * @return false - otherwise
-       * @pre Both asset must have the same symbol
+       * @param a — первый актив
+       * @param b — второй актив
+       * @return true — количества различаются
+       * @return false — иначе
+       * @pre у обоих активов один и тот же символ
        */
       friend bool operator!=( const asset& a, const asset& b ) {
          return !( a == b);
       }
 
       /**
-       * Less than operator
+       * Оператор «меньше»
        *
-       * @param a - The first asset to be compared
-       * @param b - The second asset to be compared
-       * @return true - if the first asset's amount is less than the second asset amount
-       * @return false - otherwise
-       * @pre Both asset must have the same symbol
+       * @param a — первый актив
+       * @param b — второй актив
+       * @return true — количество a меньше количества b
+       * @return false — иначе
+       * @pre у обоих активов один и тот же символ
        */
       friend bool operator<( const asset& a, const asset& b ) {
          eosio::check( a.symbol == b.symbol, "comparison of assets with different symbols is not allowed" );
@@ -277,13 +277,13 @@ namespace eosio {
       }
 
       /**
-       * Less or equal to operator
+       * Оператор «меньше или равно»
        *
-       * @param a - The first asset to be compared
-       * @param b - The second asset to be compared
-       * @return true - if the first asset's amount is less or equal to the second asset amount
-       * @return false - otherwise
-       * @pre Both asset must have the same symbol
+       * @param a — первый актив
+       * @param b — второй актив
+       * @return true — количество a не больше количества b
+       * @return false — иначе
+       * @pre у обоих активов один и тот же символ
        */
       friend bool operator<=( const asset& a, const asset& b ) {
          eosio::check( a.symbol == b.symbol, "comparison of assets with different symbols is not allowed" );
@@ -291,13 +291,13 @@ namespace eosio {
       }
 
       /**
-       * Greater than operator
+       * Оператор «больше»
        *
-       * @param a - The first asset to be compared
-       * @param b - The second asset to be compared
-       * @return true - if the first asset's amount is greater than the second asset amount
-       * @return false - otherwise
-       * @pre Both asset must have the same symbol
+       * @param a — первый актив
+       * @param b — второй актив
+       * @return true — количество a больше количества b
+       * @return false — иначе
+       * @pre у обоих активов один и тот же символ
        */
       friend bool operator>( const asset& a, const asset& b ) {
          eosio::check( a.symbol == b.symbol, "comparison of assets with different symbols is not allowed" );
@@ -305,13 +305,13 @@ namespace eosio {
       }
 
       /**
-       * Greater or equal to operator
+       * Оператор «больше или равно»
        *
-       * @param a - The first asset to be compared
-       * @param b - The second asset to be compared
-       * @return true - if the first asset's amount is greater or equal to the second asset amount
-       * @return false - otherwise
-       * @pre Both asset must have the same symbol
+       * @param a — первый актив
+       * @param b — второй актив
+       * @return true — количество a не меньше количества b
+       * @return false — иначе
+       * @pre у обоих активов один и тот же символ
        */
       friend bool operator>=( const asset& a, const asset& b ) {
          eosio::check( a.symbol == b.symbol, "comparison of assets with different symbols is not allowed" );
@@ -321,16 +321,16 @@ namespace eosio {
       /// @endcond
 
       /**
-       *  Writes the asset as a string to the provided char buffer
+       *  Записывает представление актива в виде строки в буфер char
        *
-       *  @brief Writes the asset as a string to the provided char buffer
+       *  @brief Записывает asset в виде строки в переданный буфер char
        *  @pre is_valid() == true
-       *  @pre The range [begin, end) must be a valid range of memory to write to.
-       *  @param begin - The start of the char buffer
-       *  @param end - Just past the end of the char buffer
-       *  @param dry_run - If true, do not actually write anything into the range.
-       *  @return char* - Just past the end of the last character that would be written assuming dry_run == false and end was large enough to provide sufficient space. (Meaning only applies if returned pointer >= begin.)
-       *  @post If the output string fits within the range [begin, end) and dry_run == false, the range [begin, returned pointer) contains the string representation of the asset. Nothing is written if dry_run == true or returned pointer > end (insufficient space) or if returned pointer < begin (overflow in calculating desired end).
+       *  @pre диапазон [begin, end) — допустимая область памяти для записи
+       *  @param begin — начало буфера
+       *  @param end — конец буфера (не включая end)
+       *  @param dry_run — если true, ничего не записывать, только вычислить длину
+       *  @return char* — указатель сразу за последним символом, который был бы записан при dry_run == false и достаточном размере буфера (смысл только если возвращаемый указатель ≥ begin)
+       *  @post если строка помещается в [begin, end) и dry_run == false, то [begin, возврат) содержит строковое представление актива; при dry_run == true, недостаточном месте или переполнении при расчёте конца запись не выполняется
        */
       char* write_as_string( char* begin, char* end, bool dry_run = false )const {
          bool negative = (amount < 0);
@@ -353,9 +353,9 @@ namespace eosio {
       }
 
       /**
-       * %asset to std::string
+       * Преобразование %asset в std::string
        *
-       * @brief %asset to std::string
+       * @brief Преобразование %asset в std::string
        */
       std::string to_string()const {
          int buffer_size = std::max(static_cast<int>(symbol.precision()), 19) + 11;
@@ -367,9 +367,9 @@ namespace eosio {
       }
 
       /**
-       * %Print the asset
+       * Вывод актива (печать в лог контракта COOPOS)
        *
-       * @brief %Print the asset
+       * @brief Вывод asset
        */
       void print()const {
          int buffer_size = std::max(static_cast<int>(symbol.precision()), 19) + 11;
@@ -385,44 +385,44 @@ namespace eosio {
    };
 
   /**
-   *  Extended asset which stores the information of the owner of the asset
+   *  Расширенный актив: количество и контракт-эмитент токена в сети COOPOS
    *
    *  @ingroup asset
    */
    struct extended_asset {
       /**
-       * The asset
+       * Сам актив (количество и символ)
        */
       asset quantity;
 
       /**
-       * The owner of the asset
+       * Имя контракта, выпускающего токен
        */
       name contract;
 
       /**
-       * Get the extended symbol of the asset
+       * Возвращает расширенный символ (символ + контракт)
        *
-       * @return extended_symbol - The extended symbol of the asset
+       * @return extended_symbol — расширенный символ
        */
       extended_symbol get_extended_symbol()const { return extended_symbol{ quantity.symbol, contract }; }
 
       /**
-       * Default constructor
+       * Конструктор по умолчанию
        */
       extended_asset() = default;
 
        /**
-       * Construct a new extended asset given the amount and extended symbol
+       * Создаёт расширенный актив по количеству и расширенному символу
        */
       extended_asset( int64_t v, extended_symbol s ):quantity(v,s.get_symbol()),contract(s.get_contract()){}
       /**
-       * Construct a new extended asset given the asset and owner name
+       * Создаёт расширенный актив по активу и имени контракта
        */
       extended_asset( asset a, name c ):quantity(a),contract(c){}
 
       /**
-       * %Print the extended asset
+       * Вывод расширенного актива (печать в лог контракта COOPOS)
        */
       void print()const {
          quantity.print();
@@ -431,100 +431,100 @@ namespace eosio {
 
       /// @cond OPERATORS
 
-      // Unary minus operator
+      // Унарный минус
       extended_asset operator-()const {
          return {-quantity, contract};
       }
 
-      // Subtraction operator
+      // Оператор вычитания
       friend extended_asset operator - ( const extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          return {a.quantity - b.quantity, a.contract};
       }
 
-      // Addition operator
+      // Оператор сложения
       friend extended_asset operator + ( const extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          return {a.quantity + b.quantity, a.contract};
       }
 
-      /// Addition operator.
+      /// Оператор сложения с присваиванием.
       friend extended_asset& operator+=( extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          a.quantity += b.quantity;
          return a;
       }
 
-      /// Subtraction operator.
+      /// Оператор вычитания с присваиванием.
       friend extended_asset& operator-=( extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          a.quantity -= b.quantity;
          return a;
       }
 
-      /// Multiplication operator.
+      /// Умножение на число с присваиванием.
       extended_asset& operator*=( int64_t b ) {
          quantity *= b;
          return *this;
       }
 
-      /// Multiplication operator.
+      /// Умножение актива на число.
       friend extended_asset operator*( const extended_asset& a, int64_t b ) {
          return {a.quantity * b, a.contract};
       }
 
-      /// Multiplication operator.
+      /// Умножение числа на актив.
       friend extended_asset operator*( int64_t a, const extended_asset& b ) {
          return {a * b.quantity, b.contract};
       }
 
-      /// Division operator. Follows format of 'int64_t operator/( const asset& a, const asset& b )'.
+      /// Деление расширенных активов по количеству (аналог int64_t operator/( const asset& a, const asset& b )).
       friend int64_t operator/( const extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          return a.quantity / b.quantity;
       }
 
-      /// Division operator.
+      /// Деление на число с присваиванием.
       extended_asset& operator/=( int64_t b ) {
          quantity /= b;
          return *this;
       }
 
-      /// Division operator.
+      /// Деление актива на число.
       friend extended_asset operator/( const extended_asset& a, int64_t b ) {
          return {a.quantity / b, a.contract};
       }
 
 
-      /// Less than operator
+      /// Оператор «меньше»
       friend bool operator<( const extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          return a.quantity < b.quantity;
       }
 
-      /// Greater than operator
+      /// Оператор «больше»
       friend bool operator>( const extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          return a.quantity > b.quantity;
       }
 
-      /// Equality operator
+      /// Оператор равенства
       friend bool operator==( const extended_asset& a, const extended_asset& b ) {
          return std::tie(a.quantity, a.contract) == std::tie(b.quantity, b.contract);
       }
 
-      /// Inequality operator
+      /// Оператор неравенства
       friend bool operator!=( const extended_asset& a, const extended_asset& b ) {
          return std::tie(a.quantity, a.contract) != std::tie(b.quantity, b.contract);
       }
 
-      /// Less than or equal operator
+      /// Оператор «меньше или равно»
       friend bool operator<=( const extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          return a.quantity <= b.quantity;
       }
 
-      /// Greater than or equal operator
+      /// Оператор «больше или равно»
       friend bool operator>=( const extended_asset& a, const extended_asset& b ) {
          eosio::check( a.contract == b.contract, "type mismatch" );
          return a.quantity >= b.quantity;

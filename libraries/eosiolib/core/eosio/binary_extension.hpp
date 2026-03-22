@@ -4,17 +4,17 @@
 
 namespace eosio {
     /**
-    *  @defgroup binary_extension Binary Extension
+    *  @defgroup binary_extension Двоичное расширение
     *  @ingroup core
     *  @ingroup types
-    *  @brief Container to hold a binary payload for an extension
+    *  @brief Контейнер для двоичной полезной нагрузки расширения
     */
 
     /**
-    *  Container to hold a binary payload for an extension
+    *  Опциональное значение типа T для расширений действий/таблиц в COOPOS (аналог optional с размещением в буфере)
     *
     *  @ingroup binary_extension
-    *  @tparam T - Contained typed
+    *  @tparam T — тип хранимого значения
     */
    template <typename T>
    class binary_extension {
@@ -32,7 +32,7 @@ namespace eosio {
          {
             ::new (&_data) T(std::move(ext));
          }
-          /** construct contained type in place */
+          /** размещает значение T по месту (in-place) */
          template <typename... Args>
          constexpr binary_extension( std::in_place_t, Args&&... args )
          :_has_value(true)
@@ -82,12 +82,12 @@ namespace eosio {
             }
             return *this;
          }
-         /** test if container is holding a value */
+         /** true, если значение присутствует */
          constexpr explicit operator bool()const { return _has_value; }
-         /** test if container is holding a value */
+         /** true, если значение присутствует */
          constexpr bool has_value()const { return _has_value; }
 
-          /** get the contained value */
+          /** ссылка на хранимое значение */
          constexpr T& value()& {
             if (!_has_value) {
                check(false, "cannot get value of empty binary_extension");
@@ -97,7 +97,7 @@ namespace eosio {
 
          /// @cond INTERNAL
 
-          /** get the contained value */
+          /** константная ссылка на хранимое значение */
          constexpr const T& value()const & {
             if (!_has_value) {
                check(false, "cannot get value of empty binary_extension");
@@ -105,8 +105,8 @@ namespace eosio {
             return _get();
          }
 
-          /** get the contained value or a user specified default
-          * @pre def should be convertible to type T
+          /** значение или переданный по ссылке запасной объект
+          * @pre def должен быть приводим к T
           * */
          template <typename U>
          constexpr auto value_or( U&& def ) -> std::enable_if_t<std::is_convertible<U, T>::value, T&>& {
@@ -194,14 +194,14 @@ namespace eosio {
    /// @cond IMPLEMENTATIONS
 
    /**
-    *  Serialize a binary_extension into a stream
+    *  Сериализация binary_extension в поток (через value_or())
     *
     *  @ingroup binary_extension
-    *  @brief Serialize a binary_extension
-    *  @param ds - The stream to write
-    *  @param opt - The value to serialize
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Сериализация binary_extension
+    *  @param ds — поток записи
+    *  @param be — значение для сериализации
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream, typename T>
    inline DataStream& operator<<(DataStream& ds, const eosio::binary_extension<T>& be) {
@@ -210,14 +210,14 @@ namespace eosio {
    }
 
    /**
-    *  Deserialize a binary_extension from a stream
+    *  Десериализация binary_extension из потока (при наличии остатка в потоке)
     *
     *  @ingroup binary_extension
-    *  @brief Deserialize a binary_extension
-    *  @param ds - The stream to read
-    *  @param opt - The destination for deserialized value
-    *  @tparam DataStream - Type of datastream buffer
-    *  @return DataStream& - Reference to the datastream
+    *  @brief Десериализация binary_extension
+    *  @param ds — поток чтения
+    *  @param be — приёмник значения
+    *  @tparam DataStream — тип буфера потока данных
+    *  @return DataStream& — ссылка на поток
     */
    template<typename DataStream, typename T>
    inline DataStream& operator>>(DataStream& ds, eosio::binary_extension<T>& be) {
