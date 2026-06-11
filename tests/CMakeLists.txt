@@ -4,6 +4,7 @@ macro(add_unit_test TEST_NAME)
 endmacro()
 
 add_unit_test( asset_tests )
+add_unit_test( base64_tests )
 add_unit_test( binary_extension_tests )
 add_unit_test( crt_tests )
 add_unit_test( crypto_tests )
@@ -28,7 +29,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/unit/version_tests.sh ${CMAKE_BINARY_
 add_test(NAME version_tests COMMAND ${CMAKE_BINARY_DIR}/tests/unit/version_tests.sh "${VERSION_FULL}" WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 set_property(TEST version_tests PROPERTY LABELS unit_tests)
 
-if (leap_FOUND)
+if (spring_FOUND)
    add_test(integration_tests ${CMAKE_BINARY_DIR}/tests/integration/integration_tests)
    set_property(TEST integration_tests PROPERTY LABELS integration_tests)
 endif()

@@ -15,8 +15,8 @@ CDT currently supports Linux x86_64 Debian packages. Visit the [release page](ht
 Download the appropriate version of the Debian package and then install it. To download and install the latest version, run the following:
 
 ```sh
-wget https://github.com/AntelopeIO/cdt/releases/download/v4.0.0/cdt_4.0.0_amd64.deb
-sudo apt install ./cdt_4.0.0_amd64.deb
+wget https://github.com/AntelopeIO/cdt/releases/download/v4.1.0/cdt_4.1.0_amd64.deb
+sudo apt install ./cdt_4.1.0_amd64.deb
 ```
 ### Debian package uninstall
 
@@ -28,9 +28,9 @@ sudo apt remove cdt
 
 ## Building from source
 
-Recent Ubuntu LTS releases are the only Linux distributions that we fully support. Other Linux distros and other POSIX operating systems (such as macOS) are tended to on a best-effort basis and may not be full featured. 
+Recent Ubuntu LTS releases are the only Linux distributions that we fully support. Other Linux distros and other POSIX operating systems (such as macOS) are tended to on a best-effort basis and may not be full featured.
 
-The instructions below assume that you are building on Ubuntu 20.04. 
+The instructions below assume that you are building on Ubuntu 20.04.
 
 ### Install dependencies
 
@@ -38,6 +38,7 @@ The instructions below assume that you are building on Ubuntu 20.04.
 apt-get update && apt-get install   \
         build-essential             \
         clang                       \
+        clang-tidy                  \
         cmake                       \
         git                         \
         libxml2-dev                 \
@@ -53,19 +54,19 @@ python3 -m pip install pygments
 
 ### Allowing integration tests to build
 
-Integration tests require access to a build of [Leap](https://github.com/AntelopeIO/leap), a C++ implementation of the Antelope protocol. Simply installing Leap from a binary package will not be sufficient.
+Integration tests require access to a build of [Spring](https://github.com/AntelopeIO/spring), a C++ implementation of the Antelope protocol. Simply installing Spring from a binary package will not be sufficient.
 
-If you do not wish to build Leap, you can continue with building CDT but without building the integration tests. Otherwise, follow the instructions below before running `cmake`.
+If you do not wish to build Spring, you can continue with building CDT but without building the integration tests. Otherwise, follow the instructions below before running `cmake`.
 
-First, ensure that Leap has been built from source (see Leap's [README](https://github.com/AntelopeIO/leap#building-from-source) for details) and identify the build path, e.g. `/path/to/leap/build/`.
+First, ensure that Spring has been built from source (see Spring's [README](https://github.com/AntelopeIO/spring#building-from-source) for details) and identify the build path, e.g. `/path/to/spring/build/`.
 
 Then, execute the following command in the same terminal session that you will use to build CDT:
 
 ```sh
-export leap_DIR=/path/to/leap/build/lib/cmake/leap
+export spring_DIR=/path/to/spring/build/lib/cmake/spring
 ```
 
-Now you can continue with the steps to build CDT as described. When you run `cmake` make sure that it does not report `leap package not found`. If it does, this means CDT was not able to find a build of Leap at the specified path in `leap_DIR` and will therefore continue without building the integration tests.
+Now you can continue with the steps to build CDT as described. When you run `cmake` make sure that it does not report `spring package not found`. If it does, this means CDT was not able to find a build of Spring at the specified path in `spring_DIR` and will therefore continue without building the integration tests.
 
 ### ccache
 
@@ -135,7 +136,7 @@ Installing CDT globally on your system will install the following tools in a loc
 * cdt-strip
 * eosio-pp
 * eosio-wasm2wast
-* eosio-wast2wasm 
+* eosio-wast2wasm
 
 It will also install CMake files for CDT accessible within a `cmake/cdt` directory located within your system's `lib` directory.
 #### Manual installation
