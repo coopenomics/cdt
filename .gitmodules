@@ -1,12 +1,12 @@
 [submodule "cdt-llvm"]
 	path = cdt-llvm
-	url = https://github.com/AntelopeIO/cdt-llvm
+	url = https://git.coopenomics.world/C9S/cdt-llvm.git
 [submodule "libraries/libc/cdt-musl"]
 	path = libraries/libc/cdt-musl
-	url = https://github.com/AntelopeIO/cdt-musl
+	url = https://git.coopenomics.world/C9S/cdt-musl.git
 [submodule "libraries/libc++/cdt-libcxx"]
 	path = libraries/libc++/cdt-libcxx
-	url = https://github.com/AntelopeIO/cdt-libcxx
+	url = https://git.coopenomics.world/C9S/cdt-libcxx.git
 [submodule "libraries/native/softfloat"]
 	path = libraries/native/softfloat
-	url = https://github.com/AntelopeIO/berkeley-softfloat-3
+	url = https://git.coopenomics.world/C9S/berkeley-softfloat-3.git
